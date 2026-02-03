@@ -20,7 +20,7 @@
 {% for p_handle in products %}
 {% assign product = all_products[p_handle] %}
 
-<div class="col-{{mobile}} col-md-{{-desktop}} card--holder">
+<div class="col-{{mobile}} col-md-{{-desktop}} card--holder{% if settings.easeIn %} ease-in{% endif %}">
 {% render 'product-card-default', product: product, dsize: '3' %}
 </div>
 {% else %}

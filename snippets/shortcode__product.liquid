@@ -132,7 +132,7 @@
         class="product__price--holder">
         <span class="product__price jsPrice">$179.00</span>
       </div>
-      <div class="product__description {% if block.settings.noMargin %}margin__bottom--reduced{%endif-%}">
+      <div class="product__description {% if block.settings.noMargin %}margin__bottom--reduced{%endif-%}{% if settings.easeIn %} ease-in{% endif %}">
         <span class="product__description--title">Product Description</span>
         <p>This is an example product. Select a product inside this section's settings in order for it to be usable.</p>
       </div>

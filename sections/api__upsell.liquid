@@ -109,13 +109,21 @@ endunless
 %}
 
 {% if data and product %}
-{% render 'upsell__container', type: type, data: data, config: upsell %}
+{% render 'upsell__container', type: type, data: data, config: upsell, section: section %}
 {% endif %}
 
 {% schema %}
 {
     "name": "Upsell/Crossell [APP]",
     "settings": [
+        {
+            "type": "header",
+            "content": "Help"
+        },
+        {
+            "type": "paragraph",
+            "content": "[Click here to follow an interactive Tutorial](https:\/\/vimeo.com\/1050645811)"
+        },
         {
             "type": "header",
             "content": "Upsell settings and conditions"
@@ -157,7 +165,21 @@ endunless
         {
             "type": "paragraph",
             "content": "Block order has NO EFFECT on the overall priority."
-        }
+        },
+        {
+            "type": "header",
+            "content": "Settings"
+        },
+        {
+            "type": "select",
+            "id": "defaultSelector",
+            "label": "Default variant selector",
+            "options": [
+                {"value": "dropdown", "label": "Dropdown"},
+                {"value": "swatch", "label": "Swatch"}
+            ],
+            "default": "swatch"
+        },
     ],
     "blocks": [
         {

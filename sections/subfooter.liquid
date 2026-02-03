@@ -17,13 +17,13 @@
 {% capture layoutConfig %}{% render 'common-layout' with section as section %}{% endcapture %}
 
 <div class="subfooter inherit layout__{{-layoutConfig}}">
-<div class="layout__content row p-reset--all">
-{% for block in section.blocks %}
-    <div class="col-12 col-md col-md-{{-block.settings.width}} subfooter__block {{block.settings.horizontalAlignment}} {{block.settings.verticalAlignment-}}">
-    {% render 'get-block' with block as block %}
+    <div class="layout__content row p-reset--all">
+        {% for block in section.blocks %}
+            <div class="col-12 col-md col-md-{{-block.settings.width}} subfooter__block {{block.settings.horizontalAlignment}} {{block.settings.verticalAlignment-}}">
+                {% render 'get-block' with block as block %}
+            </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 </div>
 
 {% endif %}
@@ -32,14 +32,6 @@
 {
     "name": "Sub Footer",
     "settings": [
-        {
-      "type": "header",
-      "content": "Help"
-    },
-    {
-      "type": "paragraph",
-      "content": "[Click here to follow an interactive Tutorial](https://vimeo.com/458178951)"
-    },
     {
             "type": "header",
             "content": "Section layout"
@@ -574,6 +566,58 @@
                         {"value": "end", "label": "Right"}
                     ],
                     "default": "center"
+                }
+            ]
+        },
+        {
+            "name": "Internationalization",
+            "type": "footerInternational",
+            "settings": [
+                {
+                    "type": "header",
+                    "content": "Note"
+                },
+                {
+                    "type": "paragraph",
+                    "content": "To render the block, make sure you enable multi-language option and the currency conversion in the theme settings"
+                },
+                {
+                    "id": "width",
+                    "label": "Width",
+                    "type": "select",
+                    "options": [
+                        {"value": "auto", "label": "Auto"},
+                        {"value": "12", "label": "100%"},
+                        {"value": "9", "label": "75%"},
+                        {"value": "8", "label": "66%"},
+                        {"value": "6", "label": "50%"},
+                        {"value": "4", "label": "33%"},
+                        {"value": "3", "label": "25%"},
+                        {"value": "1-5", "label": "20%"}
+                    ],
+                    "default": "auto"
+                },
+                {
+                    "type": "select",
+                    "id": "horizontalAlignment",
+                    "label": "Content alignment (left to right)",
+                    "options": [
+                        {"value": "start", "label": "Left"},
+                        {"value": "center", "label": "Center"},
+                        {"value": "end", "label": "Right"}
+                    ],
+                    "default": "center"
+                },
+                {
+                    "type": "select",
+                    "id": "verticalAlignment",
+                    "label": "Content alignment (top to bottom)",
+                    "options": [
+                        {"value": "top", "label": "Top"},
+                        {"value": "middle", "label": "Middle"},
+                        {"value": "bottom", "label": "Bottom"}
+                    ],
+                    "default": "middle"
                 }
             ]
         }

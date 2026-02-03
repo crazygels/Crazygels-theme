@@ -7,8 +7,13 @@
             <a class="user__link" href="{{ routes.account_url }}">{% render 'get-icon', icon: 'user' %}Account</a>
             <a class="user__link" href="{{ routes.account_logout_url }}">{% render 'get-icon', icon: 'signout' %}{{'navigation.buttons.log_out'|t}}</a>
         {% else %}
-            <a class="user__link" href="{{ routes.account_login_url }}">{% render 'get-icon', icon: 'signin' %}{{'navigation.buttons.sign_in'|t}}</a>
-            <a class="user__link" href="{{ routes.account_register_url }}">{% render 'get-icon', icon: 'signup' %}{{'navigation.buttons.sign_up'|t}}</a>
+            {% unless loginPopup  %}
+                <a class="user__link" href="{{ routes.account_login_url }}">{% render 'get-icon', icon: 'signin' %}{{'navigation.buttons.sign_in'|t}}</a>
+                <a class="user__link" href="{{ routes.account_register_url }}">{% render 'get-icon', icon: 'signup' %}{{'navigation.buttons.sign_up'|t}}</a>
+            {% else %}
+                <span class="user__link" data-login-popup> {% render 'get-icon', icon: 'signin' %}{{'navigation.buttons.sign_in'|t}} </span >
+                <span class="user__link" data-login-popup-register>{% render 'get-icon', icon: 'signup' %}{{'navigation.buttons.sign_up'|t}}</span>
+            {% endunless %}
         {% endif %}
         <a class="user__link" href="{{ routes.cart_url }}">{% render 'get-icon', icon: 'shopping-bag' %}{{'general.buttons.view_cart' | t}}</a>
     </div>
@@ -79,14 +84,14 @@
     <input type="checkbox" data-minicart-input id="minicart__button--{{section.id}}{% if mobile %}-mobile{% endif %}">
     <label class="overlay" for="minicart__button--{{section.id}}{% if mobile %}-mobile{% endif %}"></label>
     <label class="minicart__label" for="minicart__button--{{section.id}}{% if mobile %}-mobile{% endif %}" data-cart-settings="count" data-cart-container>
-        {% render 'get-icon', icon: section.settings.cartIcon %}<span class="item__count" data-count>0</span>
+        {% render 'get-icon', icon: section.settings.cartIcon %}<span class="item__count{% if settings.easeIn %} ease-in{% endif %}" data-count>0</span>
     </label>
     <div class="minicart__holder minicart--{{-settings.cartStyle}}" data-cart-settings="product-list" data-cart-container><div class="data-product-list" data-product-list></div></div>
 </div>
 {% else %}
 <div class="minicart__button minicart__button--{{section.settings.cartIcon}}">
     <a href="{{routes.cart_url}}" class="minicart__label" for="minicart__button--{{section.id}}" data-cart-settings="count" data-cart-container>
-        {% render 'get-icon', icon: section.settings.cartIcon %}<span class="item__count" data-count>0</span>
+        {% render 'get-icon', icon: section.settings.cartIcon %}<span class="item__count{% if settings.easeIn %} ease-in{% endif %}" data-count>0</span>
     </a>
 </div>
 {% endunless %}

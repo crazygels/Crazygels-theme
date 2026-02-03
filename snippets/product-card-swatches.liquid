@@ -1,3 +1,10 @@
+<style>
+    .product-card__swatches .swatch--color {
+        height: {{ settings.cardSwatchesSize }}px;
+        width: {{ settings.cardSwatchesSize }}px;
+    }
+</style>
+
 {% if product.variants.size > 1 %}
 
     {% assign altSelector = settings.altSelectorList | downcase | split: ',' %}

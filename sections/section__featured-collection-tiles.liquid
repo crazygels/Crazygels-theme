@@ -13,15 +13,25 @@
 {% endunless %}
 </style>
 
-{% assign mobile = settings.cardMobile %}
+{% if section.settings.cardDesktop == "default" %}
 {% assign desktop = settings.cardDesktop %}
+{% else %}
+{% assign desktop = section.settings.cardDesktop %}
+{% endif %}
+
+{% if section.settings.cardMobile == "default" %}
+{% assign mobile = settings.cardMobile %}
+{% else %}
+{% assign mobile = section.settings.cardMobile %}
+{% endif %}
+
 {% assign customID = section.settings.custom_id %}
 
 <div id="s--{{section.id}}" class="{% render 'common-class', section: section, class: 'row padding__vertical', vAlign: false %}">
 <div id="{{customID}}" class="row layout__content s__content">
 {% render 'block__general--heading' with section as section %}
 <div class="row">
-<div class="col-12 col-md-{{-desktop}} bottom card--holder card--default collection-title__card lazyload"
+<div class="col-12 col-md-{{-desktop}} bottom card--holder card--default collection-title__card lazyload{% if settings.easeIn %} ease-in{% endif %}"
 {% unless section.settings.titleBackgroundImage == nil -%}{% render 'background', image: section.settings.titleBackgroundImage %}{%- endunless %}>
     {% if section.settings.overlayOpacity > 0 %}
         <div
@@ -45,12 +55,12 @@
     </div>
 </div>
 {% for product in collections[section.settings.collection].products limit: section.settings.productCount %}
-  <div class="col-{{mobile}} col-md-{{-desktop}} card--holder s__block">
+  <div class="col-{{mobile}} col-md-{{-desktop}} card--holder s__block{% if settings.easeIn %} ease-in{% endif %}">
   {% render 'product-card-default', product: product, dsize: '3' %}
   </div>
 {% else %}
   {% for i in (1..3) %}
-    <div class="col-{{mobile}} col-md-{{-desktop}} card--holder s__block">
+    <div class="col-{{mobile}} col-md-{{-desktop}} card--holder s__block{% if settings.easeIn %} ease-in{% endif %}">
       {% render 'product-card-fake', i: i %}
     </div>
   {% endfor %}
@@ -61,18 +71,8 @@
 
 {% schema %}
 {
-    "name": {
-        "en": "Featured collection tiles"
-    },
+    "name": "Featured collection tiles",
     "settings": [
-      {
-      "type": "header",
-      "content": "Help"
-    },
-    {
-      "type": "paragraph",
-      "content": "[Click here to follow an interactive Tutorial](https://vimeo.com/458157958)"
-    },
     {
       "type": "header",
       "content": "Section ID"
@@ -303,6 +303,33 @@
         {"value": "end", "label": "Right"}
       ],
       "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Layout settings"
+    },
+    {
+      "type": "select",
+      "id": "cardDesktop",
+      "label": "How many cards per row (Desktop)",
+      "options": [
+        {"value": "default", "label": "Global default"},
+        {"value": "1-5", "label": "5"},
+        {"value": "3", "label": "4"},
+        {"value": "4", "label": "3"}
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "cardMobile",
+      "label": "How many cards per row (Mobile)",
+      "options": [
+        {"value": "default", "label": "Global default"},
+        {"value": "12", "label": "1"},
+        {"value": "6", "label": "2"}
+      ],
+      "default": "default"
     }
     ],
     "presets": [

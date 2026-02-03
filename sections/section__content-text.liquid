@@ -30,7 +30,7 @@
 {% assign tWidth = 12 | minus: block.settings.imageWidth %}
 {% assign customID = section.settings.custom_id %}
 
-<div id="s--{{block.id}}" class="{% render 'common-class', section:block , class: 'row', bg: true, vAlign: false %}">
+<div id="s--{{block.id}}" class="{% render 'common-class', section:block , class: 'row', bg: true, vAlign: false %}{% if settings.easeIn %} ease-in{% endif %}">
 <div id="{{customID}}" class="row {{ block.settings.verticalAlignment }} layout__content s__content">
     {% case block.type %}
     {% when 'imageText' %}
@@ -39,7 +39,7 @@
             <div class="overlay" style="opacity: {{block.settings.overlayOpacity | times: 0.01}}; background-color: {{block.settings.overlayColor}};"></div>
             {% endif %}
             {% unless block.settings.image == nil %}
-              {% render 'ratio-image', image: block.settings.image, mratio: '12', dratio: iWidth, ratioType: 'col' %}
+              {% render 'ratio-image', image: block.settings.image, alt: block.settings.image.alt, mratio: '12', dratio: iWidth, ratioType: 'col' %}
             {% else %}
               {%if settings.demo %}
                 <img class="lazyload" loading="lazy" data-src="https://source.unsplash.com/random/700x700">
@@ -104,9 +104,7 @@
 
 {% schema %}
 {
-    "name": {
-        "en": "Content + text (bulk)"
-    },
+    "name": "Content + text (bulk)",
     "settings": [
       {
         "type": "header",

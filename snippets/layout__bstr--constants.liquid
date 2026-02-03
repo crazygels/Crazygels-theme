@@ -41,7 +41,7 @@
 
     {% capture emptySearch %}
     {% for item in collections[settings.emptySearch].products limit: 5 %}
-        <div class="col-12 col-md-1-5">
+        <div class="col-12{% unless settings.headerType == 'inline-search' %} col-md-1-5{% endunless %}">
         {% render 'product-card-search', product: item, dsize: '1-5' %}
         </div>
     {% endfor %}
@@ -54,6 +54,7 @@
         sold_out: `{{'general.buttons.sold_out' | t | strip}}`,
         select: `{{'general.buttons.add_to_cart_selection' | t | strip}}`,
         adding: `{{'general.buttons.add_to_cart_loading' | t | strip}}`,
+        checking_out: `{{'general.buttons.checkout_loading' | t | strip}}`,
         back_to_shop: `{{'navigation.buttons.back_to_shop' | t | strip}}`
     },
     tags: {
@@ -71,6 +72,75 @@
 <template id="productCardTemplate">
     {% render 'product-card-template' %}
 </template>
+
+{% if settings.productCompare %}
+    <template id="productCompareVendor">
+        <div class='compare-product-vendor--wrapper'>
+            <div class='compare-prodcut-vendor--header'>
+              <h2> Vendor </h2>
+            </div>
+            
+            <div class='compare-product-vendor--content' data-product-compare-vendor> </div>
+          </div>
+    </template>
+    
+    <template id="productCompareAvailability">
+        <div class='compare-product-availability--wrapper'>
+            <div class='compare-prodcut-availability--header'>
+              <h2> Availability </h2>
+            </div>
+            
+            <div class='compare-product-availability--content' data-product-compare-availability>  </div>
+          </div>
+    </template>
+    
+    <template id="productCompareDescription">
+        <div class='compare-product-description--wrapper'>
+            <div class='compare-prodcut-description--header'>
+              <h2> Description </h2>
+            </div>
+    
+            <div class='compare-product-description--content' data-product-compare-description> </div>
+          </div>
+    </template>
+    
+    <template id="productCompareCard">
+        <div class='compare-product-card--wrapper' id="compare-product-card"> 
+          <div class='compare-product-card'>
+            <div class='compare-product-card--img'>
+              <img data-compare-product-image src="" />
+            </div>
+    
+            <div class='compare-product-card--content'>
+                <p class='compare-product-card--compare_at_price' data-compare-compare-at-price> </p>
+                <p class='compare-product-card--price' data-compare-product-price> </p>
+                <p class='compare-product-card--title' data-compare-product-title> </p>
+            </div>
+          </div>
+          <div class='compare-product-card--atc'>
+            {% comment %} {% render 'add-to-cart-button', variant: compareProduct.selected_or_first_available_variant.id, quantity: , price: compareProduct.price %} {% endcomment %}
+          </div>
+        </div>
+    </template>
+    
+    <template id="productCompareTemplate">
+        <div class="product-compare-drawer__item">
+            <div class="product-compare-drawer__image">
+            <img src="" class="product-compare--image" data-product-compare-drawer-image />
+            </div>
+            <a class="product-compare-drawer__item-title" data-product-compare-drawer-title></a>
+            <button class="product-compare-drawer__remove" data-product-compare-drawer-remove data-product-compare-id>
+                <svg class="icon-remove product-compare-drawer__remove-icon" aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10">      <path fill="currentColor" d="M6.08785659,5 L9.77469752,1.31315906 L8.68684094,0.225302476 L5,3.91214341 L1.31315906,0.225302476 L0.225302476,1.31315906 L3.91214341,5 L0.225302476,8.68684094 L1.31315906,9.77469752 L5,6.08785659 L8.68684094,9.77469752 L9.77469752,8.68684094 L6.08785659,5 Z"></path>    </svg>                                              
+            </button>
+        </div>
+    </template>
+
+    <template id="productCompareDisableTemplate">
+        <div class="product-compare-drawer__item--disabled">
+            <a class="product-compare-drawer__item-title" data-product-compare-drawer-title> </a>
+        </div>
+    </template>
+{% endif %}
 
 <script>
 {% comment %} Load designMode Javascript {% endcomment %}

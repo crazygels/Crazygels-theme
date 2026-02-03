@@ -40,4 +40,4 @@
     {% assign desktop = dratio %}
 {% endcase %}
 
-<img height="{{image.height}}" width="{{image.width}}" loading="lazy" src="{{image | img_url: 'master'}}" data-srcset="{{bgset | slice: 0, strlen}}" data-sizes="(max-width: 787px) {{mobile}}vw, {{desktop}}vw" alt="{{alt}}" class="lazyload {{class}}">
+<img height="{{image.height}}" width="{{image.width}}" loading="lazy" src="{{image | img_url: 'master'}}" data-srcset="{{bgset | slice: 0, strlen}}" data-sizes="(max-width: 787px) {{mobile}}vw, {{desktop}}vw" alt="{{alt | escape}}" class="lazyload{% if settings.easeIn %} ease-in{% endif %} {{class}}">

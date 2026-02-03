@@ -10,12 +10,12 @@
 {% render 'block__general--heading' with section as section %}
 <div class="row center">
 {% for block in section.blocks %}
-<div class="col-{{mobile}} col-md-3 card--holder">
-{% render 'collection-card' with collections[block.settings.collection] as collection %}
+<div class="col-{{mobile}} col-md-3 card--holder{% if settings.easeIn %} ease-in{% endif %}">
+{% render 'collection-card', collection: collections[block.settings.collection], block: block %} 
 </div>
 {% else %}
 {% for i in (1..4) %}
-<div class="col-{{mobile}} col-md-3 card--holder">
+<div class="col-{{mobile}} col-md-3 card--holder{% if settings.easeIn %} ease-in{% endif %}">
 {% render 'product-card-fake', 'i:i' %}
 </div>
 {% endfor %}
@@ -36,18 +36,8 @@
 
 {% schema %}
 {
-    "name": {
-        "en": "List collections"
-    },
+    "name": "List collections",
     "settings": [
-      {
-      "type": "header",
-      "content": "Help"
-    },
-    {
-      "type": "paragraph",
-      "content": "[Click here to follow an interactive Tutorial](https://vimeo.com/458157944)"
-    },
     {
       "type": "header",
       "content": "Section ID"
@@ -211,6 +201,11 @@
             "id": "collection",
             "label": "Collection",
             "type": "collection"
+          },
+          {
+            "type": "image_picker",
+            "id": "custom_collection_image",
+            "label": "Custom collection image"
           }
         ]
       }

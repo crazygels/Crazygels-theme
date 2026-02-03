@@ -52,6 +52,14 @@
     margin-bottom: 0px !important;
 }
 {% endif %}
+
+@media screen and (max-width: 767px){
+    #shopify-section-{{section.id}} .grid__block--image img {
+    aspect-ratio: {{ section.settings.imageMobileSize }};
+    width: 100%;
+    }
+}
+
 </style>
 
 {% assign customID = section.settings.custom_id %}
@@ -76,7 +84,7 @@
 {% endcase %}
 
 
-<div id="grid--{{-section.id}}" class="{% render 'common-class', section: section, class: 'grid__section', bg: true, inherit: false, vAlign: false %} {{customID}}" {% unless section.settings.backgroundImage == nil -%}data-bg="url({{section.settings.backgroundImage | img_url: '1280x'}})"{%- endunless %}>
+<div id="grid--{{-section.id}}" class="{% render 'common-class', section: section, class: 'grid__section', bg: true, inherit: false, vAlign: false %} {{customID}}{% if settings.easeIn %} ease-in{% endif %}" {% unless section.settings.backgroundImage == nil -%}data-bg="url({{section.settings.backgroundImage | img_url: '1280x'}})"{%- endunless %}>
     {% if section.settings.overlayOpacity > 0 %}
         <div
         class="overlay"
@@ -151,9 +159,7 @@
 
 {% schema %}
 {
-    "name": {
-        "en": "Dynamic Grid"
-    },
+    "name": "Dynamic Grid",
     "max_blocks": 6,
     "settings": [
     {
@@ -208,6 +214,16 @@
       "step": 10,
       "unit": "px",
       "info": "If you want to enable 'auto-height', set the height to 0px."
+    },
+    {
+        "type": "select",
+        "id": "imageMobileSize",
+        "label": "Mobile Image Size",
+        "options": [
+            {"value": "auto", "label": "Auto"},
+            {"value": "1/1", "label": "Square"}
+        ],
+        "default": "auto"
     },
     {
       "type": "range",

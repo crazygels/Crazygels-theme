@@ -71,31 +71,21 @@ class="{% render 'common-class', section: section, class: 'row', bg: true %}">
         {% endif %}
         <input type="radio" id="{{section.id}}--close" name="{{section.id}}">
         {% for block in section.blocks %}
-        {% if block.settings.question == empty or block.settings.answer == empty %}{% continue %}{% endif %}
-        <label class="accordion__item" {{block.shopify__attrbutes}}>
-            <input type="radio" name="{{section.id}}" {% if forloop.first %}checked{% endif %}>
-            <span class="accordion__item--title">{{block.settings.question}}<label class="collapse" for="{{section.id}}--close"></label></span>
-            <div class="accordion__item--content">{{block.settings.answer}}</div>
-        </label>
-    {% endfor %}
+          {% if block.settings.question == empty or block.settings.answer == empty %}{% continue %}{% endif %}
+          <div class="accordion__item" {{block.shopify__attributes}}>
+              <input type="checkbox" id="accordion-{{ block.id }}" class="accordion__input" {% if block.settings.openAccordion %}checked{% endif %}>
+              <label for="accordion-{{ block.id }}" class="accordion__item--title">{{block.settings.question}}</label>
+              <div class="accordion__item--content">{{block.settings.answer}}</div>
+          </div>
+        {% endfor %}
     </div>
   </div>
 </div>
 
 {% schema %}
 {
-    "name": {
-        "en": "FAQ"
-    },
+    "name": "FAQ",
     "settings": [
-      {
-            "type": "header",
-            "content": "Help"
-        },
-        {
-        "type": "paragraph",
-        "content": "[Click here to follow an interactive Tutorial](https://vimeo.com/458159172)"
-        },
         {
           "type": "header",
           "content": "Section ID"
@@ -382,6 +372,12 @@ class="{% render 'common-class', section: section, class: 'row', bg: true %}">
     "type": "accordion",
     "name": "Accordion",
     "settings": [
+        {
+          "type": "checkbox",
+          "id": "openAccordion",
+          "label": "Open on first load?",
+          "default": false
+        },
         {
             "type": "richtext",
             "id": "question",

@@ -15,9 +15,9 @@ style="background-color: {{block.settings.backgroundColor}};" {{ block.shopify_a
 {% assign class = 'slider__image--adaptive' %}
 {% if block.settings.backgroundImageMobile != nil %}
 {% assign class = class | append: ' hide-mobile' %}
-{% render 'ratio-image', image: block.settings.backgroundImageMobile, class: 'slider__image--adaptive hide-desktop', mratio: '12', dratio: '12', ratioType: 'col' %}
+{% render 'ratio-image', image: block.settings.backgroundImageMobile, alt: block.settings.backgroundImageMobile.alt, class: 'slider__image--adaptive hide-desktop', mratio: '12', dratio: '12', ratioType: 'col' %}
 {% endif %}
-{% render 'ratio-image', image: block.settings.backgroundImage, class: class, mratio: '12', dratio: '12', ratioType: 'col' %}
+{% render 'ratio-image', image: block.settings.backgroundImage, alt: block.settings.backgroundImage.alt, class: class, mratio: '12', dratio: '12', ratioType: 'col' %}
 {% endif %}
 {% if block.settings.overlayOpacity > 0 %}
 <div class="overlay" style="opacity: {{block.settings.overlayOpacity | times: 0.01}}; background-color: {{block.settings.overlayColor}};"></div>

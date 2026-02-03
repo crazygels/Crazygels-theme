@@ -15,10 +15,7 @@
     },
     "content": {
       "type": "page",
-      "settings": {
-        "layout": "default",
-        "enableShortcodes": true
-      }
+      "settings": {}
     }
   },
   "order": [

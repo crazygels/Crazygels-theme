@@ -129,7 +129,7 @@
 
 
 
-<div id="s--{{-section.id}}" class="banner_blocks banner_padding {% render 'common-class', section: section, class: 'grid__section', bg: true, inherit: false, vAlign: false %} {{customID}}" {% unless section.settings.backgroundImage == nil -%}data-bg="url({{section.settings.backgroundImage | img_url: '1280x'}})"{%- endunless %}>
+<div id="s--{{-section.id}}" class="banner_blocks banner_padding{% if settings.easeIn %} ease-in{% endif %} {% render 'common-class', section: section, class: 'grid__section', bg: true, inherit: false, vAlign: false %} {{customID}}" {% unless section.settings.backgroundImage == nil -%}data-bg="url({{section.settings.backgroundImage | img_url: '1280x'}})"{%- endunless %}>
     {% render 'block__general--heading' with section as section %}
     {% if section.settings.overlayOpacity > 0 %}
         <div
@@ -168,9 +168,7 @@
 
 {% schema %}
 {
-    "name": {
-        "en": "Banner"
-    },
+    "name": "Banner",
     "max_blocks": 6,
     "settings": [
     {

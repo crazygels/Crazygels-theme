@@ -7,8 +7,10 @@
           <span>{{'cart.page.expires'|t}}</span> <span class="minutes">00</span>:<span class="seconds">00</span>
       </div>
     {% endif %}
+    {% assign cart_product = '' %}
     
     {% for item in cart.items %}
+      {% assign cart_product = cart_product | append: item.product_id | append: ',' %}
       <div class="minicart__entry">
         <a class="card__img--container minicart__image"  href="{{ item.url | within: collections.all }}">
           <div class="card__img--ratio">
@@ -95,6 +97,96 @@
         {% render 'button', type: 'primary', text: trantext, url: checkout_url %}
       </div>
     {% endfor %}
+
+    {% if settings.miniCartUpsell and cart.items.size > 0 and settings.miniCartUpsellCollection  %}
+      <style>
+        :root { --cartupsell-bg-color: {{ settings.upsellBgColor }}; }
+
+        .minicart__upsell {
+          border-top: {{ settings.upsellBorderWidth }}px {{ settings.upsellBorderStyle }} {{ settings.upsellBorderColor }};
+          border-bottom: {{ settings.upsellBorderWidth }}px {{ settings.upsellBorderStyle }} {{ settings.upsellBorderColor }};
+        }
+
+        .minicart__upsell .minicart__upsell--header p,
+        .minicart__upsell .minicart__info > *,
+        .minicart__upsell .jsPrice {
+          color: {% if settings.upsellTextColor != 'rgba(0,0,0,0)' %}{{ settings.upsellTextColor }}{% else %}var(--textColor){% endif %} !important;  
+        } 
+      </style>
+
+      {% assign hasProduct = false %}
+      {% for miniCartUpsellProduct in settings.miniCartUpsellCollection.products %}
+        {% if cart_product contains miniCartUpsellProduct.id %}
+          {% assign hasProduct = true %}
+        {% else %}
+        {% assign hasProduct = false %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+      {% unless hasProduct %}
+        <div class="minicart__upsell">
+          <div class="minicart__upsell--header">
+              <p> {{ settings.miniCartUpsellHeading }} </p>
+          </div>
+          {% assign length = settings.miniCartUpsellProductLength %}
+          {% assign total_products = settings.miniCartUpsellCollection.products.size %}
+          {% assign max_start = total_products | minus: length %}
+          {%  if max_start == 0 %}
+            {%  assign max_start = 1 %}
+          {% endif %}
+          {% assign start_index = "now" | date: "%S" | modulo: max_start %}
+          {% assign products_shown = 0 %}
+          {% for miniCartUpsellProduct in settings.miniCartUpsellCollection.products %}
+
+            {% if forloop.index0 >= start_index %}
+              {% unless cart_product contains miniCartUpsellProduct.id %} 
+                <div class="minicart__entry minicart__upsell--entry">
+                  <a class="card__img--container minicart__image"  href="{{ miniCartUpsellProduct.url | within: collections.all }}">
+                    <div class="card__img--ratio">
+                      <div class="card__img">
+                        <img src="{{ miniCartUpsellProduct.featured_image | img_url: 'medium'}}" alt="{{miniCartUpsellProduct.title | escape }}">
+                      </div>
+                    </div>
+                  </a>
+                  <div class="minicart__info">
+                    <a href="{{ miniCartUpsellProduct.url }}">{{ miniCartUpsellProduct.title }}</a>
+                    <span class="minicart__price">
+                      <span class="jsPrice" data-product-id="{{ miniCartUpsellProduct.id }}">{{ miniCartUpsellProduct.price | money | strip_html }}</span> 
+                    </span>
+                    {% if miniCartUpsellProduct.variants.size > 1 %}
+                      <select class="minicart__variant-dropdown" data-product-id="{{ miniCartUpsellProduct.id }}" onchange="BoosterTheme.cartUpsell.toggleUpsellVariantUI({{ miniCartUpsellProduct.id }},this.value, this.options[this.selectedIndex].getAttribute('price'))">
+                        {% for variant_option in miniCartUpsellProduct.variants %}
+                       
+                          {% if variant_option.available %}
+                            <option value="{{ variant_option.id }}" price="{{ variant_option.price | money | strip_html}}">
+                              {{ variant_option.title | truncate: 20, '...' }}
+                            </option>
+                          {% else %}
+                            <option disabled>{{ variant_option.title | truncate: 20, '...' }} - {{'general.buttons.sold_out' | t}}</option>
+                          {% endif %}
+                        {% endfor %}
+                      </select>
+                    {% endif %}
+                    <div class="quantity--input">
+                      <button class="cart-upsell quantity--input__button quantity--input__incr" onclick="BoosterTheme.cartUpsell.quantityHandler(event, false, {{miniCartUpsellProduct.id}})">-</button><!--
+                      --><input class="cart-upsell quantity--input__input" data-cart-upsell-quantity-id="{{ miniCartUpsellProduct.id }}" value="1" ><!--
+                      --><button class="cart-upsell quantity--input__button quantity--input__decr"onclick="BoosterTheme.cartUpsell.quantityHandler(event, true, {{miniCartUpsellProduct.id}})">+</button>
+                    </div>
+                  </div>
+                  <div class="minicart__upsell--button"> 
+                    {% assign text = 'upsell.add_to_cart' | t  %}
+                    {% render 'add-to-cart-button-upsell', product:miniCartUpsellProduct.id ,variant: miniCartUpsellProduct.first_available_variant.id, quantity: 1, price: miniCartUpsellProduct.price, text: text %}
+                  </div>
+                </div>
+                {% assign products_shown = products_shown | plus: 1 %}
+                {% if products_shown >= length %}{% break %}{% endif %}
+              {% endunless %}
+            {% endif %}
+          {% endfor %}
+
+        </div>
+      {% endunless %}
+    {% endif %}
   </div>
   {% unless cart.items.size == 0 %}
   <div class="minicart__bottom">
@@ -120,7 +212,7 @@
 {% endcapture %}
 
 
-</div>
+<div>
 {
   "html": {{cartHTML | json}},
   "item_count": {{cart.item_count}},
@@ -128,4 +220,4 @@
   "total": "{{cart.total_price | money | strip_html}}",
   "total_raw": {{cart.total_price}}
 }
-<div>
+</div>

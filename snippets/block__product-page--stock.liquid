@@ -5,7 +5,7 @@
 data-reduce="{{block.settings.reduce}}" 
 data-product="{{product.id}}" 
 data-stock-type="{{block.settings.stockLeft}}" 
-data-stock-left="{% unless block.settings.stockLeft == 'inventory' %}{{block.settings.stockLeft}}{%else%}{{product.first_available_variant.inventory_quantity | default: 5}}{%endunless%}">
+data-stock-left="{% unless block.settings.stockLeft == 'inventory' %}{{block.settings.stockLeft}}{%else%}{{product.selected_or_first_available_variant.inventory_quantity | default: 5}}{%endunless%}">
 0</span>
  {{'product_page.apps.in_stock' | t}}</span>
 <span class="amount"><span class="amount--left"></span></span>

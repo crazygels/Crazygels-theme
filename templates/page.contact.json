@@ -1,0 +1,90 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "banner--contact",
+      "settings": {
+        "layout": "default",
+        "height": 200,
+        "horizontalAlignment": "center",
+        "verticalAlignment": "middle",
+        "fontSize": "medium",
+        "contentColor": "rgba(0,0,0,0)",
+        "fillColor": "#f8f7f7",
+        "overlayOpacity": 0,
+        "overlayColor": "#000000"
+      }
+    },
+    "contact": {
+      "type": "contact",
+      "blocks": {
+        "a56b4452-1e0b-46ad-a877-98983243bc4b": {
+          "type": "contactFormEmail",
+          "settings": {
+            "name": "Email Address",
+            "placeholder": ""
+          }
+        },
+        "c183eb29-2f80-4e7a-ac75-bf3bd3219ffc": {
+          "type": "contactFormText",
+          "settings": {
+            "required": true,
+            "name": "Subject",
+            "placeholder": "",
+            "type": "text"
+          }
+        },
+        "c395d566-73fd-462c-a8bb-f77e835ac0ae": {
+          "type": "contactFormText",
+          "settings": {
+            "required": false,
+            "name": "Phone Number",
+            "placeholder": "",
+            "type": "number"
+          }
+        },
+        "ea7116bf-a948-4f20-9f60-abb397bf8c6b": {
+          "type": "contactFormDropdown",
+          "settings": {
+            "required": true,
+            "name": "Options",
+            "options": "Option 1, Option 2, Option 3"
+          }
+        },
+        "1adc7ae8-f3e0-4cf4-8972-fc3aa5463588": {
+          "type": "contactFormTextarea",
+          "settings": {
+            "name": "Comment",
+            "required": false,
+            "placeholder": ""
+          }
+        }
+      },
+      "block_order": [
+        "a56b4452-1e0b-46ad-a877-98983243bc4b",
+        "c183eb29-2f80-4e7a-ac75-bf3bd3219ffc",
+        "c395d566-73fd-462c-a8bb-f77e835ac0ae",
+        "ea7116bf-a948-4f20-9f60-abb397bf8c6b",
+        "1adc7ae8-f3e0-4cf4-8972-fc3aa5463588"
+      ],
+      "settings": {}
+    },
+    "content": {
+      "type": "page--content",
+      "settings": {}
+    }
+  },
+  "order": [
+    "banner",
+    "contact",
+    "content"
+  ]
+}

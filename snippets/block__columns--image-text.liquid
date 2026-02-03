@@ -13,7 +13,7 @@
 </style>
 
 <div class="column__media col-12 no-gap" {{block.shopify__attributes}}>
-{% render 'image', src: block.settings.image, size: '960x' %}
+{% render 'image', src: block.settings.image, alt: block.settings.image.alt, size: '960x' %}
 </div>
 <div class="column__text col-12 unflex no-gap">
 <h3 class="h-reset">{{block.settings.heading | remove: '<p>' | remove: '</p>'}}</h3>

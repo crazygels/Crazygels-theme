@@ -27,7 +27,7 @@ function getRandomInt(minimum, maximum){
 
 function closeModal(event, modal = false){
     if(!modal) modal = event.currentTarget.closest('[data-bstr-modal]') || event.currentTarget.closest('.modal')
-    modal.style.display = "none"
+    if(modal) modal.style.display = "none"
 }
 
 const isUndefined = (e)=>typeof e == "undefined"
@@ -321,6 +321,33 @@ class BstrCart{
         return qtyInput.onchange({target: qtyInput});
     }
 
+    stickyQuantityHandler(event, incr, updateCart = true){
+        event.preventDefault();
+        let prodId = event.target.dataset.productId;
+        let form = document.querySelector(`#product_form_${prodId}`)
+        let qtyInput = form ? form.querySelector('[data-qty-input]') : event.target.parentElement.querySelector('[data-qty-input]');
+        let closestQtyInput = event.target.parentElement.querySelector('.quantity--input__input');
+        let {target} = event;
+        if(incr){
+            if(!isNaN(parseInt(qtyInput.max)) && parseInt(qtyInput.value) >= qtyInput.max) return this.error({description: "Seems like there are no more items in stock."})
+            qtyInput.value++;
+            if (closestQtyInput) closestQtyInput.value++;
+        } else {
+            if(parseInt(qtyInput.value) <= 0 || !updateCart && parseInt(qtyInput.value) == 1) return false
+            if(parseInt(qtyInput.value) == 1 ){
+                let mcentry = target ? target.closest('.minicart__entry') : false;
+                let centry = target ? target.closest('.cart__item') : false;
+                if(target) target.disabled = true;
+                if(centry) centry.style.opacity = "0.5"
+                if(mcentry) mcentry.style.opacity = "0.5"
+            }
+            --qtyInput.value;
+            if (closestQtyInput) --closestQtyInput.value;
+        }
+        if(!updateCart) return true
+        return qtyInput.onchange({target: qtyInput});
+    }
+
     addToQueue(data){
         this.queue.push(data)
         if(this.queue.length > 1) return
@@ -355,12 +382,13 @@ class BstrCart{
             return
         }
         this.addToQueue({form, target})
+        closeModal(event);
     }
 
-    addToCartJSON(event = false, json = {items: []}){
+    addToCartJSON(event = false, json = {items: []}, isUpsell = false){
         let target = false;
         if(event) target = event.currentTarget
-        if(target){
+        if(target && !isUpsell){
             target.disabled = true
             target.querySelector('[data-button-text]').innerText = _bstrLocale.buttons.adding
         }
@@ -371,6 +399,22 @@ class BstrCart{
                 target.querySelector('[data-button-text]').innerText = target.dataset.originalText
             }
             return
+        }
+
+        if(target && isUpsell) {
+            target.disabled = true
+            let productId = json.items[0].product
+            let variantDropDown = document.querySelector(`.minicart__variant-dropdown[data-product-id='${productId}']`)
+            let variantQuantity = document.querySelector(`[data-cart-upsell-quantity-id="${productId}"]`);
+            
+            if(variantDropDown) {
+                let variantId = variantDropDown.value;
+                json.items[0].id = variantId
+                json.items[0].quantity = variantQuantity.value
+            }
+           
+            target.querySelector('[data-button-text]').style.display = 'none'
+            target.querySelector('.upsellLoader').style.display = 'inline-block'
         }
         this.addToQueue({target, json})
     }
@@ -443,7 +487,7 @@ class BstrCart{
 
     async processQueue(data){
         let {target, form, json} = data
-        let fconfig = form ? {method: 'POST', body: new URLSearchParams(new FormData(form)), headers: {'Content-Type': 'multipart/form-data'}} : {method: 'POST', body: JSON.stringify(json), headers: {'Content-Type': 'application/json'}}
+        let fconfig = form ? {method: 'POST', body: new FormData(form)} : {method: 'POST', body: JSON.stringify(json), headers: {'Content-Type': 'application/json'}}
         let res = await (await fetch(`${window.Shopify.routes.root}cart/add.js`, fconfig)).json();
 
         if(target){
@@ -493,7 +537,7 @@ class BstrCart{
         }
         $pi('.add-to-cart__success--single-title').innerText = title;
         $pi('.add-to-cart__success--single-variation').innerText = variant;
-        let template = this.cartSuccessInfoTemplate.replace('%total%', total).replace('%itemCount%', itemCount);
+        let template = this.cartSuccessInfoTemplate.replace('%total%', ` <strong>${total}</strong>`).replace('%itemCount%', itemCount);
         $pi('.add-to-cart__success--single-current').innerHTML = template;
         let prevent_upsell = this.events.trigger('booster:cart:b*upsell', {item, cart: this.minicart})
         if(render_upsell && !prevent_upsell.prevent){
@@ -504,8 +548,32 @@ class BstrCart{
               let modal = document.getElementById('quickbuy__modal')
               if(modal) modal.style.display = "none"
               upsellContainer.innerHTML = upsell
-              upsellContainer.style.display = "flex"
+              upsellContainer.style.display = "block"
               this.events.trigger('booster:cart:upsell', {html: upsellContainer, items: false, item, cart: this.minicart})
+
+              new Swiper('.add-to-cart__success--upsell .swiper', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                grabCursor: true,
+                allowTouchMove: true,
+                loop: true,
+                autoheight: true,
+                navigation: {
+                    nextEl: "[data-bstr-carousel-button-next]",
+                    prevEl: "[data-bstr-carousel-button-prev]",
+                },
+                breakpoints: {
+                    320: {
+                        slidesPerView: 1,
+                    },
+                    768: {
+                        slidesPerView: 2,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                    }
+                    }
+                });
           }
         }
         modal.style.display = "block";
@@ -519,8 +587,8 @@ class BstrCart{
         if(config.action == 'cart') return window.location = `${window.Shopify.routes.root}cart`;
         if(config.action == 'checkout') return window.location = `${window.Shopify.routes.root}checkout`;
         if(config.action == 'message') return this.events.trigger('booster:notify', {type: 'success', message: 'Product added to cart successfully.'});
-        if(config.action == 'minicart') return this.open()
-        this.renderModal(item, config.action == 'upsell')
+        if(config.action == 'minicart' && window.location.pathname != `/cart`) return this.open()
+        if((config.action == 'upsell' || config.action == 'added') && window.location.pathname != `/cart`) this.renderModal(item, config.action == 'upsell')
       }
 
       error(data){
@@ -535,7 +603,6 @@ class BstrCurrency{
         this.currentCurrency = bstore.get('currentCurrency')
         this.format = _settings.currencyFormat || "money_with_currency_format"
         this.events = events
-
         if(this.currentCurrency && Shopify.currency.active !== this.currentCurrency){
             this.convertAll({})
         }
@@ -619,6 +686,7 @@ class BstrCurrency{
     convertAll({oldCurrency = false, newCurrency = false, selector = '.jsPrice', format = this.format}) {
         let oldc = oldCurrency || Shopify.currency.active
         if(!oldc) return
+
         let newc = newCurrency || bstore.get("currentCurrency")
         if(!newc) return
         if(newc == oldc) return
@@ -626,6 +694,7 @@ class BstrCurrency{
         let newf = this.moneyFormats[newc][format] || '{{amount}}'
 
         let conts = document.querySelectorAll(selector)
+
         for(let i = 0, maxi = conts.length; i < maxi; ++i){
             let u;
             let elem = conts[i]
@@ -637,6 +706,17 @@ class BstrCurrency{
 
             elem.innerHTML = this.formatMoney(u, newf)
             elem.dataset.currency = newc
+        }
+
+        let currencySymbol = document.querySelectorAll('.curreny-symbol');
+        if(currencySymbol) {
+            currencySymbol.forEach((e) => {
+                let u;
+                let amount = e.innerText
+                u = -1 !== oldf.indexOf("amount_no_decimals") ? Currency.convert(100 * parseInt(amount.replace(/[^0-9]/g, ""), 10), oldc, newc) : "JOD" === oldc || "KWD" == oldc || "BHD" == oldc ? Currency.convert(parseInt(amount.replace(/[^0-9]/g, ""), 10) / 10, oldc, newc) : Currency.convert(parseInt(amount.replace(/[^0-9]/g, ""), 10), oldc, newc)
+                let str = this.formatMoney(u, newf).replace('0', '').replace('.', '')
+                e.innerHTML = str
+            })
         }
 
         bstore.set('currentCurrency', newc)
@@ -1161,6 +1241,42 @@ class BstrElements{
         }
     }
 
+    stickyBuyNow(button, e) {
+        let id = button.dataset.buyButton
+        let form = document.getElementById('product_form_' + id)
+        let target = e.currentTarget;
+
+        if(target){
+            target.disabled = true
+            target.querySelector('[data-button-text]').innerText = _bstrLocale.buttons.checking_out;
+        }
+        if(form) {
+            var formData = new FormData(form);
+
+            fetch(`${window.Shopify.routes.root}cart/add.js`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                },
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                if(target){
+                    target.disabled = false
+                    target.querySelector('[data-button-text]').innerText = target.dataset.originalText
+                }
+                window.location = `${window.Shopify.routes.root}checkout`;
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+            });
+        }
+    }
+
     closeSticky(button){
         button.closest('.sticky--mobile').classList.add('sticky--closed')
     }
@@ -1219,6 +1335,7 @@ class BstrElements{
         const $c = (q)=>card.querySelector(q)
         $c('.card__img--container').href = product.url;
         $c('.card__title').href = product.url;
+        $c('.card__title').classList.add('card__title--searched');
         $c('[data-product-image]').src = product.featured_image.url;
         $c('.card__title').innerText = product.title;
         $c('.card__price').innerText = product.price;
@@ -1314,27 +1431,41 @@ class BstrElements{
         return this.events.trigger('booster:content:update');
     }
 
-    async quickBuy(e){
-        if(window.innerWidth < 768) return
+    async quickBuy(e, btnType){
         e.preventDefault();
         const button = '<button class="close" onclick="closeModal(event)"><i class="uil uil-arrow-left"></i>' + _bstrLocale.buttons.back_to_shop + '</button>'
         const $e = (e, q)=>e.querySelector(q)
         let url = new URL(e.target.closest('a').href);
         let {parser} = await this.basync.load({url, section: 'product-page__product'})
-        if($e(parser, '.product__row').classList.contains('product__row--marketplace')){
-            let container = $e(parser, '.product__row');
-            container.classList.remove('product__row--marketplace');
-            let middle = $e(container, '.product__page--info');
-            let title = $e(middle, '.product__title');
-            let price = $e(middle, '.product__price--holder');
-            container.removeChild(middle);
-            let sticky = $e(container, '.product__page--info')
-            if(!$e(sticky, '.product__title')) sticky.insertBefore(title, sticky.firstChild);
-            if(!$e(sticky, '.product__price')) $e(sticky, '.product__title').insertAdjacentElement('afterend', price);
+        if(btnType === 'quickShop' || _settings.quickShop == false ){
+            if($e(parser, '.product__row').classList.contains('product__row--marketplace')){
+                let container = $e(parser, '.product__row');
+                container.classList.remove('product__row--marketplace');
+                let middle = $e(container, '.product__page--info');
+                let title = $e(middle, '.product__title');
+                let price = $e(middle, '.product__price--holder');
+                container.removeChild(middle);
+                let sticky = $e(container, '.product__page--info')
+                if(!$e(sticky, '.product__title')) sticky.insertBefore(title, sticky.firstChild);
+                if(!$e(sticky, '.product__price')) $e(sticky, '.product__title').insertAdjacentElement('afterend', price);
+            }
+            document.querySelector('.content').style.width = 'calc(100% - 80px)';
+            let quickBuy = document.getElementById('quickbuy__modal');
+            $e(quickBuy, '.content').innerHTML = button + $e(parser, 'body').innerHTML;
+            quickBuy.style.display = 'flex';
+        }else if(btnType === 'quickBuy'){
+            let productInfoDiv = $e(parser, '.product__page--info');
+            let productDescriptionDiv = $e(productInfoDiv, '.product__description');
+            if (productDescriptionDiv) {
+                productDescriptionDiv.remove();
+            }
+            let quickBuy = document.getElementById('quickbuy__modal');
+            $e(quickBuy, '.content').innerHTML = button + productInfoDiv.outerHTML;
+            document.querySelector('.content').style.width = '600px';
+            document.querySelector('.product__page--info').classList.remove('col-md-6');
+            document.querySelector('.product__page--info').style.marginTop = '32px';
+            quickBuy.style.display = 'flex';
         }
-        let quickBuy = document.getElementById('quickbuy__modal');
-        $e(quickBuy, '.content').innerHTML = button + $e(parser, 'body').innerHTML;
-        quickBuy.style.display = 'flex';
         this.events.trigger('booster:content:update', {trigger: 'quickbuy'})
     }
 
@@ -1391,10 +1522,17 @@ class BstrElements{
     
         let stateURL = new URL(document.URL);
         stateURL.searchParams.set('page', url.searchParams.get('page'));
-        history.pushState({}, '', stateURL);
-        
+        // history.pushState({}, '', stateURL);
+
         container.style.opacity = '1';
-        return this.events.trigger('booster:content:update', {trigger: 'pagination'})
+        
+        let swatches = document.querySelectorAll('[data-swatch-index][data-booster-initd]');
+
+        swatches.forEach(el => {
+            el.removeAttribute('data-booster-initd');
+        });
+      
+        return this.events.trigger('booster:content:update')
       }
 
       localizeDates(){
@@ -1419,6 +1557,14 @@ class BstrFilters{
         this.events.on('booster:content:update', ()=>this.initListeners())
     }
 
+    debounce(func, timeout = 500){
+        let timer;
+        return (...args) => {
+          clearTimeout(timer);
+          timer = setTimeout(() => { func.apply(this, args); }, timeout);
+        };
+    }
+
     initListeners(){
         for(let e of document.querySelectorAll('input[data-filter-href]:not([data-bstr-initd])')) {
             e.dataset.bstrInitd = "true"
@@ -1429,11 +1575,140 @@ class BstrFilters{
             e.dataset.bstrInitd = "true"
             e.addEventListener('click', this.modifyFilters.bind(this))
         }
+        
+        let params = new URL(document.location).searchParams;
+
+        let priceRangeMin = document.querySelector('.priceRangeFilter__min:not([data-bstr-initd]');
+        if(priceRangeMin) {
+            if(params.get('filter.v.price.gte')) {
+                priceRangeMin.value = params.get('filter.v.price.gte')
+            } 
+            priceRangeMin.dataset.bstrInitd = "true"
+            priceRangeMin.addEventListener('keyup', this.debounce(this.priceRangeFilterMin.bind(this)))
+        }
+
+        let priceRangeMax = document.querySelector('.priceRangeFilter__max:not([data-bstr-initd]');
+        if(priceRangeMax) {
+            if(params.get('filter.v.price.lte')) {
+                priceRangeMax.value = params.get('filter.v.price.lte')
+            } 
+            priceRangeMax.dataset.bstrInitd = "true"
+            priceRangeMax.addEventListener('keyup', this.debounce(this.priceRangeFilterMax.bind(this)))
+        }
+
+        let resetPriceFilter = document.querySelector('.reset-price-filter:not([data-bstr-initd]');
+        if(resetPriceFilter) { 
+            resetPriceFilter.dataset.bstrInitd = "true"
+            resetPriceFilter.addEventListener('click', this.resetPriceFilter.bind(this))
+        }
+
+        this.checkReset();
+
+        const rangeInput = document.querySelectorAll(".priceRange__slider .range-input input:not([data-bstr-initd]"),
+        priceInput = document.querySelectorAll(".min-max__container .price-input:not([data-bstr-initd]"),
+        range = document.querySelector(".priceRange__slider .slider .progress:not([data-bstr-initd]");
+
+        if(rangeInput && priceInput && range ) {
+            let priceReset = document.querySelector('.reset-price-container');
+
+            let priceGap = 10;
+            rangeInput.forEach((e) => {
+                e.dataset.bstrInitd = "true"
+            })
+            priceInput.forEach((e) => {
+                e.dataset.bstrInitd = "true"
+            })
+       
+            range.dataset.bstrInitd = "true"
+
+            if(params.get('filter.v.price.gte')) {
+                priceInput[0].innerHTML = params.get('filter.v.price.gte')
+                rangeInput[0].value = params.get('filter.v.price.gte')
+                range.style.left = ((params.get('filter.v.price.gte') / rangeInput[0].max) * 100) + "%";
+                priceReset.classList.add('show');
+            } 
+
+            if(params.get('filter.v.price.lte')) {
+                priceInput[1].innerHTML = params.get('filter.v.price.lte')
+                rangeInput[1].value = params.get('filter.v.price.lte')
+                range.style.right = 100 - (params.get('filter.v.price.lte') / rangeInput[1].max) * 100 + "%";
+                priceReset.classList.add('show');
+            } 
+
+            rangeInput.forEach(input =>{
+                input.addEventListener("input",  
+                    e => {
+                        let minVal = parseInt(rangeInput[0].value),
+                        maxVal = parseInt(rangeInput[1].value);
+                        if((maxVal - minVal) < priceGap){
+                            if(e.target.className === "range-min"){
+                                rangeInput[0].value = maxVal - priceGap
+                            }else{
+                                rangeInput[1].value = minVal + priceGap;
+                            }
+                        }else{
+                            priceInput[0].innerHTML = minVal;
+                            priceInput[1].innerHTML = maxVal;
+                            range.style.left = ((minVal / rangeInput[0].max) * 100) + "%";
+                            range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+                            
+                        }
+                    }
+                );
+
+                input.addEventListener("input",  
+                    this.debounce( e => {
+                        if(e.target.className === "range-min"){
+                            this.debounce(this.priceRangeFilterMin(e))
+                        }else{
+                            this.debounce(this.priceRangeFilterMax(e))
+                        }
+                    })
+                );
+            });
+        }
+    }
+
+    resetPriceFilter(event) {
+        let url = new URL(document.location);
+        url.searchParams.delete('filter.v.price.gte');
+        url.searchParams.delete('filter.v.price.lte');
+
+        const priceRangeMin = document.querySelector('.priceRangeFilter__min'),
+        priceRangeMax = document.querySelector('.priceRangeFilter__max');
+        if(priceRangeMin && priceRangeMax) {
+            priceRangeMin.value = "";
+            priceRangeMax.value = "";
+        }
+
+        const rangeMin = document.querySelector(".priceRange__slider .range-min"),
+        rangeMax = document.querySelector(".priceRange__slider .range-max"),
+        range = document.querySelector(".priceRange__slider .slider .progress"),
+        priceMin = document.querySelector(".price-min.price-input"),
+        priceMax = document.querySelector(".price-max.price-input")
+
+        if(rangeMin && rangeMax && range && priceMin && priceMax) {
+            priceMin.innerHTML = 0;
+            priceMax.innerHTML = rangeMax.max;
+    
+            rangeMin.value = 0;
+            rangeMax.value = rangeMax.max;
+    
+            range.style.left = "0";
+            range.style.right = "0";
+        }
+       
+        let searchUrl = url.pathname + url.search
+
+        let priceReset = document.querySelector('.reset-price-container');
+        priceReset.classList.remove('show')
+
+        this.renderChangePage(searchUrl);
     }
 
     modifyFilters(event){
         this.renderChangePage(event.target.dataset.filterHref)
-
+       
         let selectedProductCount = 0;
         let currentFilterCount = 0
         let hasSelectedFilter = 0;
@@ -1489,30 +1764,64 @@ class BstrFilters{
         return
       }
 
-      renderFilters(json){
-        this.setInputState(true)
+    renderFilters(json){
+    this.setInputState(true)
 
-        for(let [k, v] of Object.entries(json.filters)){
-            for(let f of v){
-                let t = document.querySelector(`[data-filter="${k}-${f.value}"]`);
-                if (t) {
-                    let c = t.nextElementSibling;
-                    if (c) {
-                        let spanElement = c.querySelector('[data-filter-count]');
-                        if (spanElement) spanElement.innerText = String(f.count);
-                    }
-                    t.disabled = !f.count;
-                    t.checked = f.active;
-                    t.dataset.filterHref = f.active ? f.urls.remove : f.urls.add;
-                    if (f.count) {
-                        t.closest('div').classList.remove('filter--disabled');
-                    } else {
-                        t.closest('div').classList.add('filter--disabled');
-                    }
+    for(let [k, v] of Object.entries(json.filters)){
+        for(let f of v){
+            let t = document.querySelector(`[data-filter="${k}-${f.value}"]`);
+            if (t) {
+                let c = t.nextElementSibling;
+                if (c) {
+                    let spanElement = c.querySelector('[data-filter-count]');
+                    if (spanElement) spanElement.innerText = String(f.count);
+                }
+                t.disabled = !f.count;
+                t.checked = f.active;
+                t.dataset.filterHref = f.active ? f.urls.remove : f.urls.add;
+                if (f.count) {
+                    t.closest('div').classList.remove('filter--disabled');
+                } else {
+                    t.closest('div').classList.add('filter--disabled');
                 }
             }
         }
-      }
+    }
+    }
+
+    priceRangeFilterMin(event) {
+        let priceMin = event.target.value;
+        let url = new URL(window.location.href); 
+        url.searchParams.delete('filter.v.price.gte');
+        if(priceMin > 0) { 
+            url.searchParams.append('filter.v.price.gte', priceMin); 
+        }
+        let href = url.pathname + url.search;
+        this.checkReset()
+        this.renderChangePage(href)
+    }
+
+    priceRangeFilterMax(event) {
+        let priceMax = event.target.value;
+        let url = new URL(window.location.href); 
+        url.searchParams.delete('filter.v.price.lte');
+        if(priceMax > 0) {
+            url.searchParams.append('filter.v.price.lte', priceMax); 
+        }
+        let href = url.pathname + url.search;
+        this.checkReset()
+        this.renderChangePage(href)
+    }
+
+    checkReset() {
+        let params = new URL(document.location).searchParams;
+        let priceReset = document.querySelector('.reset-price-container');
+        if(params.get('filter.v.price.lte') || params.get('filter.v.price.gte')) {
+            priceReset?.classList.add('show')
+        } else {
+            priceReset?.classList.remove('show')
+        }
+    }
 }
 
 class BstrGDPR {
@@ -1548,8 +1857,8 @@ class BstrGDPR {
     }
 }
 
-class CardTruncate {
-    constructor({ events, cardClass = '.card__title' }) {
+class ProductTitleTruncate {
+    constructor({ events, cardClass = '.card__title:not(.card__title--searched)' }) {
         this.events = events;
         this.cardClass = cardClass;
         this.initElements();
@@ -1691,7 +2000,7 @@ class BstrLazy{
     init(){
       if(!this.images) this.convertNative()
 
-      this.observer = new IntersectionObserver(function(entries, self) {
+      this.observer = new IntersectionObserver((entries, self) => {
         for(let i = 0, maxi = entries.length; i < maxi; ++i){
           let entry = entries[i];
           if(entry.isIntersecting) {
@@ -1712,7 +2021,7 @@ class BstrLazy{
                     let bg = bgset[i].split(' ')
                     let w = parseInt(bg[1]);
                     if(w >= width || i + 1 == bgset.length){
-                      t.style.backgroundImage = `url(${bg})`;
+                      t.style.backgroundImage = `url(${bg[0]})`;
                       break;
                     }
                   }
@@ -1732,10 +2041,35 @@ class BstrLazy{
           }
         }
       }, {threshold: 0.05});
-      
-      let lazyloads = this.images ? document.querySelectorAll('.lazyload') : document.querySelectorAll('.lazyload:not([loading="lazy"])');
+
+      if (_settings.easeIn){
+        this.easeInObserver = new IntersectionObserver((entries, self) => {
+            for (let i = 0, maxi = entries.length; i < maxi; ++i) {
+              let entry = entries[i];
+              if (entry.isIntersecting) {
+                let t = entry.target;
+                if (t.classList.contains('ease-in')) {
+                  requestAnimationFrame(() => {
+                    t.classList.remove('ease-in');
+                    t.classList.add('eased-in');
+                  });
+                  self.unobserve(entry.target);
+                }
+              }
+            }
+        }, { threshold: 0.05 });
+      }
+  
+      let lazyloads = this.images ? document.querySelectorAll(`.${this.class}`) : document.querySelectorAll(`.${this.class}:not([loading="lazy"])`);
       for(let i = 0, maxi = lazyloads.length; i < maxi; ++i){
         this.observer.observe(lazyloads[i]);
+      }
+      
+      if (_settings.easeIn){
+        let easeIns = document.querySelectorAll('.ease-in');
+        for (let i = 0, maxi = easeIns.length; i < maxi; ++i) {
+            this.easeInObserver.observe(easeIns[i]);
+        }
       }
       
       this.events.on('booster:content:update', ()=>this.update())
@@ -1752,14 +2086,23 @@ class BstrLazy{
       }
     }
   
-    update(){
-      if(!this.images) this.convertNative()
-      let lazyloads = this.images ? document.querySelectorAll('.lazyload') : document.querySelectorAll('.lazyload:not([loading="lazy"])');
-      for(let i = 0, maxi = lazyloads.length; i < maxi; ++i){
+    update() {
+      if (!this.images) this.convertNative();
+      let lazyloads = this.images ? document.querySelectorAll(`.${this.class}`) : document.querySelectorAll(`.${this.class}:not([loading="lazy"])`);
+      for (let i = 0, maxi = lazyloads.length; i < maxi; ++i) {
         this.observer.observe(lazyloads[i]);
       }
+      
+      if (_settings.easeIn){
+        let easeIns = document.querySelectorAll('.ease-in');
+        for (let i = 0, maxi = easeIns.length; i < maxi; ++i) {
+            this.easeInObserver.observe(easeIns[i]);
+        }
+      }
     }
-}
+  }
+  
+  
 
 class BstrNotify{
     constructor({events}){
@@ -1814,6 +2157,8 @@ class BstrRecentlyBought{
     }
   
     async init(){
+      let showEvery = _settings.recentlyBoughtInterval;
+      let displayFor = _settings.recentlyBoughtRemain;
       let data = await fetch(this.config.allProductsUrl + '?section_id=api__recently-bought');
       let raw = await data.text();
       let parser = document.createElement('div');
@@ -1823,11 +2168,25 @@ class BstrRecentlyBought{
       parsed.names = parsed.names.filter(name=>name.trim()!='');
       if(!parsed.names.length) parsed.names = 'Alissa Ashford, Carroll Calley, Augustina Angulo, Kenna Kuntz, Hailey Hinkle, Breann Beckham, Raquel Roles, Bernetta Beeks'.split(',')
       this.recentlyBoughtCollection = parsed;
-  
-      setInterval(()=>this.render(), (_settings.recentlyBoughtInterval + _settings.recentlyBoughtRemain) * 1000)
+
+      if (_settings.showEveryUnit == 'minutes') {
+        showEvery *= 60;
+      }
+
+      if (_settings.displayForUnit == 'minutes') {
+        displayFor *= 60;
+      }
+      this.render()
+
+      setInterval(() => this.render(), (showEvery + displayFor) * 1000);
     }
   
     render(){
+      let displayFor = _settings.recentlyBoughtRemain;
+        
+      if (_settings.displayForUnit == 'minutes') {
+        displayFor *= 60;
+      }
       const RBC = this.container;
       const $rb = (q)=>RBC.querySelector(q)
   
@@ -1871,7 +2230,7 @@ class BstrRecentlyBought{
   
       setTimeout(()=>{
         RBC.classList.remove('anim__fade-in')
-      }, _settings.recentlyBoughtRemain * 1000);
+      }, displayFor * 1000);
     }
 }
 
@@ -1906,7 +2265,7 @@ class BstrSlider {
         let previous = parseInt(slider.dataset.bstrSliderCurrent)
         const vertical = slider.dataset.bstrSliderOrientation.toLowerCase() == "vertical"
         if(!slider.querySelector('[data-bstr-slide]')) return
-        let current = vertical ? Math.round(slider.scrollTop / slider.querySelector('[data-bstr-slide]').offsetHeight) : Math.round(slider.scrollLeft / slider.querySelector('[data-bstr-slide]').offsetWidth)
+        let current = vertical ? Math.round(slider.scrollTop / slider.querySelector('[data-bstr-slide]').offsetHeight) : slider.scrollLeft != 0 ? Math.round(slider.scrollLeft / slider.querySelector('[data-bstr-slide]').offsetWidth) : 0
         slider.dataset.bstrSliderCurrent = current
         let direction = previous - current > 0 ? '+' : '-'
 
@@ -1941,10 +2300,6 @@ class BstrSlider {
     }
 
     init(selector = false) {
-        let slideScroll = document.querySelector('.slider--product-holder')
-        if(slideScroll) {
-            slideScroll.classList.add('slide-scroll')
-        }
         let sliders = document.querySelectorAll(`${selector || this._selector}:not([data-bstr-initd])`);
         for (let sliderComponent of sliders) {
             let slider = sliderComponent.querySelector('[data-bstr-slide-holder]');
@@ -2085,6 +2440,88 @@ class BstrSlider {
         }
 
         vertical ? slider.scrollTo(0, s_children[current].offsetTop - slider.offsetTop) : slider.scrollTo(s_children[current].offsetLeft - slider.offsetLeft - parseInt(window.getComputedStyle(slider).paddingLeft), 0)
+    }
+}
+
+class BstrCarousel {
+    constructor() {
+        this._options = {};
+        this.init();
+    }
+
+    init() {
+        document.querySelectorAll("[data-bstr-carousel]").forEach(section => {
+            if (section.hasAttribute('data-bstr-thumbs-carousel')) {
+                // carousel is thumbnail
+                // https://swiperjs.com/demos#thumbs-gallery
+
+                const thumbSwiper = section.querySelector(".thumbs-swiper");
+                const mainSwiper = section.querySelector(".main-swiper");
+                const prevButton = section.querySelector("[data-bstr-carousel-button-prev]");
+                const nextButton = section.querySelector("[data-bstr-carousel-button-next]");
+
+                let options1 = {}
+
+                const selector1Options = thumbSwiper.dataset.bstrCarouselOptions ? JSON.parse(thumbSwiper.dataset.bstrCarouselOptions) : {};
+                options1 = { ...options1, ...selector1Options }; 
+
+                var thumbSwipers = new Swiper(thumbSwiper, options1);
+
+                let options2 = {
+                    navigation: {
+                        nextEl: nextButton,
+                        prevEl: prevButton,
+                    }
+                }
+
+                const selector2Options = mainSwiper.dataset.bstrCarouselOptions ? JSON.parse(mainSwiper.dataset.bstrCarouselOptions) : {};
+                options2 = { ...options2, ...selector2Options }; 
+
+                var mainSwipers = new Swiper(mainSwiper, options2);
+
+                let isSyncing = false;
+
+                thumbSwipers.on('realIndexChange', function () {
+                    if (isSyncing) return;
+                    isSyncing = true;
+                    const realIndex = this.realIndex;
+                    mainSwipers.slideToLoop(realIndex);
+                    isSyncing = false;
+                });
+
+                mainSwipers.on('realIndexChange', function () {
+                    if (isSyncing) return;
+                    isSyncing = true;
+                    const realIndex = this.realIndex;
+                    thumbSwipers.slideToLoop(realIndex);
+                    isSyncing = false;
+                });
+            } else {
+                // single carousel only
+
+                const selector = section.querySelector("[data-bstr-carousel-items]");
+                const prevButton = section.querySelector("[data-bstr-carousel-button-prev]");
+                const nextButton = section.querySelector("[data-bstr-carousel-button-next]");
+                const pagination = section.querySelector("[data-bstr-carousel-pagination]");
+                this._options = {
+                    navigation: {
+                        nextEl: nextButton,
+                        prevEl: prevButton,
+                    },
+                    pagination: {
+                        el: pagination,
+                        clickable: true
+                    }
+                };
+                
+                const sectionOptions = section.dataset.bstrCarouselOptions ? JSON.parse(section.dataset.bstrCarouselOptions) : {};
+                this._options = { ...this._options, ...sectionOptions };
+                
+                if (selector) {
+                    new Swiper(selector, this._options);
+                }
+            }
+        }); 
     }
 }
 
@@ -2288,13 +2725,13 @@ class BstrSwatches {
             if(_settings.preselectSwatch == "firstOptionIndex"){
                 for(let nos of variants){
                     nos.dataset.bstrInitd = "true"
-                    if(Object.keys(this.current).includes(nos.dataset.bstrSwatch)) continue
+                    // if(Object.keys(this.current).includes(nos.dataset.bstrSwatch)) continue
                     this.setOption(nos.dataset.bstrSwatch, 0, this.getVariant(nos.dataset.bstrSwatch, nos.dataset.bstrPreselect).options[0])
                 }
             }else{
                 for(let nos of variants){
                     nos.dataset.bstrInitd = "true"
-                    if(Object.keys(this.current).includes(nos.dataset.bstrSwatch)) continue
+                    // if(Object.keys(this.current).includes(nos.dataset.bstrSwatch)) continue
                     this.setProductVariant(nos.dataset.bstrSwatch, nos.dataset.bstrPreselect)
                 }
             }
@@ -2634,6 +3071,7 @@ class BstrSwatchesTheme{
         let dynbuttons = document.querySelectorAll(`[data-dynamic-button="${params.product.id}"]`)
         for(let btn of dynbuttons){
             let b = btn.querySelector('button')
+            btn.classList.remove('disabled')
             if(!b) continue
             if(variant.available){
                 b.removeAttribute('disabled')
@@ -2845,6 +3283,565 @@ class BstrBlockLink {
     }
 }
 
+class BstrProductCompare {
+    constructor() {
+        this.sessionKey = 'BoosterProductCompare'
+        this.productCompareItems = {}
+        this.maxItem = 3
+        this.initProductCompare()
+    }
+
+    initProductCompare() {
+        let sessionItems = JSON.parse(sessionStorage.getItem(this.sessionKey));
+        if(sessionItems) {
+            this.productCompareItems = sessionItems.products
+            this.populateCompareProduct()
+        }
+
+        let productCompareCheckbox = document.querySelectorAll("[data-compare-checkbox]")
+        productCompareCheckbox.forEach(e => {
+            if(this.productCompareItems[e.value] !== undefined) {
+                e.checked = true;
+            }
+            e.addEventListener('change', event => this.productCompare(event))
+        })
+
+        let drawerClearAll = document.querySelector("[data-product-compare-clear-all]");
+        drawerClearAll.addEventListener('click', e => this.clearAll());
+
+        let viewCompare = document.querySelector("[data-product-view-compare]")
+        viewCompare.addEventListener('click', e => {
+            e.preventDefault();
+            this.viewCompare()
+        });
+
+        this.productCompareCheckboxCheckOpen()
+        this.toggleCompareDrawer();
+        this.toggleCompareButton();
+        this.toggleCheckboxes()
+        this.productCompareDrawerTrigger();
+    }
+
+    productCompare(event) {
+        let value = event.target.value
+        let isChecked = event.target.checked
+
+        if(isChecked) {
+            let productData = JSON.parse(document.querySelector(`[data-product-compare-id='${value}']`).innerText)
+            this.productCompareItems[value] = productData
+        } else {
+            this.removeCompareProduct(value)
+        }
+
+        this.productCompareCheckboxCheckOpen()
+        this.setSessionStorage()
+        this.populateCompareProduct()
+        this.toggleCompareDrawer();
+        this.toggleCompareButton();
+        this.toggleCheckboxes();
+    }
+
+    productCompareDrawerTrigger() {
+        let trigger = document.querySelector('[data-product-compare-trigger]')
+        if(trigger) {
+            trigger.addEventListener('click', e => {
+                trigger.parentElement.parentElement.parentElement.classList.toggle('minimize')
+                if (trigger.parentElement.parentElement.parentElement.classList.contains('minimize')) {
+                    this.backToTopButtonMinimize()
+                } else {
+                    this.backToTopButtonOpen()
+                }
+            })
+        }
+    }
+
+    toggleCompareDrawer() {
+        if(Object.keys(this.productCompareItems).length >= 1) {
+            this.openCompareDrawer()
+        } else {
+            this.closeCompareDrawer()
+        }
+    }
+
+    toggleCompareButton() {
+        if(Object.keys(this.productCompareItems).length > 1) {
+            this.enableCompareButton()
+        } else {
+            this.disabledCompareButton()
+        }
+    }
+
+    enableCompareButton() { 
+        let compareButton = document.querySelector('[data-product-view-compare]')
+        compareButton.disabled = false
+    }
+
+    disabledCompareButton() {
+        let compareButton = document.querySelector('[data-product-view-compare]')
+        compareButton.disabled = true
+    }
+
+    openCompareDrawer() {
+        let compareDrawer = document.querySelector('[data-product-compare-drawer]')
+        compareDrawer.classList.add('open')
+        this.backToTopButtonOpen()
+    }
+
+    closeCompareDrawer() {
+        let compareDrawer = document.querySelector('[data-product-compare-drawer]')
+        compareDrawer.classList.remove('open')
+        this.backToTopButtonClose()
+    }
+
+    toggleCheckboxes() {
+        if(Object.keys(this.productCompareItems).length >= this.maxItem) {
+            this.disabledCheckboxes()
+        } else {
+            this.enableCheckboxes()
+        }
+    }
+
+    disabledCheckboxes() {
+        let checkboxes = document.querySelectorAll('[data-compare-checkbox]')
+        if (checkboxes) {
+            checkboxes.forEach(e => {
+                if(!e.checked) {
+                    e.disabled = true
+                }
+            })
+        }
+    }
+
+    enableCheckboxes() {
+        let checkboxes = document.querySelectorAll('[data-compare-checkbox]')
+        if (checkboxes) {
+            checkboxes.forEach(e => {
+                e.disabled = false
+            })
+        }
+    }
+
+    productCompareCheckboxCheckOpen() {
+        if(window.innerWidth < 767 ) {
+            let checkboxes = document.querySelectorAll('[data-compare-checkbox]')
+            checkboxes.forEach(e => {
+                e.parentElement.parentElement.classList.remove('hide')
+            })
+        } else {
+            let length = Object.keys(this.productCompareItems).length
+            let checkboxes = document.querySelectorAll('[data-compare-checkbox]')
+            if(length > 0) {
+                checkboxes.forEach(e => {
+                    e.parentElement.parentElement.classList.remove('hide')
+                })
+            } else {
+                checkboxes.forEach(e => {
+                    e.parentElement.parentElement.classList.add('hide')
+                })
+            }
+        }
+    }
+
+    renderCompareProduct(product){
+        let productTemplate = document.getElementById('productCompareTemplate').cloneNode(true).content.children[0]
+        const $c = (q)=>productTemplate.querySelector(q)
+        $c('[data-product-compare-drawer-image]').src = product.image;
+        $c('[data-product-compare-drawer-title]').href = product.url;
+        $c('[data-product-compare-drawer-title]').innerText = product.title;
+        $c('[data-product-compare-drawer-remove]').dataset.productCompareId = product.id
+        $c('[data-product-compare-drawer-remove]').addEventListener('click', e => this.removeCompareProduct(product.id))
+        return productTemplate;
+    }
+
+    renderCompareDisableProduct(index){
+        let productTemplate = document.getElementById('productCompareDisableTemplate').cloneNode(true).content.children[0]
+        const $c = (q)=>productTemplate.querySelector(q)
+        let itemPosition = '';
+
+        switch(index) {
+            case 2:
+                itemPosition = 'second'
+                break;
+            case 3:
+                itemPosition = 'third'
+                break;
+            default:
+                itemPosition = ''
+        }
+
+        $c('[data-product-compare-drawer-title]').innerText = `Select ${itemPosition} item to compare`;
+        return productTemplate;
+    }
+
+    populateCompareProduct() {
+        const container = document.querySelector('[product-compare-items]')
+        if(this.productCompareItems) {
+            let products = this.productCompareItems
+            let length = Object.keys(products).length
+            let count = 0;
+
+            var frag = document.createDocumentFragment();
+            Object.keys(products).forEach(key => {
+                count++;
+                const value = products[key];
+                frag.appendChild(this.renderCompareProduct(value));
+            });
+            for (let i = count; i < this.maxItem; i++) {
+                frag.appendChild(this.renderCompareDisableProduct(i + 1));
+            }
+            container.innerHTML = '';
+            container.appendChild(frag);
+        }
+    }
+
+    removeCompareProduct(id) {
+        delete this.productCompareItems[id]
+        this.productCompareCheckbox();
+        this.setSessionStorage();
+        this.populateCompareProduct();
+        this.productCompareCheckboxCheckOpen()
+        this.toggleCompareDrawer()
+        this.toggleCompareButton()
+        this.toggleCheckboxes()
+    }
+
+    setSessionStorage() {
+        let data = {
+            "enabled": true,
+            "products" : this.productCompareItems
+        }
+        sessionStorage.setItem("BoosterProductCompare",JSON.stringify(data) );
+    }
+
+    productCompareCheckbox() {
+        let productCompareCheckbox = document.querySelectorAll("[data-compare-checkbox]")
+        productCompareCheckbox.forEach(e => {
+            if(this.productCompareItems[e.value] !== undefined) {
+                e.checked = true;
+            } else {
+                e.checked = false;
+            }
+        })
+    }
+
+    clearAll() {
+        this.productCompareItems = {};
+        sessionStorage.removeItem("BoosterProductCompare");
+        this.productCompareCheckbox();
+        this.populateCompareProduct();
+        this.productCompareCheckboxCheckOpen()
+        this.toggleCompareDrawer()
+        this.toggleCompareButton()
+        this.closeModalOverlay()
+        this.toggleCheckboxes()
+    }
+
+    renderCompareProductCard(product) {
+        let productTemplate = document.getElementById('productCompareCard').cloneNode(true).content.children[0]
+        const $c = (q)=>productTemplate.querySelector(q)
+        $c('[data-compare-product-image]').src = product.image;
+        $c('[data-compare-compare-at-price]').innerText = product.compare_at_price;
+        $c('[data-compare-product-price]').innerText = product.price;
+        $c('[data-compare-product-title]').innerText = product.title;
+        return productTemplate;
+    }
+
+    renderCompareProductDescription(product) {
+        let productTemplate = document.getElementById('productCompareDescription').cloneNode(true).content.children[0]
+        const $c = (q)=>productTemplate.querySelector(q)
+        $c('[data-product-compare-description]').innerHTML = product.description;
+        return productTemplate;
+    }
+
+    renderCompareProductAvailability(product) {
+        let productTemplate = document.getElementById('productCompareAvailability').cloneNode(true).content.children[0]
+        const $c = (q)=>productTemplate.querySelector(q)
+        $c('[data-product-compare-availability]').innerHTML = product.availability;
+        return productTemplate;
+    }
+
+    renderCompareProductVendor(product) {
+        let productTemplate = document.getElementById('productCompareVendor').cloneNode(true).content.children[0]
+        const $c = (q)=>productTemplate.querySelector(q)
+        $c('[data-product-compare-vendor]').innerHTML = product.vendor;
+        return productTemplate;
+    }
+
+    renderCompareProductModal() {
+        const productCardContainer = document.querySelector('[data-compare-product-card--holder]')
+        const productDescriptionContainer = document.querySelector('[data-compare-product-description--holder]')
+        const productAvailabilityContainer = document.querySelector('[data-compare-product-availability--holder]')
+        const productVendorContainer = document.querySelector('[data-compare-product-vendor--holder]')
+
+        let products = this.productCompareItems
+        var fragProduct = document.createDocumentFragment();
+        var fragDescription = document.createDocumentFragment();
+        var fragAvailability = document.createDocumentFragment();
+        var fragVendor = document.createDocumentFragment();
+
+        Object.keys(products).forEach(key => {
+            fragProduct.appendChild(this.renderCompareProductCard(products[key]));
+            fragDescription.appendChild(this.renderCompareProductDescription(products[key]));
+            fragAvailability.appendChild(this.renderCompareProductAvailability(products[key]));
+            fragVendor.appendChild(this.renderCompareProductVendor(products[key]));
+        });
+
+        productCardContainer.innerHTML = '';
+        productCardContainer.appendChild(fragProduct);
+
+        productDescriptionContainer.innerHTML = '';
+        productDescriptionContainer.appendChild(fragDescription);
+
+        productAvailabilityContainer.innerHTML = '';
+        productAvailabilityContainer.appendChild(fragAvailability);
+
+        
+        productVendorContainer.innerHTML = '';
+        productVendorContainer.appendChild(fragVendor);
+
+        this.comparePageListener();
+        this.openProductCompareModal();
+    }
+
+    viewCompare() {
+        if(this.productCompareItems) {
+            this.renderCompareProductModal()
+        } else {
+
+        }
+    }
+
+    comparePageListener() {
+        let compareFilter = document.querySelectorAll('[data-compare-product-filter-input]')
+        compareFilter.forEach(e => {
+            e.addEventListener('input', i => {
+                let hasChecked = false;
+                compareFilter.forEach( z => {
+                    let input = z.dataset.compareProductFilterInput;
+                    let isFilterChecked = z.checked;
+                    if(!isFilterChecked) {
+                        let content = document.querySelector(`[data-compare-product-content="${input}"]`)
+                        content.classList.add('hide')
+                    } else {
+                        hasChecked = true;
+                    }
+                })
+
+                let compareProductFilterInput = i.target.dataset.compareProductFilterInput;
+                let isChecked = i.target.checked;
+                if(isChecked) {
+                    let content = document.querySelector(`[data-compare-product-content="${compareProductFilterInput}"]`)
+                    content.classList.remove('hide')
+                } else {
+                    let content = document.querySelector(`[data-compare-product-content="${compareProductFilterInput}"]`)
+                    content.classList.add('hide')
+                }
+
+
+                if(hasChecked == false) {
+                    compareFilter.forEach( z => {
+                        let input = z.dataset.compareProductFilterInput;
+                        let content = document.querySelector(`[data-compare-product-content="${input}"]`)
+                        content.classList.remove('hide')
+                    })
+                }
+            })
+        })
+
+        let closeProductCompareModal = document.querySelector('[data-compare-product-modal-close]')
+        closeProductCompareModal.addEventListener('click', e => { this.closeProductCompareModal() } )
+    }
+
+    openProductCompareModal() {
+        let compareProductModal = document.querySelector('[data-compare-product-modal]')
+        compareProductModal.classList.add('open')
+        this.closeCompareDrawer()
+        this.openModalOverlay()
+    }
+
+    closeProductCompareModal() {
+        let compareProductModal = document.querySelector(['[data-compare-product-modal]'])
+        compareProductModal.classList.remove('open')
+        this.openCompareDrawer()
+        this.closeModalOverlay()
+    }
+
+    backToTopButtonOpen() {
+        let drawerHeight = document.querySelector('[data-product-compare-drawer]').offsetHeight
+        let scrollTopButton =  document.querySelector('#scrollTopBtn')
+        if(scrollTopButton) {
+            scrollTopButton.style.bottom = `${drawerHeight + 20}px`;
+        }
+    }
+
+    backToTopButtonMinimize() {
+        let drawerHeight = document.querySelector('[data-product-compare-drawer]').offsetHeight
+        let itemContainerHeight = document.querySelector('.product-compare-drawer__container').offsetHeight + 36
+        let scrollTopButton =  document.querySelector('#scrollTopBtn')
+        scrollTopButton.style.bottom = `${drawerHeight - itemContainerHeight}px`;
+    }
+
+    backToTopButtonClose() {
+        let drawerHeight = document.querySelector('[data-product-compare-drawer]').offsetHeight
+        let scrollTopButton =  document.querySelector('#scrollTopBtn')
+        if(scrollTopButton) {
+            scrollTopButton.style.bottom = `18px`;
+        }
+    }
+
+    openModalOverlay() {
+        let overlay = document.querySelector('[data-compare-product-modal-overlay]')
+        let body = document.querySelector('body')
+        overlay.classList.add('active')
+        body.classList.add('product-compare-modal-open')
+    }
+
+    closeModalOverlay() {
+        let overlay = document.querySelector('[data-compare-product-modal-overlay]')
+        let body = document.querySelector('body')
+        overlay.classList.remove('active')
+        body.classList.remove('product-compare-modal-open')
+    }
+}
+       
+class BstrLoginPopup {
+    constructor(){
+        this.initPopup()
+    }
+
+    initPopup() {
+        let popupButton = document.querySelectorAll('[data-login-popup]');
+        let userButton = document.querySelector('#user__button');
+        let loginForm = document.querySelector('[data-login-popup-form]')
+        let registerForm = document.querySelector('[data-register-popup-form]')
+        let body = document.querySelector('body');
+        
+        if(popupButton) {
+            popupButton.forEach((e)=>{ 
+                e.addEventListener('click', function(e) {
+                    let loginPopup = document.querySelector('[data-login-popup-container]')
+                    loginPopup.style.display = 'block';
+                    userButton.checked = false;
+                    loginForm.style.display = 'block';
+                    registerForm.style.display = 'none';
+                })
+            })
+        }
+
+        let registerPopup = document.querySelectorAll('[data-login-popup-register]');
+        if(registerPopup) {
+            registerPopup.forEach((e)=>{
+                e.addEventListener('click', function(e) {
+                    let loginPopup = document.querySelector('[data-login-popup-container]')
+                    loginPopup.style.display = 'block';
+                    userButton.checked = false;
+                    loginForm.style.display = 'none';
+                    registerForm.style.display = 'block';
+                })
+            })
+            
+        }
+
+        let signinPopup = document.querySelectorAll('[data-login-popup-signin]');
+        if(signinPopup) {
+            signinPopup.forEach((e)=>{  
+                e.addEventListener('click', function(e) {
+                    loginForm.style.display = 'block';
+                    registerForm.style.display = 'none'
+                })
+            })
+        }
+
+        let popupLogingOverlay = document.querySelector('.login-popup-overlay');
+        if(popupLogingOverlay) {
+            popupLogingOverlay.addEventListener('click', function(e) {
+                let loginPopup = document.querySelector('[data-login-popup-container]')
+                loginPopup.style.display = 'none';
+            })
+        }
+        
+    }
+}
+class BstrCartUpsell {
+    toggleUpsellVariantUI(product_id, variant_id, price ) {
+        let variantPrice = document.querySelectorAll(`.jsPrice[data-product-id="${product_id}"]`)
+        if(variantPrice) {
+            variantPrice.forEach(e => {
+                e.innerHTML = price
+            }) 
+        }
+   }
+
+   quantityHandler(event, incr, product_id) {
+    const upsellQuantityInput = document.querySelectorAll(`[data-cart-upsell-quantity-id="${product_id}"]`);
+    if(incr) {
+        upsellQuantityInput.forEach(e => {
+            e.value = parseInt(e.value) + 1
+        });
+        upsellQuantityInput.value = parseInt(upsellQuantityInput.value) + 1
+    } else {
+        upsellQuantityInput.forEach(e => {
+            if(parseInt(e.value) > 1) {
+                e.value = parseInt(e.value) - 1 
+            }
+        });
+    }
+   }
+}
+        
+class BstrScrollText {
+    constructor() {
+        document.querySelectorAll("[data-scroll-text-section]").forEach(section => this.initSection(section));
+    }
+
+    initSection(section) {
+        const marquee = section.querySelector("[data-marquee]");
+        const marqueeItems = section.querySelectorAll("[data-marquee-items]");
+        if (marquee) {
+            marqueeItems.forEach(el => this.cloneItems(el));
+            this.observeAnimations(marquee);
+        }
+    }
+
+    cloneItems(el) {
+        const items = el.querySelectorAll("[data-marquee-item]");
+        const width = el.offsetWidth;
+        const totalItemWidth = Array.from(items).reduce((total, item) => total + item.offsetWidth, 0);
+        const numItems = Math.ceil(width / totalItemWidth);
+        for (let i = 0; i < numItems; i++) {
+            items.forEach(item => el.appendChild(item.cloneNode(true)));
+        }
+    }
+
+    observeAnimations(marquee) {
+        new IntersectionObserver(debounce(entries => {
+            marquee.classList.toggle("marquee--is-animated", entries[0].isIntersecting);
+        }, 100, false)).observe(marquee);
+    }
+}
+
+class BstrProductImageHandler extends BstrSlider  {
+    constructor(props) {
+        super(props)
+        this.initProductImage() 
+    }
+
+    initProductImage() {
+        setTimeout(() => {
+            let slider = document.querySelectorAll('.slider--product-holder');
+            if(slider) {
+                slider.forEach(e => {
+                    e.style.visibility = 'visible';
+                    if(!_settings.variantShowImage) {
+                        let index = 0;
+                        super._moveTo({e, index});
+                    }
+                })
+            }
+        }, 300);
+    }
+}
+
 class BstrTheme{
     constructor(){
         this.events = new BstrEvents()
@@ -2874,10 +3871,17 @@ class BstrTheme{
         if(_settings.OPDynTitle.trim() != '' || _settings.BPDynTitle.trim() != '') this.dynt = new BstrDynTitle()
         if(_settings.copycat) this.copycat = new BstrCopycat()
         if(_settings.gdpr) this.gdpr = new BstrGDPR()
-        if (_settings.cardNameLimit !== 'none') this.cardNameLimit = new CardTruncate({ events: this.events });
+        if (_settings.cardNameLimit !== 'none') this.cardNameLimit = new ProductTitleTruncate({ events: this.events });
+        this.prodTitle = new ProductTitleTruncate({ events: this.events, cardClass: '.product__title--truncated' });
         if(_settings.recentlyBought && typeof recentlyBoughtConfig !== 'undefined') this.recentlyBought = new BstrRecentlyBought()
         this.blockLink = new BstrBlockLink();
-        this.events.trigger('booster:loaded', {BoosterTheme: this})
+        if(_settings.productCompare) this.productCompare = new BstrProductCompare();
+        this.loginPopup = new BstrLoginPopup();
+        this.cartUpsell = new BstrCartUpsell();
+        this.defaultCarousel = new BstrCarousel()
+        this.scrollText = new BstrScrollText();
+        this.productImageHandler = new BstrProductImageHandler({events: this.events}); 
+        this.events.trigger('booster:loaded', {BoosterTheme: this});
     }
 
     async initFeaturedProducts(){

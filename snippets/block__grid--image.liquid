@@ -23,7 +23,7 @@
         </div>
     {% endif %}
     {%- unless block.settings.backgroundImage == nil -%}
-        {% render 'image', src: block.settings.backgroundImage, size: '960x' %}
+        {% render 'image', src: block.settings.backgroundImage, alt: block.settings.backgroundImage.alt, size: '960x' %}
     {% else %}
     {% if settings.demo %}
         <img data-src="https://source.unsplash.com/random/960x" loading="lazy" class="lazyload">
@@ -48,7 +48,7 @@
         </div>
     {% endif %}
     {%- unless block.settings.backgroundImage == nil -%}
-    {% render 'image', src: block.settings.backgroundImage, size: '960x' %}
+    {% render 'image', src: block.settings.backgroundImage, alt: block.settings.backgroundImage.alt, size: '960x' %}
     {% else %}
     {% if settings.demo %}
         <img data-src="https://source.unsplash.com/random/960x" loading="lazy" class="lazyload">

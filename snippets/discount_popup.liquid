@@ -13,7 +13,7 @@
                 background-repeat: no-repeat;flex-grow:1;"{% endif %}>
                 {% if settings.discount_icon != blank %}
               
-                <img src="{{ settings.discount_icon | img_url:'medium' }}" style="visibility: hidden;height: 470px;">
+                <img src="{{ settings.discount_icon | img_url:'medium' }}" alt="{{ settings.discount_icon.alt }}" style="visibility: hidden;height: 470px;">
                 {% else %}
                 {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
                 {% endif %}

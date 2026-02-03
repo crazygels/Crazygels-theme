@@ -16,11 +16,7 @@
     },
     "content": {
       "type": "cart-page",
-      "settings": {
-        "discount": "money",
-        "additional_notes": false,
-        "featured": ""
-      }
+      "settings": {}
     }
   },
   "order": [

@@ -18,14 +18,14 @@
 {% endunless %}
 </style>
 
-{% assign class = 'newsletter__form ' | append: section.settings.horizontalAlignment %}
+{% assign class = 'newsletter__form' | append: section.settings.horizontalAlignment %}
 {% if block.settings.newsletter == "shopify" %}
 {% form 'customer', class: class, id: "footer_news" %}
-{%- if block.settings.heading != blank -%}<span class="footer__title">{{block.settings.heading}}</span>{%-endif-%}
+{%- if block.settings.heading != blank -%}<span class="footer__title{% if settings.easeIn %} ease-in{% endif %}">{{block.settings.heading}}</span>{%-endif-%}
 {% if form.posted_successfully? %}
     {% render 'newsletter__general--confirm' %}
 {% endif %}
-<div id="form--{{-block.id}}" class="newsletter__inputs {{section.settings.horizontalAlignment}}">
+<div id="form--{{-block.id}}" class="newsletter__inputs {{section.settings.horizontalAlignment}}{% if settings.easeIn %} ease-in{% endif %}">
 <input type="hidden" name="customer[accepts_marketing,newsletter,prospect]" value="true" />
 <input name="contact[email]" placeholder="{{block.settings.email | default: 'Email'}}" id="{{block.id-}}__email" class="newsletter__input newsletter__email" type="email">
 {% assign btntext = block.settings.submit | default: 'Subscribe' %}
@@ -35,10 +35,10 @@
 {% elsif block.settings.newsletter == "mailchimp" %}
 {% unless settings.mcAction == blank %}
 <form action="{{settings.mcAction}}" method="POST" class="{{class}}">
-{%- if block.settings.heading != blank -%}<span class="footer__title">{{block.settings.heading}}</span>{%-endif-%}
+{%- if block.settings.heading != blank -%}<span class="footer__title{% if settings.easeIn %} ease-in{% endif %}">{{block.settings.heading}}</span>{%-endif-%}
 {% unless settings.mcU == blank %}<input type="hidden" name="u" value="{{settings.mcU}}">{% endunless %}
 {% unless settings.mcID == blank %}<input type="hidden" name="id" value="{{settings.mcID}}">{% endunless %}
-<div id="form--{{-block.id}}" class="newsletter__inputs {{section.settings.horizontalAlignment}}">
+<div id="form--{{-block.id}}" class="newsletter__inputs {{section.settings.horizontalAlignment}}{% if settings.easeIn %} ease-in{% endif %}">
 <input name="EMAIL" placeholder="{{block.settings.email | default: 'Email'}}" id="{{block.id-}}__email" class="newsletter__input newsletter__email" type="email">
 {% assign btntext = block.settings.submit | default: 'Subscribe' %}
 {% render 'button__submit', text: btntext, type: block.settings.buttonType %}

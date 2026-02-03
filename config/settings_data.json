@@ -310,7 +310,6 @@
           "borderRadius": 0,
           "shadow": true,
           "menuLinks": "main-menu",
-          "megamenu": false,
           "logoWidth": 110,
           "logoHeight": 135,
           "sticky": true,
@@ -331,8 +330,8 @@
           "fontFamily": "mono",
           "menu_icon": "bars",
           "cartIcon": "shopping-cart",
-          "mobileLogoPosition": "center",
-          "mobileCart": true
+          "mobileCart": true,
+          "mobileLogoPosition": "center"
         }
       },
       "bottom-info-bar": {
@@ -376,7 +375,6 @@
           "borderRadius": 0,
           "shadow": true,
           "menuLinks": "",
-          "megamenu": true,
           "linkPosition": "center",
           "logoWidth": 160,
           "logoHeight": 0,
@@ -399,8 +397,8 @@
           "fontFamily": "work_sans_n6",
           "menu_icon": "bars",
           "cartIcon": "shopping-cart",
-          "mobileLogoPosition": "left",
-          "mobileCart": true
+          "mobileCart": true,
+          "mobileLogoPosition": "left"
         }
       },
       "header--inline-search": {
@@ -411,11 +409,9 @@
           "borderRadius": 0,
           "shadow": true,
           "menuLinks": "",
-          "megamenu": true,
           "linkPosition": "center",
           "logoWidth": 160,
           "logoHeight": 0,
-          "desktopLogoPosition": "left",
           "sticky": true,
           "contentMargin": 0,
           "desktopCart": true,
@@ -436,8 +432,8 @@
           "fontFamily": "work_sans_n6",
           "menu_icon": "bars",
           "cartIcon": "shopping-cart",
-          "mobileLogoPosition": "left",
-          "mobileCart": true
+          "mobileCart": true,
+          "mobileLogoPosition": "left"
         }
       }
     },
@@ -496,17 +492,6 @@
         "type": "shopify://apps/smile-io/blocks/smile-shopify-app/2fae4e25-1841-4ea2-bc02-bd548478c4f6",
         "disabled": false,
         "settings": {}
-      },
-      "12183063181197878126": {
-        "type": "shopify://apps/tangent-quiz/blocks/tangent-popup/51b4f65b-1bd1-4373-a212-7af0ce5a9774",
-        "disabled": false,
-        "settings": {
-          "form_id": "sample",
-          "height": 400,
-          "width": 500,
-          "offset": 20,
-          "bgcolor": "#ffffff"
-        }
       },
       "14327677521557774844": {
         "type": "shopify://apps/simprosys-google-shopping-feed/blocks/core_settings_block/1f0b859e-9fa6-4007-97e8-4513aff5ff3b",

@@ -51,7 +51,7 @@
                 {% assign selector_type = "dropdown" %}
             {% endif %}
         {% endif %}
-        <div class="swatches__holder">
+        <div class="swatches__holder{% if settings.easeIn %} ease-in{% endif %}">
         <h4 class="h-reset swatches__title">{{product_option.name}} <span data-swatch-selected-name="{{product.id}}-{{index}}"></span></h4>
         {% case selector_type %}
             {% when 'dropdown' %}

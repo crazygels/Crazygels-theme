@@ -58,7 +58,7 @@ min value: {{filter.min_value.value}}
 
         {% when 'list' %}
           <input id="{{group.id}}{{forloop.index}}-{{ix}}" {% if group.settings.expanded %}checked{%endif%} type="checkbox" class="hide filter__toggle">
-          <div id="{{group.id}}" class="filter__group">
+          <div id="{{group.id}}" class="filter__group" {{group.shopify_attributes}}>
               <label for="{{group.id}}{{forloop.index}}-{{ix}}" class="filter__group-title">{{filter.label}}</label>
               {% assign dcase = filter.label | downcase %}
               {% if swatches contains dcase %}
@@ -101,7 +101,7 @@ min value: {{filter.min_value.value}}
     
   {% when 'collectionList' %}
     <input id="{{group.id}}{{forloop.index}}" {% if group.settings.expanded %}checked{%endif%} type="checkbox" class="hide filter__toggle">
-    <div id="{{group.id}}" class="filter__group">
+    <div id="{{group.id}}" class="filter__group" {{group.shopify_attributes}}>
         <label for="{{group.id}}{{forloop.index}}" class="filter__group-title">{{group.settings.name}}</label>
 
         <a href="{{ routes.all_products_collection_url }}" class="filter__tag filter__tag--text filter__collection {% if collection.url == routes.all_products_collection_url %}filter__collection--current{% endif %}">{{'collection_page.sidebar.all_products' | t }}</a>
@@ -121,7 +121,7 @@ min value: {{filter.min_value.value}}
 
   {% when 'brandList' %}
     <input id="{{group.id}}{{forloop.index}}" {% if group.settings.expanded %}checked{%endif%} type="checkbox" class="hide filter__toggle">
-    <div id="{{group.id}}" class="filter__group">
+    <div id="{{group.id}}" class="filter__group" {{group.shopify_attributes}}>
         <label for="{{group.id}}{{forloop.index}}" class="filter__group-title">{{group.settings.name}}</label>
         {% if collection.current_vendor %}
             <a href="{{ routes.all_products_collection_url }}" class="filter__tag filter__tag--text filter__vendor filter__vendor--back">{% render 'get-icon', icon: 'arrow-left' %} {{'collection_page.sidebar.back_to_all' | t }}</a>
@@ -135,7 +135,7 @@ min value: {{filter.min_value.value}}
 
   {% when 'typeList' %}
     <input id="{{group.id}}{{forloop.index}}" {% if group.settings.expanded %}checked{%endif%} type="checkbox" class="hide filter__toggle">
-    <div id="{{group.id}}" class="filter__group">
+    <div id="{{group.id}}" class="filter__group" {{group.shopify_attributes}}>
         <label for="{{group.id}}{{forloop.index}}" class="filter__group-title">{{group.settings.name}}</label>
         {% if collection.current_type %}
             <a href="{{ routes.all_products_collection_url }}" class="filter__tag filter__tag--text filter__vendor filter__vendor--back">{% render 'get-icon', icon: 'arrow-left' %} {{'collection_page.sidebar.back_to_all' | t }}</a>
@@ -149,41 +149,108 @@ min value: {{filter.min_value.value}}
   
   {% when 'image' %}
     <input id="{{group.id}}{{forloop.index}}" checked type="checkbox" class="hide filter__toggle">
-    <div id="{{group.id}}" class="filter__group">
+    <div id="{{group.id}}" class="filter__group" {{group.shopify_attributes}}>
         <label for="{{group.id}}{{forloop.index}}" class="filter__group-title">{{group.settings.name}}</label>
         {% if group.settings.url != blank %}
-          <a href="{{group.settings.url}}">{% render 'image', src: group.settings.image, size: '720x', class: 'filter__image' %}</a>
+          <a href="{{group.settings.url}}">{% render 'image', src: group.settings.image, alt: group.settings.image.alt, size: '720x', class: 'filter__image' %}</a>
         {% else %}
-          {% render 'image', src: group.settings.image, size: '720x', class: 'filter__image' %}
+          {% render 'image', src: group.settings.image, alt: group.settings.image.alt, size: '720x', class: 'filter__image' %}
         {% endif %}
     </div>
 
   {% when 'text' %}
     <input id="{{group.id}}{{forloop.index}}" checked type="checkbox" class="hide filter__toggle">
-    <div id="{{group.id}}" class="filter__group">
+    <div id="{{group.id}}" class="filter__group" {{group.shopify_attributes}}>
         <label for="{{group.id}}{{forloop.index}}" class="filter__group-title">{{group.settings.name}}</label>
         <div class="filter__text">{{group.settings.text}}</div>
     </div>
 
-    {% when 'tagList' %}
-      <input id="{{group.id}}{{forloop.index}}" {% if group.settings.expanded %}checked{%endif%} type="checkbox" class="hide filter__toggle">
-      <div id="{{group.id}}" class="filter__group">
-          <label for="{{group.id}}{{forloop.index}}" class="filter__group-title">{{group.settings.name}}</label>
+  {% when 'tagList' %}
+    <input id="{{group.id}}{{forloop.index}}" {% if group.settings.expanded %}checked{%endif%} type="checkbox" class="hide filter__toggle">
+    <div id="{{group.id}}" class="filter__group" {{group.shopify_attributes}}>
+        <label for="{{group.id}}{{forloop.index}}" class="filter__group-title">{{group.settings.name}}</label>
 
-          {% assign tagList = group.settings.customTagList | split: "," %}
+        {% assign tagList = group.settings.customTagList | split: "," %}
 
-          {% if group.settings.customTagList != blank %}
+        {% if group.settings.customTagList != blank %}
+          {% for tag in collection.all_tags %}
+              {% if tagList contains tag %}
+                <div class="tag-filter-link filter__tag--text filter__collection filter__tag"> {{tag | link_to_tag: tag }} </div>
+              {%endif%}
+          {% endfor %}
+        {% else %}
             {% for tag in collection.all_tags %}
-                {% if tagList contains tag %}
-                  <div class="tag-filter-link filter__tag--text filter__collection filter__tag"> {{tag | link_to_tag: tag }} </div>
-                {%endif%}
+                <div class="tag-filter-link filter__tag--text filter__collection filter__tag"> {{tag | link_to_tag: tag }} </div>
             {% endfor %}
-          {% else %}
-              {% for tag in collection.all_tags %}
-                  <div class="tag-filter-link filter__tag--text filter__collection filter__tag"> {{tag | link_to_tag: tag }} </div>
-              {% endfor %}
+        {% endif %}
+    </div>
+
+  {% when 'priceRange' %}
+  <input id="{{group.id}}{{forloop.index}}" {% if group.settings.expanded %}checked{%endif%} type="checkbox" class="hide filter__toggle">
+  <div id="{{group.id}}" class="filter__group" {{group.shopify_attributes}}>
+      {% capture currencyString %}{{ shop.money_format }}{% endcapture %}
+      {% assign tempArray = currencyString | split: '{' %}
+      {% assign currencySymbol = tempArray.first %}
+
+      <label for="{{group.id}}{{forloop.index}}" class="filter__group-title">{{group.settings.name}}</label>
+      {% if group.settings.priceRangeSlider %}
+        <div class="reset-price-container"> 
+          <p class="reset-price-filter"> Reset </p> 
+        </div>
+
+        {% assign min_price = 0 %}
+        {% assign max_price = 0 %}
+        {% assign collectionHandle = collection.handle %}
+
+        {% for product in collections[collectionHandle].products %}
+          {% if product.price > max_price %}
+            {% assign max_price = product.price %}
+          {%endif %}
+        {% endfor %}
+
+        {% for product in collection.products %}
+          {% if max_price > product.price and min_price == 0 %}
+            {% assign min_price = product.price %}
+          {%endif %}
+          {% if product.price < min_price and min_price != 0 %}
+            {% assign min_price = product.price %}
           {% endif %}
-      </div>
+        {% endfor %}
+
+        <div class="min-max__container">
+          <label> Min <span class="curreny-symbol">{{currencySymbol}}</span><span class="price-min price-input"> 0 </span> </label>
+          <label> Max <span class="curreny-symbol">{{currencySymbol}}</span><span class="price-max price-input"> {{ max_price | divided_by: 100 }} </span> </label>
+        </div>
+
+        <div class="priceRange__slider"> 
+          <div class="slider">
+            <div class="progress"></div>
+          </div>
+          <div class="range-input">
+           
+            <input type="range" class="range-min" min="0" max="{{ max_price | divided_by: 100 }}" value="0" step="1">
+       
+            <input type="range" class="range-max" min="0" max="{{max_price | divided_by: 100 }}" value="{{ max_price | divided_by: 100 }}" step="1">
+          </div>
+        </div>
+       
+      {% else %}
+        <div class="reset-price-container"> 
+          <p class="reset-price-filter"> Reset </p> 
+        </div>
+        <div class="priceRange__filter">
+          <div class="priceRange__form-group"> 
+            <span class="curreny-symbol"> {{currencySymbol}} </span>
+            <input type="number" class="priceRangeFilter__min" min="0" name="filter.v.price.gte" placeholder="From" step="1" />
+          </div>
+          <div class="priceRange__form-group"> 
+            <span class="curreny-symbol"> {{currencySymbol}} </span>
+            <input type="number" class="priceRangeFilter__max" min="0" name="filter.v.price.lte" placeholder="To" step="1" />
+          </div>
+        </div>
+      {% endif %}
+  </div>
+
   {% endcase %}
 {% endfor %}
 </div>
@@ -191,8 +258,157 @@ min value: {{filter.min_value.value}}
 
 <style>
 
+  .reset-price-container {
+    display: none;
+  }
+
+  .reset-price-container.show {
+    display: block
+  }
+
+  .priceRange__filter {
+    display: none;
+    gap: 8px;
+
+  }
+  .reset-price-filter {
+    text-align:right;
+    display: none;
+    font-size: 14px;
+    text-decoration: underline;
+  }
+
+  .min-max__container {
+    display: none;
+    padding-bottom: 1rem;
+  }
+
+  .filter__toggle:checked+div>.priceRange__filter {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filter__toggle:checked+div>div>.reset-price-filter {
+    cursor: pointer;
+    display: block;
+  }
+
+  .filter__toggle:checked+div>.min-max__container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .priceRange__form-group {
+    position: relative;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+
+  .priceRange__filter input {
+    width: 100%;
+    background: #fff;
+    padding: 10px;
+  }
+
   .filter__collection a {
     text-decoration: none;
+  }
+
+  .priceRange__slider {
+    display: none;
+  }
+
+  .filter__toggle:checked+div>.priceRange__slider {
+    display: block;
+  }
+
+  .priceRange__slider .price-input {
+    width: 100%;
+    display: flex;
+    margin: 30px 0 35px;
+    gap: 8px;
+  }
+
+.price-input .field{
+    display: flex;
+    width: 100%;
+    height: 45px;
+    align-items: center;
+  }
+
+  .priceRange__slider .field input{
+    width: 100%;
+    height: 100%;
+    outline: none;
+    font-size: 19px;
+    margin-left: 12px;
+    border-radius: 5px;
+    text-align: center;
+    border: 1px solid #999;
+    -moz-appearance: textfield;
+  }
+
+  .priceRange__slider input[type="range"]::-webkit-outer-spin-button,
+  .priceRange__slider input[type="range"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+ 
+  .priceRange__slider .slider{
+    height: 5px;
+    position: relative;
+    background: #ddd;
+    border-radius: 5px;
+  }
+
+  .priceRange__slider .slider .progress{
+    height: 100%;
+    left: 0%;
+    right: 0%;
+    position: absolute;
+    border-radius: 5px;
+    background: var(--accentColor);
+  }
+
+  .priceRange__slider .range-max {
+    border:0;
+  }
+
+  .priceRange__slider .range-input{
+    position: relative;
+  }
+
+  .priceRange__slider .range-input input{
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    top: -5px;
+    background: none;
+    pointer-events: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  .priceRange__slider input[type="range"]::-webkit-slider-thumb{
+    height: 17px;
+    width: 17px;
+    border-radius: 50%;
+    background: var(--accentColor);
+    pointer-events: auto;
+    -webkit-appearance: none;
+    box-shadow: 0 0 6px rgba(0,0,0,0.05);
+    z-index: 5;
+  }
+
+  .priceRange__slider input[type="range"]::-moz-range-thumb{
+    height: 17px;
+    width: 17px;
+    border: none;
+    border-radius: 50%;
+    background: var(--accentColor);
+    pointer-events: auto;
+    -moz-appearance: none;
+    box-shadow: 0 0 6px rgba(0,0,0,0.05);
   }
 @media only screen and (min-width: 768px) {
     .product__list {
@@ -226,14 +442,6 @@ min value: {{filter.min_value.value}}
     "name": "Sidebar & Filters",
     "class": "col-12 col-md-3 unflex product__list--filter",
     "settings": [
-      {
-            "type": "header",
-            "content": "Help"
-        },
-        {
-        "type": "paragraph",
-        "content": "[Click here to follow an interactive Tutorial](https://vimeo.com/458187513)"
-        },
       {
         "id": "filter",
         "type": "checkbox",
@@ -401,6 +609,31 @@ min value: {{filter.min_value.value}}
             "info": "A comma (,) separated list of tags. Leave empty for all tags.",
             "type": "textarea"
           }
+        ]
+      },
+      {
+        "type": "priceRange",
+        "name": "Price Range",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "expanded",
+            "label": "Show this group by default",
+            "default": true
+          },
+          {
+            "id": "name",
+            "label": "Price Header Title",
+            "type": "text",
+            "default": "Filter By Price Range"
+          },
+          {
+            "id": "priceRangeSlider",
+            "label": "Enable price range slider",
+            "type": "checkbox",
+            "default": true
+          },
         ]
       }
     ]

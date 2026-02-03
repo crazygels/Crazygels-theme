@@ -20,7 +20,7 @@ button--{{-buttonType}} button--{{-block.settings.buttonStyle-}}__{{-buttonType}
 font__size--{{-block.settings.fontSize}} font__family--{{block.settings.fontFamily}}
 button__animation--{{-block.settings.animation}}
 {%if block.settings.wideButton%}button--full-width{%endif%}
-{% unless block.settings.icon == blank %}button--icon {{block.settings.iconPosition}}{% endunless %}"
+{% unless block.settings.icon == blank %}button--icon {{block.settings.iconPosition}}{% endunless %}{% if settings.easeIn %} ease-in{% endif %}"
 href="{{- block.settings.url -}}"
 {{ block.shopify_attributes }}>
 {% unless block.settings.icon == blank %}

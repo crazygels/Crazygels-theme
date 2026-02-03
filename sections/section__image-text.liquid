@@ -22,6 +22,16 @@
     padding: {{section.settings.padding}}px;
   }
 
+  #s--{{section.id}} .s__content-text-image {
+    padding: {{section.settings.padding}}px;
+  }
+
+  {% if section.settings.imagePosition == "right" %}
+    #s--{{section.id}} .s__content-text-image {
+      flex-direction: row-reverse;
+    }
+  {%endif%}
+
   {% if section.settings.layout == "stretchContent" %}
   #s--{{section.id}} .tximage__image {
     padding: 0px;
@@ -50,6 +60,11 @@
       display: none;
   }
 
+  #s--{{ section.id }} .tximage__txt {
+    padding-left: {{ section.settings.content_padding }}px;
+    padding-right: {{ section.settings.content_padding }}px;
+  }
+
   @media only screen and (max-width: 768px){
       #s--{{section.id}} .accordion{
           padding: {{ section.settings.vertPaddingAccord }}px {{ section.settings.horPaddingAccord }}px;
@@ -63,91 +78,592 @@
 {% assign tWidth = 12 | minus: section.settings.imageWidth %}
 {% assign customID = section.settings.custom_id %}
 
+{% assign imageOne = false %}
+{% assign imageTwo = false %}
+{% assign imageThree = false %}
+
+{% assign imageCount = 0 %}
+
+{% if section.settings.image != null %}
+  {% assign imageCount = imageCount | plus: 1 %}
+{% endif %}
+
+{% if section.settings.image2 != null %}
+  {% assign imageCount = imageCount | plus: 1 %}
+{% endif %}
+
+{% if section.settings.image3 != null %}
+  {% assign imageCount = imageCount | plus: 1 %}
+{% endif %}
+
+{% if imageCount == 1 %}
+  {% if section.settings.image != null %}
+    {% assign imageOne = section.settings.image %}
+  {% endif %}
+
+  {% if section.settings.image2 != null %}
+    {% assign imageOne = section.settings.image2 %}
+  {% endif %}
+
+  {% if section.settings.image3 != null %}
+    {% assign imageOne = section.settings.image3 %}
+  {% endif %}
+{% elsif imageCount == 2 %}
+  {% if section.settings.image != null %}
+    {% assign imageOne = section.settings.image %}
+  {% endif %}
+
+  {% if section.settings.image == null %}
+    {% if section.settings.image2 != null %}
+      {% assign imageOne = section.settings.image2 %}
+    {% endif %}
+  {% endif %}
+
+  {% if section.settings.image2 != null %}
+    {% assign imageTwo = section.settings.image2 %}
+  {% endif %}
+
+  {% if section.settings.image3 != null %}
+    {% assign imageTwo = section.settings.image3 %}
+  {% endif %}
+
+{% elsif imageCount == 3 %}
+  {% if section.settings.image != null %}
+    {% assign imageOne = section.settings.image %}
+  {% endif %}
+
+  {% if section.settings.image2 != null %}
+    {% assign imageTwo = section.settings.image2 %}
+  {% endif %}
+
+  {% if section.settings.image3 != null %}
+    {% assign imageThree = section.settings.image3 %}
+  {% endif %}
+{% endif %}
+
 <div
   id="s--{{section.id}}"
   {% unless section.settings.backgroundImage == null -%}
     {% render 'background', image: section.settings.backgroundImage %}
   {%- endunless %}
-  class="{% render 'common-class', section: section, class: 'row', bg: true, vAlign: false %}"
+  class="section-image-text {% render 'common-class', section: section, class: 'row', bg: true, vAlign: false %}"
 >
   {% if section.settings.overlayOpacity > 0 %}
     <div class="overlay overlay--{{-section.id}}"></div>
   {% endif %}
-  <div id="{{customID}}" class="row s__content {{ section.settings.verticalAlignment }} layout__content">
-    <div class="col-12 col-md-{{-iWidth}} tximage__image">
-      {% if section.settings.imageOverlayOpacity > 0 %}
-        <div class="overlay image__overlay--{{-section.id}}"></div>
-      {% endif %}
-      {% unless section.settings.image == null %}
+
+  {% if imageCount == 1 %}
+    <div id="{{customID}}" class="row s__content {{ section.settings.verticalAlignment }} layout__content">
+      <div class="col-12 col-md-{{-iWidth}} tximage__image">
+        {% if section.settings.imageOverlayOpacity > 0 %}
+          {% if section.settings.image_url == null %}
+            <div class="overlay image__overlay--{{-section.id}}"></div>
+          {% else %}
+            <a href="{{section.settings.image_url}}">
+              <div class="overlay image__overlay--{{-section.id}}"></div>
+            </a>
+          {% endif %}
+        {% endif %}
         {% if section.settings.image_url == null %}
-          {% render 'ratio-image', image: section.settings.image, mratio: '12', dratio: iWidth, ratioType: 'col' %}
+          <picture>
+            {% if section.settings.image_mobile %}
+              <source srcset="{{ section.settings.image_mobile | image_url: width: 600 }}" media="(max-width: 767px)">
+            {% endif %}
+            <img
+              src="{{ imageOne | image_url }}"
+              alt="{{ imageOne.alt | escape }}"
+              loading="lazy"
+              class="img--responsive"
+              width="100%"
+              height="auto"
+            >
+          </picture>
         {% else %}
-          <a href="{{section.settings.image_url}}">
-            {% render 'ratio-image', image: section.settings.image, mratio: '12', dratio: iWidth, ratioType: 'col' %}
+          <a href="{{section.settings.image_url}}" style="width:100%;">
+            <picture>
+              {% if section.settings.image_mobile %}
+                <source srcset="{{ section.settings.image_mobile | image_url: width: 600 }}" media="(max-width: 767px)">
+              {% endif %}
+              <img
+                src="{{ imageOne | image_url }}"
+                alt="{{ imageOne.alt | escape }}"
+                loading="lazy"
+                class="img--responsive"
+                width="100%"
+                height="auto"
+              >
+            </picture>
           </a>
         {% endif %}
-      {% else %}
+      </div>
+      <div class="inherit col-12 col-md-{{-tWidth}} {{section.settings.horizontalAlignment}} tximage__txt">
+        {%- for block in section.blocks %}
+          {% if block.type == '@app' %}
+            <div class="no-gap s__block s__block--{{-block.type}} unflex col-12 {{ section.settings.horizontalAlignment }} margin__bottom--12">
+              {% render block %}
+            </div>
+            {% continue %}
+          {% endif %}
+
+          <input class="accordion__input" type="radio" id="{{section.id}}--close" name="{{section.id}}">
+          {% if block.type == 'accordionBlock' %}
+            <div
+              id="maxWidth--{{-section.id}}"
+              class="row max-width--content accordion {{ section.settings.horizontalAlignment }}"
+            >
+              {% if block.settings.question == empty or block.settings.answer == empty %}{% continue %}{% endif %}
+              <label class="accordion__item" {{ block.shopify__attrbutes }}>
+                <input
+                  type="radio"
+                  name="{{section.id}}"
+                  {% if forloop.first %}
+                    checked
+                  {% endif %}
+                >
+                <span class="accordion__item--title">
+                  {{- block.settings.question -}}
+                  <label class="collapse" for="{{section.id}}--close"></label
+                ></span>
+                <div class="accordion__item--content">{{ block.settings.answer }}</div>
+              </label>
+            </div>
+          {% endif %}
+          <div class="no-gap s__block s__block--{{-block.type}} {%if block.settings.wideButton or block.type == 'separator' or block.settings.fullWidth%}col-12 {{ section.settings.horizontalAlignment }}{%endif%} margin__bottom--12">
+            {% render 'get-block' with block as block %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% elsif imageCount == 2 %}
+    <div id="{{customID}}" class="layout__content row s__content-text-image">
+      <div class="col-12 col-md-{{-iWidth}} tximage__image tximage__image2">
+        <div class="tximage2__image1">
+          {% if section.settings.imageOverlayOpacity > 0 %}
+            {% if section.settings.image_url == null %}
+              <div class="overlay image__overlay--{{-section.id}}"></div>
+            {% else %}
+              <a href="{{section.settings.image_url}}">
+                <div class="overlay image__overlay--{{-section.id}}"></div>
+              </a>
+            {% endif %}
+          {% endif %}
+          {% if section.settings.image_url == null %}
+            <picture>
+              {% if section.settings.image_mobile %}
+                <source srcset="{{ section.settings.image_mobile | image_url: width: 600 }}" media="(max-width: 767px)">
+              {% endif %}
+              <img
+                src="{{ imageOne | image_url }}"
+                alt="{{ imageOne.alt | escape }}"
+                loading="lazy"
+                class="img--responsive"
+                width="100%"
+                height="auto"
+              >
+            </picture>
+          {% else %}
+            <a href="{{section.settings.image_url}}">
+              <picture>
+                {% if section.settings.image_mobile %}
+                  <source
+                    srcset="{{ section.settings.image_mobile | image_url: width: 600 }}"
+                    media="(max-width: 767px)"
+                  >
+                {% endif %}
+                <img
+                  src="{{ imageOne | image_url }}"
+                  alt="{{ imageOne.alt | escape }}"
+                  loading="lazy"
+                  class="img--responsive"
+                  width="100%"
+                  height="auto"
+                >
+              </picture>
+            </a>
+          {% endif %}
+        </div>
+        <div class="tximage2__image2">
+          {% if section.settings.imageOverlayOpacity > 0 %}
+            {% if section.settings.image_url == null %}
+              <div class="overlay image__overlay--{{-section.id}}"></div>
+            {% else %}
+              <a href="{{section.settings.image_url}}">
+                <div class="overlay image__overlay--{{-section.id}}"></div>
+              </a>
+            {% endif %}
+          {% endif %}
+          {% if section.settings.image_url == null %}
+            <picture>
+              {% if section.settings.image2_mobile %}
+                <source
+                  srcset="{{ section.settings.image2_mobile | image_url: width: 600 }}"
+                  media="(max-width: 767px)"
+                >
+              {% endif %}
+              <img
+                src="{{ imageTwo | image_url }}"
+                alt="{{ imageTwo.alt | escape }}"
+                loading="lazy"
+                class="img--responsive"
+                width="100%"
+                height="auto"
+              >
+            </picture>
+          {% else %}
+            <a href="{{section.settings.image_url}}">
+              <picture>
+                {% if section.settings.image2_mobile %}
+                  <source
+                    srcset="{{ section.settings.image2_mobile | image_url: width: 600 }}"
+                    media="(max-width: 767px)"
+                  >
+                {% endif %}
+                <img
+                  src="{{ imageTwo | image_url }}"
+                  alt="{{ imageTwo.alt | escape }}"
+                  loading="lazy"
+                  class="img--responsive"
+                  width="100%"
+                  height="auto"
+                >
+              </picture>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="inherit col-12 col-md-{{-tWidth}} {{section.settings.horizontalAlignment}} tximage__txt">
+        <div class="tximage2__txt-container {{ section.settings.verticalAlignment }} ">
+          <div>
+            {%- for block in section.blocks %}
+              {% if block.type == '@app' %}
+                <div class="no-gap s__block s__block--{{-block.type}} unflex col-12 {{ section.settings.horizontalAlignment }} margin__bottom--12">
+                  {% render block %}
+                </div>
+                {% continue %}
+              {% endif %}
+
+              <input class="accordion__input" type="radio" id="{{section.id}}--close" name="{{section.id}}">
+              {% if block.type == 'accordionBlock' %}
+                <div
+                  id="maxWidth--{{-section.id}}"
+                  class="row max-width--content accordion {{ section.settings.horizontalAlignment }}"
+                >
+                  {% if block.settings.question == empty or block.settings.answer == empty %}{% continue %}{% endif %}
+                  <label class="accordion__item" {{ block.shopify__attrbutes }}>
+                    <input
+                      type="radio"
+                      name="{{section.id}}"
+                      {% if forloop.first %}
+                        checked
+                      {% endif %}
+                    >
+                    <span class="accordion__item--title">
+                      {{- block.settings.question -}}
+                      <label class="collapse" for="{{section.id}}--close"></label
+                    ></span>
+                    <div class="accordion__item--content">{{ block.settings.answer }}</div>
+                  </label>
+                </div>
+              {% endif %}
+              <div class="no-gap s__block s__block--{{-block.type}} {%if block.settings.wideButton or block.type == 'separator' or block.settings.fullWidth%}col-12 {{ section.settings.horizontalAlignment }}{%endif%} margin__bottom--12">
+                {% render 'get-block' with block as block %}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% elsif imageCount == 3 %}
+    <div class="row s__content-text-image layout__content">
+      <div class="col-12 col-md-{{-iWidth}} tximage__image tximage__image3">
+        <div class="tximage3__image1">
+          {% if section.settings.imageOverlayOpacity > 0 %}
+            {% if section.settings.image_url == null %}
+              <div class="overlay image__overlay--{{-section.id}}"></div>
+            {% else %}
+              <a href="{{section.settings.image_url}}">
+                <div class="overlay image__overlay--{{-section.id}}"></div>
+              </a>
+            {% endif %}
+          {% endif %}
+          {% if section.settings.image_url == null %}
+            <picture>
+              {% if section.settings.image_mobile %}
+                <source srcset="{{ section.settings.image_mobile | image_url: width: 600 }}" media="(max-width: 767px)">
+              {% endif %}
+              <img
+                src="{{ imageOne | image_url }}"
+                alt="{{ imageOne.alt | escape }}"
+                loading="lazy"
+                class="img--responsive"
+                width="100%"
+                height="auto"
+              >
+            </picture>
+          {% else %}
+            <a href="{{section.settings.image_url}}">
+              <picture>
+                {% if section.settings.image_mobile %}
+                  <source
+                    srcset="{{ section.settings.image_mobile | image_url: width: 600 }}"
+                    media="(max-width: 767px)"
+                  >
+                {% endif %}
+                <img
+                  src="{{ imageOne | image_url }}"
+                  alt="{{ imageOne.alt | escape }}"
+                  loading="lazy"
+                  class="img--responsive"
+                  width="100%"
+                  height="auto"
+                >
+              </picture>
+            </a>
+          {% endif %}
+        </div>
+        <div class="tximage3__image3">
+          {% if section.settings.imageOverlayOpacity > 0 %}
+            {% if section.settings.image_url == null %}
+              <div class="overlay image__overlay--{{-section.id}}"></div>
+            {% else %}
+              <a href="{{section.settings.image_url}}">
+                <div class="overlay image__overlay--{{-section.id}}"></div>
+              </a>
+            {% endif %}
+          {% endif %}
+          {% if section.settings.image_url == null %}
+            <picture>
+              {% if section.settings.image3_mobile %}
+                <source
+                  srcset="{{ section.settings.image3_mobile | image_url: width: 600 }}"
+                  media="(max-width: 767px)"
+                >
+              {% endif %}
+              <img
+                src="{{ imageThree | image_url }}"
+                alt="{{ imageThree.alt | escape }}"
+                loading="lazy"
+                class="img--responsive"
+                width="100%"
+                height="auto"
+              >
+            </picture>
+          {% else %}
+            <a href="{{section.settings.image_url}}">
+              <picture>
+                {% if section.settings.image3_mobile %}
+                  <source
+                    srcset="{{ section.settings.image3_mobile | image_url: width: 600 }}"
+                    media="(max-width: 767px)"
+                  >
+                {% endif %}
+                <img
+                  src="{{ imageThree | image_url }}"
+                  alt="{{ imageThree.alt | escape }}"
+                  loading="lazy"
+                  class="img--responsive"
+                  width="100%"
+                  height="auto"
+                >
+              </picture>
+            </a>
+          {% endif %}
+        </div>
+        <div class="tximage3__image2">
+          {% if section.settings.imageOverlayOpacity > 0 %}
+            {% if section.settings.image_url == null %}
+              <div class="overlay image__overlay--{{-section.id}}"></div>
+            {% else %}
+              <a href="{{section.settings.image_url}}">
+                <div class="overlay image__overlay--{{-section.id}}"></div>
+              </a>
+            {% endif %}
+          {% endif %}
+          {% if section.settings.image_url == null %}
+            <picture>
+              {% if section.settings.image2_mobile %}
+                <source
+                  srcset="{{ section.settings.image2_mobile | image_url: width: 600 }}"
+                  media="(max-width: 767px)"
+                >
+              {% endif %}
+              <img
+                src="{{ imageTwo | image_url }}"
+                alt="{{ imageTwo.alt | escape }}"
+                loading="lazy"
+                class="img--responsive"
+                width="100%"
+                height="auto"
+              >
+            </picture>
+          {% else %}
+            <a href="{{section.settings.image_url}}">
+              <picture>
+                {% if section.settings.image2_mobile %}
+                  <source
+                    srcset="{{ section.settings.image2_mobile | image_url: width: 600 }}"
+                    media="(max-width: 767px)"
+                  >
+                {% endif %}
+                <img
+                  src="{{ imageTwo | image_url }}"
+                  alt="{{ imageTwo.alt | escape }}"
+                  loading="lazy"
+                  class="img--responsive"
+                  width="100%"
+                  height="auto"
+                >
+              </picture>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="inherit col-12 col-md-{{-tWidth}} {{section.settings.horizontalAlignment}} tximage__txt">
+        <div class="tximage2__txt-container {{ section.settings.verticalAlignment }} ">
+          <div>
+            {%- for block in section.blocks %}
+              {% if block.type == '@app' %}
+                <div class="no-gap s__block s__block--{{-block.type}} unflex col-12 {{ section.settings.horizontalAlignment }} margin__bottom--12">
+                  {% render block %}
+                </div>
+                {% continue %}
+              {% endif %}
+
+              <input class="accordion__input" type="radio" id="{{section.id}}--close" name="{{section.id}}">
+              {% if block.type == 'accordionBlock' %}
+                <div
+                  id="maxWidth--{{-section.id}}"
+                  class="row max-width--content accordion {{ section.settings.horizontalAlignment }}"
+                >
+                  {% if block.settings.question == empty or block.settings.answer == empty %}{% continue %}{% endif %}
+                  <label class="accordion__item" {{ block.shopify__attrbutes }}>
+                    <input
+                      type="radio"
+                      name="{{section.id}}"
+                      {% if forloop.first %}
+                        checked
+                      {% endif %}
+                    >
+                    <span class="accordion__item--title">
+                      {{- block.settings.question -}}
+                      <label class="collapse" for="{{section.id}}--close"></label
+                    ></span>
+                    <div class="accordion__item--content">{{ block.settings.answer }}</div>
+                  </label>
+                </div>
+              {% endif %}
+              <div class="no-gap s__block s__block--{{-block.type}} {%if block.settings.wideButton or block.type == 'separator' or block.settings.fullWidth%}col-12 {{ section.settings.horizontalAlignment }}{%endif%} margin__bottom--12">
+                {% render 'get-block' with block as block %}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div id="{{customID}}" class="row s__content {{ section.settings.verticalAlignment }} layout__content">
+      <div class="col-12 col-md-{{-iWidth}} tximage__image">
+        {% if section.settings.imageOverlayOpacity > 0 %}
+          <div class="overlay image__overlay--{{-section.id}}"></div>
+        {% endif %}
         {% if settings.demo %}
           <img class="lazyload" loading="lazy" data-src="https://source.unsplash.com/random/620x620">
         {% else %}
           {{ 'image' | placeholder_svg_tag: 'svg__thumb' }}
         {% endif %}
-      {% endunless %}
-    </div>
-    <div class="inherit col-12 col-md-{{-tWidth}} {{section.settings.horizontalAlignment}} tximage__txt">
-      {%- for block in section.blocks %}
-        {% if block.type == '@app' %}
-          <div class="no-gap s__block s__block--{{-block.type}} unflex col-12 {{ section.settings.horizontalAlignment }} margin__bottom--12">
-            {% render block %}
-          </div>
-          {% continue %}
-        {% endif %}
+      </div>
+      <div class="inherit col-12 col-md-{{-tWidth}} {{section.settings.horizontalAlignment}} tximage__txt">
+        {%- for block in section.blocks %}
+          {% if block.type == '@app' %}
+            <div class="no-gap s__block s__block--{{-block.type}} unflex col-12 {{ section.settings.horizontalAlignment }} margin__bottom--12">
+              {% render block %}
+            </div>
+            {% continue %}
+          {% endif %}
 
-        <input class="accordion__input" type="radio" id="{{section.id}}--close" name="{{section.id}}">
-        {% if block.type == 'accordionBlock' %}
-          <div
-            id="maxWidth--{{-section.id}}"
-            class="row max-width--content accordion {{ section.settings.horizontalAlignment }}"
-          >
-            {% if block.settings.question == empty or block.settings.answer == empty %}{% continue %}{% endif %}
-            <label class="accordion__item" {{ block.shopify__attrbutes }}>
-              <input
-                type="radio"
-                name="{{section.id}}"
-                {% if forloop.first %}
-                  checked
-                {% endif %}
-              >
-              <span class="accordion__item--title">
-                {{- block.settings.question -}}
-                <label class="collapse" for="{{section.id}}--close"></label
-              ></span>
-              <div class="accordion__item--content">{{ block.settings.answer }}</div>
-            </label>
+          <input class="accordion__input" type="radio" id="{{section.id}}--close" name="{{section.id}}">
+          {% if block.type == 'accordionBlock' %}
+            <div
+              id="maxWidth--{{-section.id}}"
+              class="row max-width--content accordion {{ section.settings.horizontalAlignment }}"
+            >
+              {% if block.settings.question == empty or block.settings.answer == empty %}{% continue %}{% endif %}
+              <label class="accordion__item" {{ block.shopify__attrbutes }}>
+                <input
+                  type="radio"
+                  name="{{section.id}}"
+                  {% if forloop.first %}
+                    checked
+                  {% endif %}
+                >
+                <span class="accordion__item--title">
+                  {{- block.settings.question -}}
+                  <label class="collapse" for="{{section.id}}--close"></label
+                ></span>
+                <div class="accordion__item--content">{{ block.settings.answer }}</div>
+              </label>
+            </div>
+          {% endif %}
+          <div class="no-gap s__block s__block--{{-block.type}} {%if block.settings.wideButton or block.type == 'separator' or block.settings.fullWidth%}col-12 {{ section.settings.horizontalAlignment }}{%endif%} margin__bottom--12">
+            {% render 'get-block' with block as block %}
           </div>
-        {% endif %}
-        <div class="no-gap s__block s__block--{{-block.type}} {%if block.settings.wideButton or block.type == 'separator' or block.settings.fullWidth%}col-12 {{ section.settings.horizontalAlignment }}{%endif%} margin__bottom--12">
-          {% render 'get-block' with block as block %}
-        </div>
-      {% endfor %}
+        {% endfor %}
+      </div>
     </div>
-  </div>
+  {% endif %}
 </div>
+
+<script>
+  (() => {
+    const sectionImageText = {
+      init() {
+        this.eventListeners();
+        this.imageTwo();
+        this.imageThree();
+      },
+      eventListeners() {
+        window.addEventListener('resize', function () {
+          sectionImageText.imageThree();
+        });
+      },
+      imageTwo() {
+        let image1 = document.querySelector('.tximage2__image1');
+        let image2 = document.querySelector('.tximage2__image2');
+        if (image2 && image1) {
+          let imageContainer = document.querySelector('.tximage__image2');
+          if (image2.offsetHeight > image1.offsetHeight) {
+            imageContainer.style.justifyContent = 'end';
+            image2.style.position = 'relative';
+            image1.style.position = 'absolute';
+            image1.style.left = '0';
+            image1.style.height = 'unset';
+          }
+        }
+      },
+      imageThree() {
+        let imageThree1 = document.querySelector('.tximage3__image1')?.offsetHeight;
+        let imageThree2 = document.querySelector('.tximage3__image2')?.offsetHeight;
+        let imageThree3 = document.querySelector('.tximage3__image3')?.offsetHeight;
+        let imageThreeContainer = document.querySelector('.tximage__image3');
+        if (imageThree1 && imageThree2 && imageThree3) {
+          let maxHeight = Math.max(imageThree1, imageThree2, imageThree3);
+          let finalHeight = Math.max(maxHeight) * 0.08 + maxHeight;
+          if (imageThreeContainer) {
+            imageThreeContainer.style.height = `${finalHeight}px`;
+          }
+        }
+      },
+    };
+    sectionImageText.init();
+  })();
+</script>
 
 {% schema %}
 {
-  "name": {
-    "en": "Image + text"
-  },
+  "name": "Image + text",
   "settings": [
-    {
-      "type": "header",
-      "content": "Help"
-    },
-    {
-      "type": "paragraph",
-      "content": "[Click here to follow an interactive Tutorial](https://vimeo.com/458159197)"
-    },
     {
       "type": "header",
       "content": "Section ID"
@@ -225,6 +741,15 @@
       "max": 50,
       "step": 1,
       "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "content_padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "label": "Content Padding",
+      "default": 20
     },
     {
       "type": "header",
@@ -372,6 +897,36 @@
       "type": "image_picker",
       "id": "image",
       "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image2",
+      "label": "Image 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "image3",
+      "label": "Image 3"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Images"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image2_mobile",
+      "label": "Mobile Image 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "image3_mobile",
+      "label": "Mobile Image 3"
     },
     {
       "type": "url",
@@ -1266,6 +1821,12 @@
       "name": "Accordion",
       "settings": [
         {
+          "type": "checkbox",
+          "id": "openAccordion",
+          "label": "Open on first load?",
+          "default": false
+        },
+        {
           "type": "richtext",
           "id": "question",
           "label": "Question"
@@ -1481,6 +2042,70 @@
           "id": "success_text",
           "label": "Form success text",
           "default": "Thank you for your contact"
+        }
+      ]
+    },
+    {
+      "type": "countdown",
+      "name": "Countdown",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "fullWidth",
+          "default": true,
+          "label": "Single in row"
+        },
+        {
+          "type": "header",
+          "content": "Time settings"
+        },
+        {
+          "type": "text",
+          "default": "24",
+          "label": "Time",
+          "id": "countdownTime"
+        },
+        {
+          "type": "select",
+          "id": "countdownTimeFormat",
+          "options": [
+            { "value": "days", "label": "days" },
+            { "value": "hours", "label": "hours" },
+            { "value": "minutes", "label": "minutes" },
+            { "value": "seconds", "label": "seconds" }
+          ],
+          "default": "days",
+          "label": "Interval format"
+        },
+        {
+          "type": "paragraph",
+          "content": "Interval - enter a number and choose one of the values from a dropdown (days, hours..)."
+        },
+        {
+          "type": "paragraph",
+          "content": "Exact date - just enter the date in a YYYY/MM/DD format. For example using 2020/08/01 would make the countdown tick until August 1st 2020."
+        },
+        {
+          "type": "select",
+          "label": "Style",
+          "id": "style",
+          "default": "compact",
+          "options": [
+            { "value": "compact", "label": "Compact" },
+            { "value": "doublecolumn", "label": "Two columns" }
+          ]
+        },
+        {
+          "id": "title",
+          "label": "Countdown title",
+          "type": "text",
+          "default": "LIMITED TIME OFFER"
+        },
+        {
+          "id": "text",
+          "type": "text",
+          "label": "Warning text",
+          "default": "The price of this item will revert at the end of this countdown."
         }
       ]
     }

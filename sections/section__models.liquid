@@ -28,7 +28,7 @@ class="{% render 'common-class', section: section, class: 'row section__columns'
                 </div>
                 {% for block in section.blocks %}
                     <div class="lookbook--3d__slide" data-position="{{0 | minus: forloop.index0}}">
-                        <img loading="lazy" height="{{block.settings.model.height}}" width="{{block.settings.model.width}}" class="lazyload" src="{{ block.settings.model | img_url: '350x' }}">
+                        <img loading="lazy" height="{{block.settings.model.height}}" width="{{block.settings.model.width}}" class="lazyload" src="{{ block.settings.model | img_url: '350x' }}" alt="{{ block.settings.model.alt }}">
                     </div>
                 {% endfor %}
             </div>
@@ -37,7 +37,7 @@ class="{% render 'common-class', section: section, class: 'row section__columns'
                     {% for block in section.blocks %}
                         {% assign product = all_products[block.settings.product] %}
                         <a href="{{product.url}}" class="lookbook--3d__product {% if forloop.first %}product--active{%endif%}">
-                            <img src="{{product.featured_image | img_url: '10x'}}" data-src="{{product.featured_image | img_url: '450x'}}" height="{{product.featured_image.height}}" width="{{product.featured_image.width}}" loading="lazy" class="lookbook--3d__product__background lazyload">
+                            <img src="{{product.featured_image | img_url: '10x'}}" alt="{{ product.featured_image.alt }}" data-src="{{product.featured_image | img_url: '450x'}}" height="{{product.featured_image.height}}" width="{{product.featured_image.width}}" loading="lazy" class="lookbook--3d__product__background lazyload">
                             <span class="lookbook--3d__product__title font__family--title">
                                 {{product.title}}
                             </span>
@@ -78,9 +78,7 @@ class="{% render 'common-class', section: section, class: 'row section__columns'
 
 {% schema %}
 {
-    "name": {
-        "en": "Model showcase (beta)"
-    },
+    "name": "Model showcase (beta)",
     "settings": [
         {
             "type": "header",

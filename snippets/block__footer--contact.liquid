@@ -1,4 +1,4 @@
-<div class="footer__contact {{block.settings.horizontalAlignment-}}">
+<div class="footer__contact {{block.settings.horizontalAlignment-}}{% if settings.easeIn %} ease-in{% endif %}">
 {%- if block.settings.heading != blank -%}<span class="footer__title">{{block.settings.heading}}</span>{%-endif-%}
 
 {% if block.settings.emailText != blank %}

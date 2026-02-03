@@ -9,7 +9,7 @@
     padding: 4px 8px;
 }
 </style>
-<div class="highlighted-text font__size--{{-block.settings.fontSize}}" id="highlighted-text--{{block.id}}" {{block.shopify_attributes}}>{{block.settings.content}}</div>
+<div class="highlighted-text font__size--{{-block.settings.fontSize}}{% if settings.easeIn %} ease-in{% endif %}" id="highlighted-text--{{block.id}}" {{block.shopify_attributes}}>{{block.settings.content}}</div>
 
 {% comment %}
 {% blockdef %}

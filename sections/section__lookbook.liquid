@@ -16,10 +16,10 @@
 
 {% assign customID = section.settings.custom_id %}
 
-<div id="s--{{-section.id}}" class="{% render 'common-class', section: section, class: 'lookbook overflow--visible', vAlign: true %} row">
+<div id="s--{{-section.id}}" class="{% render 'common-class', section: section, class: 'lookbook overflow--visible', vAlign: true %} row{% if settings.easeIn %} ease-in{% endif %}">
     <div id="{{customID}}" class="layout__content">
     {% unless section.settings.image == nil %}
-        {% render 'ratio-image', image: section.settings.image, mratio: '100', dratio: '100', ratioType: 'vw', maxWidth: 1920, class: 'lookbook__image' %}
+        {% render 'ratio-image', image: section.settings.image,  alt: section.settings.image.alt, mratio: '100', dratio: '100', ratioType: 'vw', maxWidth: 1920, class: 'lookbook__image' %}
     {% else %}
     {%if settings.demo %}
         <img class="lazyload lookbook__image" loading="lazy" data-src="https://source.unsplash.com/random/1280x720">
@@ -49,7 +49,7 @@
             {% assign product = all_products[block.settings.product] %}
                 <div href="{{product.url}}" class="lookbook__product--holder">
                     <div class="lookbook__product">
-                        <a href="{{product.url}}">{% render 'image', src: product.featured_image, size: '200x' %}</a>
+                        <a href="{{product.url}}">{% render 'image', src: product.featured_image, alt: product.featured_image.alt, size: '200x' %}</a>
                         <a class="lookbook__product--title" href="{{product.url}}">{{product.title}}</a>
                         <span class="lookbook__product--price">{{product.price | money | strip_html}}</span>
                         {% render 'quick-buy-button', href: product.url, price: product.price %}
@@ -63,18 +63,8 @@
 
 {% schema %}
 {
-    "name": {
-        "en": "Lookbook"
-    },
+    "name": "Lookbook",
     "settings": [
-        {
-      "type": "header",
-      "content": "Help"
-    },
-    {
-      "type": "paragraph",
-      "content": "[Click here to follow an interactive Tutorial](https://vimeo.com/458157809)"
-    },
     {
       "type": "header",
       "content": "Section ID"

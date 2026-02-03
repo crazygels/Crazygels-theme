@@ -14,7 +14,7 @@
 <div
 id="s--{{section.id}}"
 {% unless section.settings.backgroundImage == nil -%}{% render 'background', image: section.settings.backgroundImage %}{%- endunless %}
-class="{% render 'common-class', section: section, class: 'row section__fplist', bg: true %}">
+class="{% if settings.easeIn %}ease-in{% endif %} {% render 'common-class', section: section, class: 'row section__fplist', bg: true %}">
   {% if section.settings.overlayOpacity > 0 %}
     <div
     class="overlay"
@@ -52,18 +52,8 @@ class="{% render 'common-class', section: section, class: 'row section__fplist',
 
 {% schema %}
 {
-    "name": {
-        "en": "Featured collections list"
-    },
+    "name": "Featured collections list",
     "settings": [
-        {
-      "type": "header",
-      "content": "Help"
-    },
-    {
-      "type": "paragraph",
-      "content": "[Click here to follow an interactive Tutorial](https://vimeo.com/458157892)"
-    },
     {
       "type": "header",
       "content": "Section ID"

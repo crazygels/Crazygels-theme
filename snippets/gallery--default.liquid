@@ -6,7 +6,7 @@
         <span class="gallery__thumbnail {% if forloop.first %}bstrSlider__thumb--active{%endif%}" data-media-type="image" data-bstr-slider-for="{{section.id}}" data-bstr-slider-thumb="{{forloop.index0}}"
         {% if section.settings.autoChange %}data-bstr-slider-thumb-hover{% endif %}
             >
-            <img height="{{image.height}}" width="{{image.width}}" src="{{image.src|img_url: '200x'}}" alt="Thumbnail for {{image.alt}}">
+            <img height="{{image.height}}" width="{{image.width}}" src="{{image.src|img_url: '200x'}}" alt="{{image.alt}}">
         </span>
         {% assign currentIndex = forloop.index0 | plus: 1 %}
     {% endfor %}
@@ -66,7 +66,7 @@
                         {{med | replace_first: 'poster=', 'autoplay loop muted controls=true poster='}}
                     {% elsif video_loop == true and video_autoplay != true %}
                         {{med | replace_first: 'poster=', 'loop muted controls=true poster='}}
-                    {% elsif video_autplay == true and video_loop != true %}
+                    {% elsif video_autoplay == true and video_loop != true %}
                         {{med | replace_first: 'poster=', 'autoplay muted poster='}}
                     {% else %}
                         {{med | replace_first: 'poster=', 'controls=true poster='}}

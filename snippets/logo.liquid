@@ -1,16 +1,16 @@
 {% assign logoStyle = '' %}
 {% if settings.defaultLogo != nil %}
-{% capture defaultLogo %}<img loading="lazy" height="{{settings.defaultLogo.height}}" width="{{settings.defaultLogo.width}}" src="{{settings.defaultLogo | img_url: '256x'}}" alt="logo" class="lazyload logo--default">{% endcapture %}
+{% capture defaultLogo %}<img loading="lazy" height="{{settings.defaultLogo.height}}" width="{{settings.defaultLogo.width}}" src="{{settings.defaultLogo | img_url: '256x'}}" alt="{{ settings.defaultLogo.alt }}" class="lazyload logo--default">{% endcapture %}
 {% assign logoStyle = logoStyle | append: ' logo--default-available' %}
 {% endif %}
 
 {% if settings.mobileLogo != nil %}
-{% capture mobileLogo %}<img loading="lazy" height="{{settings.mobileLogo.height}}" width="{{settings.mobileLogo.width}}" src="{{settings.mobileLogo | img_url: '256x'}}" alt="logo" class="hide-desktop lazyload logo--mobile">{% endcapture %}
+{% capture mobileLogo %}<img loading="lazy" height="{{settings.mobileLogo.height}}" width="{{settings.mobileLogo.width}}" src="{{settings.mobileLogo | img_url: '256x'}}" alt="{{ settings.mobileLogo.alt }}" class="hide-desktop lazyload logo--mobile">{% endcapture %}
 {% assign logoStyle = logoStyle | append: ' logo--mobile-available' %}
 {% endif %}
 
 {% if settings.transparentLogo != nil %}
-{% capture transparentLogo %}<img loading="lazy" height="{{settings.transparentLogo.height}}" width="{{settings.transparentLogo.width}}" src="{{settings.transparentLogo | img_url: '256x'}}" alt="logo" class="lazyload logo--transparent">{% endcapture %}
+{% capture transparentLogo %}<img loading="lazy" height="{{settings.transparentLogo.height}}" width="{{settings.transparentLogo.width}}" src="{{settings.transparentLogo | img_url: '256x'}}" alt="{{ settings.transparentLogo.alt }}" class="lazyload logo--transparent">{% endcapture %}
 {% assign logoStyle = logoStyle | append: ' logo--transparent-available' %}
 {% endif %}
 

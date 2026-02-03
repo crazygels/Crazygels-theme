@@ -76,7 +76,7 @@
 
 <div
 id="s--{{section.id}}"
-class="{% render 'common-class', section: section, class: 'row, vAlign: false'%}">
+class="{% render 'common-class', section: section, class: 'row, vAlign: false'%}{% if settings.easeIn %} ease-in{% endif %}">
   <div id="{{customID}}" class="col-12 no-gap {{ section.settings.verticalAlignment }} layout__content s__holder">
       <div class="col-12 col-md-6 location__embed">
           {% assign src = section.settings.mapEmbed | split: 'src="' %} 
@@ -110,18 +110,8 @@ class="{% render 'common-class', section: section, class: 'row, vAlign: false'%}
 
 {% schema %}
 {
-    "name": {
-        "en": "Map"
-    },
+    "name": "Map",
     "settings": [
-      {
-            "type": "header",
-            "content": "Help"
-        },
-        {
-        "type": "paragraph",
-        "content": "[Click here to follow an interactive Tutorial](https://vimeo.com/458158695)"
-        },
         {
             "type": "header",
             "content": "Section ID"

@@ -91,11 +91,11 @@ class="{% render 'common-class', section: section, class: 'row', bg: true, vAlig
         {% if block.type == 'accordionBlock' %}
             <div id="maxWidth--{{-section.id}}" class="row max-width--content accordion {{ section.settings.horizontalAlignment }}">
                 {% if block.settings.question == empty or block.settings.answer == empty %}{% continue %}{% endif %}
-                <label class="accordion__item" {{block.shopify__attrbutes}}>
-                    <input type="radio" name="{{section.id}}" {% if forloop.first %}checked{% endif %}>
-                    <span class="accordion__item--title">{{block.settings.question}}<label class="collapse" for="{{section.id}}--close"></label></span>
+                <div class="accordion__item" {{block.shopify__attributes}}>
+                    <input type="checkbox" id="accordion-{{ block.id }}" class="accordion__input" {% if block.settings.openAccordion %}checked{% endif %}>
+                    <label for="accordion-{{ block.id }}" class="accordion__item--title">{{block.settings.question}}</label>
                     <div class="accordion__item--content">{{block.settings.answer}}</div>
-                </label>
+                </div>
             </div>
         {% endif %}
         <div class="no-gap s__block s__block--{{-block.type}} {%if block.settings.wideButton or block.type == 'separator' or block.settings.fullWidth%}col-12 {{ section.settings.horizontalAlignment }}{%endif%} margin__bottom--12">
@@ -108,18 +108,8 @@ class="{% render 'common-class', section: section, class: 'row', bg: true, vAlig
 
 {% schema %}
 {
-    "name": {
-        "en": "Video + text"
-    },
+    "name": "Video + text",
     "settings": [
-      {
-      "type": "header",
-      "content": "Help"
-    },
-    {
-      "type": "paragraph",
-      "content": "[Click here to follow an interactive Tutorial](https://vimeo.com/458157962)"
-    },
     {
         "type": "header",
         "content": "Section ID"
@@ -1202,6 +1192,12 @@ class="{% render 'common-class', section: section, class: 'row', bg: true, vAlig
     "name": "Accordion",
     "settings": [
         {
+            "type": "checkbox",
+            "id": "openAccordion",
+            "label": "Open on first load?",
+            "default": false
+        },
+        {
             "type": "richtext",
             "id": "question",
             "label": "Question"
@@ -1212,7 +1208,72 @@ class="{% render 'common-class', section: section, class: 'row', bg: true, vAlig
             "label": "Answer"
         }
     ]
-}],
+},
+{
+    "type": "countdown",
+    "name": "Countdown",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "fullWidth",
+        "default": true,
+        "label": "Single in row"
+      },
+      {
+        "type": "header",
+        "content": "Time settings"
+      },
+      {
+        "type": "text",
+        "default": "24",
+        "label": "Time",
+        "id": "countdownTime"
+      },
+      {
+        "type": "select",
+        "id": "countdownTimeFormat",
+        "options": [
+          { "value": "days", "label": "days" },
+          { "value": "hours", "label": "hours" },
+          { "value": "minutes", "label": "minutes" },
+          { "value": "seconds", "label": "seconds" }
+        ],
+        "default": "days",
+        "label": "Interval format"
+      },
+      {
+        "type": "paragraph",
+        "content": "Interval - enter a number and choose one of the values from a dropdown (days, hours..)."
+      },
+      {
+        "type": "paragraph",
+        "content": "Exact date - just enter the date in a YYYY/MM/DD format. For example using 2020/08/01 would make the countdown tick until August 1st 2020."
+      },
+      {
+        "type": "select",
+        "label": "Style",
+        "id": "style",
+        "default": "compact",
+        "options": [
+          { "value": "compact", "label": "Compact" },
+          { "value": "doublecolumn", "label": "Two columns" }
+        ]
+      },
+      {
+        "id": "title",
+        "label": "Countdown title",
+        "type": "text",
+        "default": "LIMITED TIME OFFER"
+      },
+      {
+        "id": "text",
+        "type": "text",
+        "label": "Warning text",
+        "default": "The price of this item will revert at the end of this countdown."
+      }
+    ]
+  }
+],
     "presets": [
       {
         "category": "Content + text",

@@ -16,13 +16,18 @@
       "backHome": "Back home"
     },
     "newsletter_form": {
-      "confirmation": "Thank you for Subscribing!"
+      "confirmation": "Thank you for Subscribing!",
+      "discount_submit": "Get the discount",
+      "email_placeholder": "Email"
     },
     "buttons": {
       "buy_now": "Buy now",
+      "quick_shop": "Quick shop",
       "add_to_cart": "Add to cart",
+      "see_options": "See options",
       "add_to_cart_selection": "Make a selection",
-      "add_to_cart_loading": "Adding to cart...",
+      "add_to_cart_loading": "Processing",
+      "checkout_loading": "Checking out",
       "view_cart": "View cart",
       "sold_out": "Sold out",
       "inline_upsell": "Take the deal",
@@ -31,6 +36,8 @@
       "update_cart": "Update Cart",
       "product_page_next": "Next Product",
       "product_page_previous": "Previous Product",
+      "article_next": "Next Article",
+      "article_previous": "Previous Article",
       "show_more": "Show more",
       "submit": "Submit"
     },
@@ -87,7 +94,7 @@
       "watching": "watching this item.",
       "cart": "have this item in their cart."
     },
-    "card": {
+    "card":{
       "from": "from "
     }
   },
@@ -123,7 +130,8 @@
   "upsell": {
     "added": "Item added to cart!",
     "in_cart": "You have %itemCount% in your cart.",
-    "total": "Total being %total%"
+    "total": "Total being %total%",
+    "add_to_cart": "Add"
   },
   "recently_bought": {
     "purchased": "%name% purchased:",
@@ -141,7 +149,6 @@
       "status": "Status",
       "no_orders": "You haven't placed any orders yet.",
       "phone": "Phone",
-      "address": "Address",
       "default_addy": "Default address",
       "no_addy": "No adddress found.",
       "edit_addy": "Edit addresses",
@@ -154,7 +161,8 @@
       "email": "Email Address",
       "login": "Sign in",
       "register": "Create an account",
-      "register_here": "Not a member? Register here.",
+      "register_here": "Register here.",
+      "not_a_member": "Not a member?",
       "password": "Password",
       "confirm_password": "Password Confirmation",
       "forgot_password": "Forgot your password?",
@@ -167,4 +175,4 @@
       "newsletter_success": "Thank you for subscribing"
     }
   }
-}
+} 

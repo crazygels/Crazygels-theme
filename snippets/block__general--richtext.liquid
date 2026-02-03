@@ -12,7 +12,7 @@
 }
 </style>
 
-<div id="richtext--{{-block.id}}" class="font__size--{{-block.settings.fontSize}} font__family--{{-block.settings.fontFamily}}" {{block.shopify_attributes}}>
+<div id="richtext--{{-block.id}}" class="font__size--{{-block.settings.fontSize}} font__family--{{-block.settings.fontFamily}}{% if settings.easeIn %} ease-in{% endif %}" {{block.shopify_attributes}}>
 {% if block.settings.detectLists %}
     {% assign text = block.settings.content | split: '</p>' %}
     {% assign inList = false %}

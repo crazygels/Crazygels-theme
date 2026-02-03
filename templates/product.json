@@ -84,8 +84,7 @@
           "type": "productPageBadge",
           "disabled": true,
           "settings": {
-            "noMargin": false,
-            "imageAlt": ""
+            "noMargin": false
           }
         },
         "03fa9fdf-96ee-4b54-8245-e433dc807a01": {

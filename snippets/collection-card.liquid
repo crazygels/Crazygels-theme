@@ -3,23 +3,26 @@
           {"value": "textinsidebg", "label": "Show text inside with background"},
           {"value": "noButton {% endcomment %}
 
+{% assign card_image = block.settings.custom_collection_image | default: collection.image %}
+
 <div class="collection__card collection__card--{{settings.collectionCardStyle}}">
 {% if settings.collectionCardStyle == 'default' %}
 <a class="card__img--container" href="{{ collection.url }}">
 <div class="card__img--ratio">
   <div class="card__img">
-    {% render 'card-image', image: collection.image, alt: collection.image.alt, mobile: "12" %}
+    {% render 'card-image', image: card_image, alt: card_image.alt, mobile: "12" %}
   </div>
 </div>
 </a>
-<a class="collection__card--title font__family--{{settings.collectionCardTextFont}} font__size--{{settings.collectionCardTextSize}}">
+<span class="collection__card--title font__family--{{settings.collectionCardTextFont}} font__size--{{settings.collectionCardTextSize}}">
 {{ collection.title | escape }}
-</a>
+</span>
 {% else %}
 <a class="card__img--container" href="{{ collection.url }}">
 <div class="card__img--ratio">
   <div class="card__img">
-    {% render 'card-image', image: collection.image, alt: collection.image.alt, mobile: "12" %}
+    {% render 'card-image', image: card_image, alt: card_image.alt, mobile: "12" %}
+
   </div>
   <div class="overlay"></div>
   {% unless settings.collectionCardStyle == 'noButton' %}

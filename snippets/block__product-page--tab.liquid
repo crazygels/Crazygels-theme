@@ -14,7 +14,7 @@
             {{block.settings.customContent}}
         {% when 'metafield' %}
             {% assign metafield = product.metafields[block.settings.metafieldNS][block.settings.metafieldKey] %}
-            {{metafield}}
+            {{metafield | metafield_tag}}
         {% when 'page' %}
             {% assign page = pages[block.settings.page] %}
             {{page.content}}

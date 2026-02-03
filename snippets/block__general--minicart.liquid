@@ -2,7 +2,7 @@
     <input type="checkbox" data-minicart-input id="minicart__button--{{block.id}}">
     <label class="overlay" for="minicart__button--{{block.id}}"></label>
     <label class="minicart__label" for="minicart__button--{{block.id}}" data-cart-settings="count" data-cart-container>
-        {% if block.settings.cartIcon == "text" %}<span class="minicart__icon--text-only">Cart –<span data-count>0</span></span>{% else %}{% render 'get-icon', icon: block.settings.cartIcon %}<span class="item__count" data-count>0</span>{% endif %}
+        {% if block.settings.cartIcon == "text" %}<span class="minicart__icon--text-only">Cart –<span data-count>0</span></span>{% else %}{% render 'get-icon', icon: block.settings.cartIcon %}<span class="item__count{% if settings.easeIn %} ease-in{% endif %}" data-count>0</span>{% endif %}
     </label>
     <div class="minicart__holder minicart--{{-settings.cartStyle}}" data-cart-settings="product-list" data-cart-container><div class="data-product-list" data-product-list></div></div>
 </div>

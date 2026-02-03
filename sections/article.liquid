@@ -6,24 +6,88 @@
 
 <style>
   {% case settings.blogDisplayFor %}
-  {% when 'hide-desktop' %}
-  @media screen and (min-width: 768px){
-    .article__max-width--image{
-      display: none !important;
+    {% when 'hide-desktop' %}
+    @media screen and (min-width: 768px){
+      .article__max-width--image img {
+        display: none !important;
+      }
     }
-  }
-  {% when 'hide-mobile' %}
-  @media screen and (max-width: 767px){
-    .article__max-width--image{
-      display: none !important;
+    {% when 'hide-mobile' %}
+    @media screen and (max-width: 767px){
+      .article__max-width--image img {
+        display: none !important;
+      }
     }
-  }
   {% endcase %}
+
   .article__max-width--image{
     padding: {{ settings.articleVertPadding }}px {{ settings.articleHorPadding }}px;
+    margin-bottom: 0;
   }
-  .article__max-width--image img{
-    height: {{settings.articleHeight}}px;
+
+  .article__max-width--image img {
+    {% if settings.showFeaturedImage == false %}
+      display: none !important;
+    {% endif %}
+    object-fit: cover;
+  }
+
+  .article_sidebar {
+    margin-top: 2.3rem;
+
+    {% if settings.showArticleArrow and settings.showFeaturedImage %}
+      margin-top: 124px;  
+    {% endif %};
+
+    {% if settings.showArticleArrow and settings.showFeaturedImage == false %}
+      margin-top: 136px;  
+    {% endif %}
+
+    {% if settings.showArticleArrow == false and settings.showFeaturedImage %}
+      margin-top: 60px;  
+    {% endif %};
+
+    width: 25%;
+    position: sticky;
+    top: 0;
+  }
+
+  {% unless settings.showArticleArrow or settings.showFeaturedImage %}
+    .article_contents {
+      margin-top: 2.3rem;
+    }
+  {% endunless %}
+  
+  .article_sidebar h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+  }
+
+  .article__title {
+    text-decoration: none;
+  }
+
+  .recent_article_container:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  .recent_article_date { font-size: var(--smallFontSize) }
+
+  {% unless settings.showRecentPost %}
+    .article_contents { width: 100%; }
+  {% endunless %}
+
+  @media screen and (max-width: 992px) {
+    .article_sidebar {
+      width: 40%;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .article_sidebar {
+      width: 100%;
+      margin-top: 24px;
+    }
   }
 </style>
 
@@ -57,56 +121,102 @@
 {% endif %}
 
 <div class="row article__row">
-  <div class="col-12 breadcrumbs--default">
-    {% render 'breadcrumbs' %}
+  <div class="row breadcrumbs__wrapper">
+    <div class="layout__content breadcrumbs--default col-12">{% render 'breadcrumbs' %}</div>
   </div>
-  <div class="col-12 article__max-width unflex">
-    <h1 class="article__title h-reset">{{ article.title }}</h1>
-    {% capture date %}<time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%m/%d/%Y' }}</time>{% endcapture %}
-    <div class="unflex article__meta">{{ article.author }} {% if settings.showArticleDate %}on {{ date }}{% endif %}</div>
-    {% unless article.excerpt == blank %}
-      <div class="article__excerpt">{{ article.excerpt }}</div>
-    {% endunless %}
-  </div>
-  {% unless article.image == null %}
-    <div class="{%- if settings.articleLayout == 'default' -%} layout__{{settings.baseLayout}} {%- else -%} layout__{{settings.articleLayout}} {%- endif -%} col-12">
-      <div class="unflex article__max-width--image">
-        <img
-          loading="lazy"
-          data-src="{{article.image | img_url: '10x'}}"
-          height="{{article.image.height}}"
-          width="{{article.image.width}}"
-          class="article__featured--shadow lazyload"
-        >
-        {% render 'ratio-image',
-          ratioType: 'vw',
-          image: article.image,
-          alt: article.image.alt,
-          class: 'article__featured',
-          mratio: 100,
-          dratio: 100
-        %}
+  
+  <div class="{%- if settings.articleLayout == 'default' -%} layout__{{settings.baseLayout}} {%- else -%} layout__{{settings.articleLayout}} {%- endif -%} col-12">
+    {% if settings.showRecentPost and blog.articles_count > 0 %}
+      <div class="article_sidebar hide-mobile">
+        <h3>RECENT POSTS</h3>
+        {% assign article_url = article.url %}
+        {% for article in blog.articles limit: 4 %}
+          <div class="recent_article_container">
+            {% if article.url != article_url %}
+              <a href="{{ article.url }}" class="article__title recent_article h-reset">{{ article.title }}</a>
+              <p class="recent_article recent_article_date h-reset">{% if settings.showArticleDate %}<time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%m/%d/%Y' }}</time>{% endif %}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="article_contents">  
+      {% if settings.showArticleArrow or settings.showFeaturedImage %}
+        {% unless article.image == null %}
+          <div class="unflex article__max-width--image">
+            {% if settings.showArticleArrow and blog.articles_count > 0 %}
+              <div class="article__max-width unflex">
+                {% render 'block__article--next__prev_alt' %}
+              </div>
+              {% endif %}
+            <img
+              loading="lazy"
+              data-src="{{article.image | img_url: '10x'}}"
+              height="{{article.image.height}}"
+              width="{{article.image.width}}"
+              class="article__featured--shadow lazyload"
+            >
+            {% render 'ratio-image',
+              ratioType: 'vw',
+              image: article.image,
+              alt: article.image.alt,
+              class: 'article__featured',
+              mratio: 100,
+              dratio: 100
+            %}
+          </div>
+        {% endunless %}
+      {% endif %}
+  
+      <div class="article__max-width unflex">
+        <h1 class="article__title h-reset">{{ article.title }}</h1>
+        {% capture date %}<time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%m/%d/%Y' }}</time>{% endcapture %}
+        <div class="unflex article__meta">
+          {{ article.author }}
+          {% if settings.showArticleDate %}on {{ date }}{% endif %}
+        </div>
+        {% unless article.excerpt == blank %}
+          <div class="article__excerpt">{{ article.excerpt }}</div>
+        {% endunless %}
+  
+        <div class="unflex article__content">
+          <article>
+            {{ article.content }}
+          </article>
+        </div>
+        
+        {% unless article.tags.size == 0 %}
+          <div class="col-12 article__max-width article__tags">
+            <span>{{ 'general.tags.tags' | t }}: </span>
+            {% for tag in article.tags %}
+              <a href="{{blog.url}}/tagged/{{tag|handleize}}" class="article__tags--tag">{{ tag }}</a>
+            {% endfor %}
+          </div>
+        {% endunless %}
+  
+        {% if settings.showArticleArrow and blog.articles_count > 0 %}
+          {% render 'block__article--next__prev' %}
+        {% endif %}
+        
+        {% if settings.showRecentPost and blog.articles_count > 0 %}
+          <div class="article_sidebar hide-desktop">
+            <h3>RECENT POSTS</h3>
+            {% assign article_url = article.url %}
+            {% for article in blog.articles limit: 4 %}
+              <div class="recent_article_container">
+                {% if article.url != article_url %}
+                  <a href="{{ article.url }}" class="article__title recent_article h-reset">{{ article.title }}</a>
+                  <p class="recent_article recent_article_date h-reset">{% if settings.showArticleDate %}<time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%m/%d/%Y' }}</time>{% endif %}</p>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
       </div>
     </div>
-  {% endunless %}
-  <div class="col-12 unflex article__content">
-    <article class="article__max-width ">
-      {{ article.content }}
-    </article>
-  </div>
-  <div class="col-12 article__max-width article__tags">
-    {% unless article.tags.size == 0 %}
-      <span>{{ 'general.tags.tags' | t }}: </span>
-      {% for tag in article.tags %}
-        <a href="{{blog.url}}/tagged/{{tag|handleize}}" class="article__tags--tag">{{ tag }}</a>
-      {% endfor %}
-    {% endunless %}
   </div>
 </div>
-
-{% if settings.showArticleArrow %}
-  {% render 'block__article--next__prev' %}
-{% endif %}
 
 {% if blog.comments_enabled? %}
   <div class="article__max-width">

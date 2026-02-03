@@ -94,6 +94,8 @@
       render 'block__product-page--sku', block: block, product: product
     when 'productOrderAttribute'
       render 'block__product-page--order-attribute', block: block, product: product
+    when 'productPopUp'
+      render 'block__product-page--popup-image', block: block
 
     when 'contactFormText'
       render 'block__contact--text', block: block, i: i
@@ -150,6 +152,8 @@
       render 'block__footer--social' with block as block
     when 'footerPayment'
       render 'block__footer--payment-icons' with block as block
+    when 'footerInternational'
+      render 'block__footer--internationalization', block: block
     when 'sectionBanner'
       render 'block__banner--section', block: block
 

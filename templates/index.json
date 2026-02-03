@@ -9,85 +9,358 @@
  */
 {
   "sections": {
-    "c_image_banner_NEaFmL": {
-      "type": "c-image-banner",
-      "settings": {
-        "heading": "FLAWLESS NAILS IN MINUTES",
-        "paragraph": "<h1><strong>ENJOY SALON QUALITY NAILS WITHOUT NAIL DAMAGE</strong></h1>",
-        "section_url": "shopify://collections/nails",
-        "image": "shopify://shop_images/hero_image_crazygels-min.jpg",
-        "image_mobile": "shopify://shop_images/hero_image_crazygels-min.jpg",
-        "full_width": false,
-        "x_alignment": "center",
-        "y_alignment": "center",
-        "text_alignment": "center",
-        "overlay": 0,
-        "min_height": 55,
-        "use_fixed_height": true,
-        "fixed_height": 80,
-        "padding_top": 2,
-        "padding_bottom": 2
-      }
-    },
-    "0b1d2300-2d81-4c7c-9c36-26e3f28f493e": {
-      "type": "section__image-text",
+    "b90e60d1-4548-45a9-9af3-5b8a98cfde79": {
+      "type": "section__cta",
       "blocks": {
-        "template--18107171209482__0b1d2300-2d81-4c7c-9c36-26e3f28f493e-title-1": {
+        "a190fe9b-d605-4bf7-a7ec-d0e0e8a35c80": {
           "type": "title",
           "settings": {
-            "fullWidth": false,
-            "content": "FLAWLESS NAILS IN MINUTES!",
-            "textColor": "#0d0d0d",
+            "fullWidth": true,
+            "content": "Uncover The Delights",
+            "textColor": "rgba(0,0,0,0)",
             "fontFamily": "title",
-            "fontSize": "medium"
+            "fontSize": "big"
           }
         },
-        "template--18107171209482__0b1d2300-2d81-4c7c-9c36-26e3f28f493e-richText-1": {
+        "6d78c5a5-f89b-4e32-b468-3385bdb078c0": {
+          "type": "title",
+          "settings": {
+            "fullWidth": true,
+            "content": "of Hair Haven",
+            "textColor": "rgba(0,0,0,0)",
+            "fontFamily": "title",
+            "fontSize": "big"
+          }
+        },
+        "a9a265e3-08bc-4af2-bd4a-af4d8f0a315d": {
           "type": "richText",
           "settings": {
             "fullWidth": true,
             "maxBWidth": 100,
-            "content": "<p>ENJOY SALON QUALITY NAILS WITHOUT NAIL DAMAGE</p>",
+            "content": "<p>Gather the Goodness for Lustrous, Hydrated,<br/>and Naturally Beautiful Hair!</p><p>Fulfill Your Hair Care Desires Here!</p>",
             "detectLists": true,
             "textColor": "rgba(0,0,0,0)",
             "fontFamily": "base",
             "fontSize": "base"
           }
         },
-        "template--18107171209482__0b1d2300-2d81-4c7c-9c36-26e3f28f493e-button-1": {
+        "4bd0b1fb-b057-4d8a-a564-6182aaf4e5b6": {
           "type": "button",
           "settings": {
             "fullWidth": true,
-            "text": "UNLOCK OFFERS",
-            "url": "shopify://collections/nails",
+            "text": "Shop Now!",
+            "url": "shopify://collections/all",
             "icon": "",
             "iconPosition": "icon--left",
             "wideButton": false,
-            "buttonStyle": "secondary",
+            "buttonStyle": "primary",
             "buttonType": "default",
-            "fontSize": "small",
-            "fontFamily": "title",
-            "animation": "heartBeat",
-            "animationDuration": 2500,
-            "animationInfinite": false
+            "fontSize": "base",
+            "fontFamily": "base",
+            "animation": "none",
+            "animationDuration": 1000,
+            "animationInfinite": true
           }
         }
       },
       "block_order": [
-        "template--18107171209482__0b1d2300-2d81-4c7c-9c36-26e3f28f493e-title-1",
-        "template--18107171209482__0b1d2300-2d81-4c7c-9c36-26e3f28f493e-richText-1",
-        "template--18107171209482__0b1d2300-2d81-4c7c-9c36-26e3f28f493e-button-1"
+        "a190fe9b-d605-4bf7-a7ec-d0e0e8a35c80",
+        "6d78c5a5-f89b-4e32-b468-3385bdb078c0",
+        "a9a265e3-08bc-4af2-bd4a-af4d8f0a315d",
+        "4bd0b1fb-b057-4d8a-a564-6182aaf4e5b6"
+      ],
+      "settings": {
+        "custom_id": "",
+        "displayFor": "hide-mobile",
+        "layout": "boxed",
+        "nomargin": true,
+        "scopedCSS": "",
+        "height": 640,
+        "padding": 50,
+        "lineMargin": 12,
+        "backgroundColor": "rgba(0,0,0,0)",
+        "backgroundImage": "shopify://shop_images/image_14.png",
+        "backgroundImageUrl": "",
+        "backgroundPosition": "middle",
+        "backgroundFilter": "none",
+        "backdropIntensity": 50,
+        "parallax": false,
+        "backgroundPattern": false,
+        "overlayOpacity": 0,
+        "overlayColor": "#000000",
+        "contentColor": "rgba(0,0,0,0)",
+        "horizontalAlignment": "start",
+        "verticalAlignment": "middle",
+        "maxContentWidth": 100,
+        "heading": "",
+        "headingColor": "rgba(0,0,0,0)",
+        "subheading": "",
+        "subheadingColor": "rgba(0,0,0,0)",
+        "subheadingPosition": "above",
+        "headingAlignment": "center"
+      }
+    },
+    "916bbae0-03c1-441e-a6cf-3b8e292b139b": {
+      "type": "section__cta",
+      "blocks": {
+        "template--21557189345560__916bbae0-03c1-441e-a6cf-3b8e292b139b-title-1": {
+          "type": "title",
+          "settings": {
+            "fullWidth": true,
+            "content": "Uncover The Delights  of Hair Haven",
+            "textColor": "rgba(0,0,0,0)",
+            "fontFamily": "title",
+            "fontSize": "medium"
+          }
+        },
+        "template--21557189345560__916bbae0-03c1-441e-a6cf-3b8e292b139b-richText-1": {
+          "type": "richText",
+          "settings": {
+            "fullWidth": true,
+            "maxBWidth": 100,
+            "content": "<p>Gather the Goodness for Lustrous, Hydrated,<br/>and Naturally Beautiful Hair!</p><p>Fulfill Your Hair Care Desires Here!</p>",
+            "detectLists": true,
+            "textColor": "rgba(0,0,0,0)",
+            "fontFamily": "base",
+            "fontSize": "small"
+          }
+        },
+        "template--21557189345560__916bbae0-03c1-441e-a6cf-3b8e292b139b-button-1": {
+          "type": "button",
+          "settings": {
+            "fullWidth": true,
+            "text": "Shop Now!",
+            "url": "shopify://collections/all",
+            "icon": "",
+            "iconPosition": "icon--left",
+            "wideButton": false,
+            "buttonStyle": "primary",
+            "buttonType": "default",
+            "fontSize": "base",
+            "fontFamily": "base",
+            "animation": "none",
+            "animationDuration": 1000,
+            "animationInfinite": true
+          }
+        }
+      },
+      "block_order": [
+        "template--21557189345560__916bbae0-03c1-441e-a6cf-3b8e292b139b-title-1",
+        "template--21557189345560__916bbae0-03c1-441e-a6cf-3b8e292b139b-richText-1",
+        "template--21557189345560__916bbae0-03c1-441e-a6cf-3b8e292b139b-button-1"
       ],
       "settings": {
         "custom_id": "",
         "displayFor": "hide-desktop",
         "layout": "default",
-        "nomargin": true,
+        "nomargin": false,
+        "scopedCSS": "",
+        "height": 470,
+        "padding": 20,
+        "lineMargin": 4,
+        "backgroundColor": "rgba(0,0,0,0)",
+        "backgroundImage": "shopify://shop_images/Gather_the_Goodness_for_Lustrous_Hydrated_and_Naturally_Beautiful_Hair_Fulfill_Your_Hair_Care_Desires_Here_1.png",
+        "backgroundImageUrl": "",
+        "backgroundPosition": "middle",
+        "backgroundFilter": "none",
+        "backdropIntensity": 50,
+        "parallax": false,
+        "backgroundPattern": false,
+        "overlayOpacity": 0,
+        "overlayColor": "#000000",
+        "contentColor": "rgba(0,0,0,0)",
+        "horizontalAlignment": "start",
+        "verticalAlignment": "top",
+        "maxContentWidth": 100,
+        "heading": "",
+        "headingColor": "rgba(0,0,0,0)",
+        "subheading": "",
+        "subheadingColor": "rgba(0,0,0,0)",
+        "subheadingPosition": "above",
+        "headingAlignment": "center"
+      }
+    },
+    "a8fb6dcb-e63c-45bd-9535-c8fbf8894200": {
+      "type": "section__slider--adaptive",
+      "blocks": {
+        "c22dc845-b3c6-4990-b8f2-d5b80fc732d1": {
+          "type": "imageSlideAdaptive",
+          "settings": {
+            "horizontalAlignment": "start",
+            "verticalAlignment": "middle",
+            "padding": 40,
+            "contentSpacing": 12,
+            "backgroundColor": "rgba(0,0,0,0)",
+            "backgroundImage": "shopify://shop_images/image_6.png",
+            "backgroundImageMobile": "shopify://shop_images/Gather_the_Goodness_for_Lustrous_Hydrated_and_Naturally_Beautiful_Hair_Fulfill_Your_Hair_Care_Desires_Here.png",
+            "backgroundPosition": "middle",
+            "overlayOpacity": 0,
+            "overlayColor": "#000000",
+            "slideURL": "shopify://collections/all",
+            "heading": "",
+            "headingColor": "rgba(0,0,0,0)",
+            "content": "",
+            "contentColor": "rgba(0,0,0,0)",
+            "button1Text": "",
+            "button1Link": "",
+            "button1Style": "primary",
+            "button1Type": "default",
+            "button2Text": "",
+            "button2Link": "",
+            "button2Style": "secondary",
+            "button2Type": "default"
+          }
+        }
+      },
+      "block_order": [
+        "c22dc845-b3c6-4990-b8f2-d5b80fc732d1"
+      ],
+      "disabled": true,
+      "settings": {
+        "custom_id": "",
+        "displayFor": "display--both",
+        "layout": "boxed",
+        "nomargin": false,
+        "height": 0,
+        "contentColor": "rgba(0,0,0,0)",
+        "autoplay": false,
+        "slideSpeed": 3,
+        "animation": "none",
+        "delayAnimation": false
+      }
+    },
+    "e0fb4ebe-9942-4341-9059-d54d6f9933af": {
+      "type": "section__content",
+      "settings": {
+        "custom_id": "",
+        "displayFor": "display--both",
+        "layout": "default",
+        "nomargin": false,
         "scopedCSS": "",
         "height": 0,
         "padding": 0,
         "lineMargin": 0,
-        "backgroundColor": "#e6c5d4",
+        "backgroundColor": "rgba(0,0,0,0)",
+        "backgroundPosition": "middle",
+        "backgroundFilter": "none",
+        "backdropIntensity": 50,
+        "parallax": false,
+        "backgroundPattern": false,
+        "overlayOpacity": 0,
+        "overlayColor": "#000000",
+        "contentColor": "rgba(0,0,0,0)",
+        "horizontalAlignment": "center",
+        "verticalAlignment": "middle"
+      }
+    },
+    "297dee03-8cb8-4d3e-b6a5-4c4aa649905f": {
+      "type": "section__auto-grid",
+      "blocks": {
+        "70f72d55-7e3d-483a-b922-9953a5595d72": {
+          "type": "gridImage",
+          "settings": {
+            "hide": "show-both",
+            "url": "shopify://collections/color-care",
+            "backgroundImage": "shopify://shop_images/image_16.png",
+            "backgroundSize": "cover",
+            "overlayOpacity": 0,
+            "overlayColor": "#000000",
+            "imageText": "",
+            "textColor": "rgba(0,0,0,0)",
+            "textFillColor": "rgba(0,0,0,0)",
+            "fullwidthText": false,
+            "fontSize": "base",
+            "horizontalAlignment": "center",
+            "verticalAlignment": "middle"
+          }
+        },
+        "87bfe788-2b94-441e-98d4-7e099137ad40": {
+          "type": "gridImage",
+          "settings": {
+            "hide": "show-both",
+            "url": "shopify://collections/hair-treatments",
+            "backgroundImage": "shopify://shop_images/image_18.png",
+            "backgroundSize": "cover",
+            "overlayOpacity": 0,
+            "overlayColor": "#000000",
+            "imageText": "",
+            "textColor": "rgba(0,0,0,0)",
+            "textFillColor": "rgba(0,0,0,0)",
+            "fullwidthText": false,
+            "fontSize": "base",
+            "horizontalAlignment": "center",
+            "verticalAlignment": "middle"
+          }
+        }
+      },
+      "block_order": [
+        "70f72d55-7e3d-483a-b922-9953a5595d72",
+        "87bfe788-2b94-441e-98d4-7e099137ad40"
+      ],
+      "custom_css": [],
+      "settings": {
+        "custom_id": "",
+        "layout": "default",
+        "nomargin": false,
+        "height": 300,
+        "gap": 20
+      }
+    },
+    "59365ce0-5026-42e5-9fe2-7843e5a9b40a": {
+      "type": "section__featured-collection-tabs",
+      "blocks": {
+        "2a7ba802-bc3e-4edb-a694-0436b7c20265": {
+          "type": "fplistCollection",
+          "settings": {
+            "collection": "shampoo",
+            "title": ""
+          }
+        },
+        "cb3e312b-76d9-4d79-a207-21643c2ee52c": {
+          "type": "fplistCollection",
+          "settings": {
+            "collection": "color-care",
+            "title": ""
+          }
+        },
+        "45dd7c06-6acc-4b16-b940-c0e8b632fea5": {
+          "type": "fplistCollection",
+          "settings": {
+            "collection": "conditioner",
+            "title": ""
+          }
+        },
+        "5000211b-c109-40f1-81e4-e014c1ca0284": {
+          "type": "fplistCollection",
+          "settings": {
+            "collection": "hair-treatments",
+            "title": ""
+          }
+        },
+        "289905d8-2285-40b1-b2cf-99196da646a9": {
+          "type": "fplistCollection",
+          "settings": {
+            "collection": "heat-protectant",
+            "title": ""
+          }
+        }
+      },
+      "block_order": [
+        "2a7ba802-bc3e-4edb-a694-0436b7c20265",
+        "cb3e312b-76d9-4d79-a207-21643c2ee52c",
+        "45dd7c06-6acc-4b16-b940-c0e8b632fea5",
+        "5000211b-c109-40f1-81e4-e014c1ca0284",
+        "289905d8-2285-40b1-b2cf-99196da646a9"
+      ],
+      "settings": {
+        "custom_id": "",
+        "displayFor": "display--both",
+        "layout": "default",
+        "nomargin": false,
+        "scopedCSS": "",
+        "height": 800,
+        "padding": 20,
+        "backgroundColor": "rgba(0,0,0,0)",
         "backgroundPosition": "middle",
         "backgroundFilter": "none",
         "backdropIntensity": 50,
@@ -98,261 +371,225 @@
         "contentColor": "rgba(0,0,0,0)",
         "horizontalAlignment": "center",
         "verticalAlignment": "middle",
-        "imagePosition": "right",
-        "imageWidth": "9",
-        "image": "shopify://shop_images/no_background_hero.webp",
-        "image_url": "shopify://collections/all",
-        "imageOverlayOpacity": 0,
-        "imageOverlayColor": "#000000",
-        "vertPaddingAccord": 0,
-        "horPaddingAccord": 0
-      }
-    },
-    "bc7ede14-658b-47dc-9a41-d159b412e2ce": {
-      "type": "section__content-text",
-      "blocks": {
-        "7ea0578d-0827-4aa3-83f3-04a922103730": {
-          "type": "imageText",
-          "settings": {
-            "displayFor": "display--both",
-            "layout": "default",
-            "nomargin": false,
-            "scopedCSS": "",
-            "height": 0,
-            "padding": 0,
-            "lineMargin": 0,
-            "backgroundColor": "#fdeef5",
-            "contentColor": "#0d0d0d",
-            "horizontalAlignment": "center",
-            "verticalAlignment": "middle",
-            "imagePosition": "right",
-            "imageWidth": "6",
-            "image": "shopify://shop_images/hero_image_crazygels-min.jpg",
-            "overlayOpacity": 0,
-            "overlayColor": "#000000",
-            "heading": "FLAWLESS NAILS",
-            "text": "<h3> SALON QUALITY NAILS </h3><h3>NO NAIL DAMAGE</h3>",
-            "buttonText": "UNLOCK OFFERS",
-            "url": "shopify://collections/nails",
-            "wideButton": true,
-            "buttonType": "secondary",
-            "buttonStyle": "default"
-          }
-        }
-      },
-      "block_order": [
-        "7ea0578d-0827-4aa3-83f3-04a922103730"
-      ],
-      "settings": {
-        "custom_id": ""
-      }
-    },
-    "39ffde19-ca3f-4bed-ac9e-5562062dcbed": {
-      "type": "section__cta",
-      "blocks": {
-        "template--18107171209482__39ffde19-ca3f-4bed-ac9e-5562062dcbed-title-1": {
-          "type": "title",
-          "settings": {
-            "fullWidth": true,
-            "content": "LIMITED TIME OFFER",
-            "textColor": "#ffffff",
-            "fontFamily": "title",
-            "fontSize": "medium"
-          }
-        },
-        "template--18107171209482__39ffde19-ca3f-4bed-ac9e-5562062dcbed-richText-1": {
-          "type": "richText",
-          "settings": {
-            "fullWidth": true,
-            "maxBWidth": 100,
-            "content": "<h2> 15% OFF </h2>",
-            "detectLists": false,
-            "textColor": "#ffffff",
-            "fontFamily": "title",
-            "fontSize": "small"
-          }
-        },
-        "template--18107171209482__39ffde19-ca3f-4bed-ac9e-5562062dcbed-button-1": {
-          "type": "button",
-          "settings": {
-            "fullWidth": true,
-            "text": "GET YOURS",
-            "url": "shopify://collections/nails",
-            "icon": "",
-            "iconPosition": "icon--left",
-            "wideButton": false,
-            "buttonStyle": "secondary",
-            "buttonType": "ghost",
-            "fontSize": "base",
-            "fontFamily": "title",
-            "animation": "heartBeat",
-            "animationDuration": 1375,
-            "animationInfinite": true
-          }
-        }
-      },
-      "block_order": [
-        "template--18107171209482__39ffde19-ca3f-4bed-ac9e-5562062dcbed-title-1",
-        "template--18107171209482__39ffde19-ca3f-4bed-ac9e-5562062dcbed-richText-1",
-        "template--18107171209482__39ffde19-ca3f-4bed-ac9e-5562062dcbed-button-1"
-      ],
-      "settings": {
-        "custom_id": "",
-        "displayFor": "display--both",
-        "layout": "default",
-        "nomargin": true,
-        "scopedCSS": "",
-        "height": 200,
-        "padding": 0,
-        "lineMargin": 0,
-        "backgroundColor": "#000000",
-        "backgroundImageUrl": "",
-        "backgroundPosition": "middle",
-        "backgroundFilter": "none",
-        "backdropIntensity": 50,
-        "parallax": false,
-        "backgroundPattern": false,
-        "overlayOpacity": 0,
-        "overlayColor": "#000000",
-        "contentColor": "#ffffff",
-        "horizontalAlignment": "center",
-        "verticalAlignment": "middle",
-        "maxContentWidth": 100,
-        "heading": "",
+        "heading": "Featured Products",
         "headingColor": "rgba(0,0,0,0)",
         "subheading": "",
-        "subheadingColor": "rgba(0,0,0,0)",
+        "subheadingColor": "#fa9090",
         "subheadingPosition": "above",
-        "headingAlignment": "center"
-      }
-    },
-    "16265528618af17c6c": {
-      "type": "section__cta",
-      "blocks": {
-        "16265528618af17c6c-0": {
-          "type": "title",
-          "settings": {
-            "fullWidth": true,
-            "content": "CRAZY GELS",
-            "textColor": "#391241",
-            "fontFamily": "title",
-            "fontSize": "medium"
-          }
-        },
-        "16265528618af17c6c-1": {
-          "type": "richText",
-          "settings": {
-            "fullWidth": true,
-            "maxBWidth": 50,
-            "content": "<p>-Protect and grow your nails with Crazy Gels </p><p>-Cut down on salon visits and save time</p><p>-Save even more subscribe to our VIP package </p>",
-            "detectLists": true,
-            "textColor": "rgba(0,0,0,0)",
-            "fontFamily": "base",
-            "fontSize": "base"
-          }
-        }
-      },
-      "block_order": [
-        "16265528618af17c6c-0",
-        "16265528618af17c6c-1"
-      ],
-      "settings": {
-        "custom_id": "",
-        "displayFor": "display--both",
-        "layout": "default",
-        "nomargin": false,
-        "scopedCSS": "",
-        "height": 200,
-        "padding": 20,
-        "lineMargin": 0,
-        "backgroundColor": "#f8e8ff",
-        "backgroundImageUrl": "",
-        "backgroundPosition": "middle",
-        "backgroundFilter": "none",
-        "backdropIntensity": 50,
-        "parallax": false,
-        "backgroundPattern": false,
-        "overlayOpacity": 0,
-        "overlayColor": "#000000",
-        "contentColor": "#391241",
-        "horizontalAlignment": "center",
-        "verticalAlignment": "middle",
-        "maxContentWidth": 100,
-        "heading": "",
-        "headingColor": "rgba(0,0,0,0)",
-        "subheading": "",
-        "subheadingColor": "rgba(0,0,0,0)",
-        "subheadingPosition": "above",
-        "headingAlignment": "center"
-      }
-    },
-    "16265529277430f275": {
-      "type": "section__featured-collection",
-      "settings": {
-        "custom_id": "",
-        "displayFor": "display--both",
-        "layout": "default",
-        "nomargin": false,
-        "scopedCSS": "",
-        "height": 150,
-        "padding": 5,
-        "backgroundColor": "#cfb4d9",
-        "heading": "We Have IT",
-        "headingColor": "#0d0d0d",
-        "subheading": "Your Favorites",
-        "subheadingColor": "#000000",
-        "subheadingPosition": "below",
         "headingAlignment": "center",
-        "collection": "all-products",
-        "productCount": 8,
+        "prdtCount": 8,
         "showMore": true,
-        "showMoreText": "MORE",
+        "showMoreText": "",
         "showMoreAlignment": "center"
       }
     },
-    "5825d15c-1ad3-48a6-86d6-f863f3c776eb": {
-      "type": "section__cta",
+    "3f6cbb01-c834-4e89-a8d8-def88d150134": {
+      "type": "section__grid",
       "blocks": {
-        "template--18860173033747__5825d15c-1ad3-48a6-86d6-f863f3c776eb-168307626454f18187-0": {
-          "type": "title",
+        "4fec8236-dd2d-4433-8b17-39e48d74a814": {
+          "type": "gridImage",
           "settings": {
-            "fullWidth": true,
-            "content": "Crazy Gels Family",
-            "textColor": "#0d0d0d",
-            "fontFamily": "title",
-            "fontSize": "big"
+            "column": 1,
+            "row": 1,
+            "height": "12",
+            "width": "4",
+            "hide": "show-both",
+            "url": "",
+            "backgroundSize": "cover",
+            "overlayOpacity": 0,
+            "overlayColor": "#000000",
+            "imageText": "",
+            "textColor": "rgba(0,0,0,0)",
+            "textFillColor": "rgba(0,0,0,0)",
+            "fullwidthText": false,
+            "fontSize": "base",
+            "horizontalAlignment": "center",
+            "verticalAlignment": "middle"
           }
         },
-        "template--18860173033747__5825d15c-1ad3-48a6-86d6-f863f3c776eb-168307626454f18187-1": {
-          "type": "richText",
+        "492b7a29-e5ba-486b-9fb0-c2777477361c": {
+          "type": "gridImage",
           "settings": {
-            "fullWidth": true,
-            "maxBWidth": 100,
-            "content": "<p>Join Now and be part of our Fam </p>",
-            "detectLists": true,
-            "textColor": "#0d0d0d",
-            "fontFamily": "title",
-            "fontSize": "base"
+            "column": 5,
+            "row": 1,
+            "height": "6",
+            "width": "4",
+            "hide": "show-both",
+            "url": "",
+            "backgroundImage": "shopify://shop_images/small_banner_3.png",
+            "backgroundSize": "cover",
+            "overlayOpacity": 0,
+            "overlayColor": "#000000",
+            "imageText": "",
+            "textColor": "rgba(0,0,0,0)",
+            "textFillColor": "rgba(0,0,0,0)",
+            "fullwidthText": false,
+            "fontSize": "base",
+            "horizontalAlignment": "center",
+            "verticalAlignment": "middle"
           }
         },
-        "a5ba7003-740a-4f01-b7f7-ab81d26e712c": {
-          "type": "blockNewsletter",
+        "bf929cad-a0ca-4087-ba44-ce75c6322fcf": {
+          "type": "gridImage",
           "settings": {
-            "fullWidth": true,
-            "newsletter": "shopify",
-            "inputMaxWidth": 500,
-            "inputText": "#0d0d0d",
-            "inputBackground": "#ffffff",
-            "email": "e-mail",
-            "buttonType": "secondary",
-            "submit": "SUB-UP"
+            "column": 5,
+            "row": 12,
+            "height": "6",
+            "width": "4",
+            "hide": "show-both",
+            "url": "",
+            "backgroundImage": "shopify://shop_images/small_banner_2.png",
+            "backgroundSize": "cover",
+            "overlayOpacity": 0,
+            "overlayColor": "#000000",
+            "imageText": "",
+            "textColor": "rgba(0,0,0,0)",
+            "textFillColor": "rgba(0,0,0,0)",
+            "fullwidthText": false,
+            "fontSize": "base",
+            "horizontalAlignment": "center",
+            "verticalAlignment": "middle"
+          }
+        },
+        "56c5d2f9-1a08-47ee-a944-ae9438b86c74": {
+          "type": "gridImage",
+          "settings": {
+            "column": 12,
+            "row": 1,
+            "height": "6",
+            "width": "4",
+            "hide": "show-both",
+            "url": "",
+            "backgroundImage": "shopify://shop_images/small_banner_4.png",
+            "backgroundSize": "cover",
+            "overlayOpacity": 0,
+            "overlayColor": "#000000",
+            "imageText": "",
+            "textColor": "rgba(0,0,0,0)",
+            "textFillColor": "rgba(0,0,0,0)",
+            "fullwidthText": false,
+            "fontSize": "base",
+            "horizontalAlignment": "center",
+            "verticalAlignment": "middle"
+          }
+        },
+        "756d81c1-1214-4310-ad37-3de729ad043a": {
+          "type": "gridImage",
+          "settings": {
+            "column": 12,
+            "row": 12,
+            "height": "6",
+            "width": "4",
+            "hide": "show-both",
+            "url": "",
+            "backgroundImage": "shopify://shop_images/small_banner_1.png",
+            "backgroundSize": "cover",
+            "overlayOpacity": 0,
+            "overlayColor": "#000000",
+            "imageText": "",
+            "textColor": "rgba(0,0,0,0)",
+            "textFillColor": "rgba(0,0,0,0)",
+            "fullwidthText": false,
+            "fontSize": "base",
+            "horizontalAlignment": "center",
+            "verticalAlignment": "middle"
           }
         }
       },
       "block_order": [
-        "template--18860173033747__5825d15c-1ad3-48a6-86d6-f863f3c776eb-168307626454f18187-0",
-        "template--18860173033747__5825d15c-1ad3-48a6-86d6-f863f3c776eb-168307626454f18187-1",
-        "a5ba7003-740a-4f01-b7f7-ab81d26e712c"
+        "4fec8236-dd2d-4433-8b17-39e48d74a814",
+        "492b7a29-e5ba-486b-9fb0-c2777477361c",
+        "bf929cad-a0ca-4087-ba44-ce75c6322fcf",
+        "56c5d2f9-1a08-47ee-a944-ae9438b86c74",
+        "756d81c1-1214-4310-ad37-3de729ad043a"
+      ],
+      "disabled": true,
+      "settings": {
+        "custom_id": "",
+        "layout": "boxed",
+        "nomargin": false,
+        "height": 0,
+        "orientation": "50",
+        "gap": 20
+      }
+    },
+    "d53ac72d-c90c-425a-a5dd-5f75abd78235": {
+      "type": "section__slider--adaptive",
+      "blocks": {
+        "template--21557189345560__d53ac72d-c90c-425a-a5dd-5f75abd78235-imageSlideAdaptive-1": {
+          "type": "imageSlideAdaptive",
+          "settings": {
+            "horizontalAlignment": "center",
+            "verticalAlignment": "middle",
+            "padding": 16,
+            "contentSpacing": 12,
+            "backgroundColor": "rgba(0,0,0,0)",
+            "backgroundImage": "shopify://shop_images/image_13.png",
+            "backgroundImageMobile": "shopify://shop_images/Explore_the_latest_trends_and_customer_favorites_with_our_curated_selections..png",
+            "backgroundPosition": "middle",
+            "overlayOpacity": 0,
+            "overlayColor": "#000000",
+            "slideURL": "",
+            "heading": "",
+            "headingColor": "rgba(0,0,0,0)",
+            "content": "",
+            "contentColor": "rgba(0,0,0,0)",
+            "button1Text": "",
+            "button1Link": "",
+            "button1Style": "primary",
+            "button1Type": "default",
+            "button2Text": "",
+            "button2Link": "",
+            "button2Style": "secondary",
+            "button2Type": "default"
+          }
+        }
+      },
+      "block_order": [
+        "template--21557189345560__d53ac72d-c90c-425a-a5dd-5f75abd78235-imageSlideAdaptive-1"
+      ],
+      "settings": {
+        "custom_id": "",
+        "displayFor": "display--both",
+        "layout": "boxed",
+        "nomargin": false,
+        "height": 0,
+        "contentColor": "rgba(0,0,0,0)",
+        "autoplay": true,
+        "slideSpeed": 3,
+        "animation": "none",
+        "delayAnimation": false
+      }
+    },
+    "1626553335f2494384": {
+      "type": "section__featured-collection-list",
+      "blocks": {
+        "0e794b70-266d-4875-8498-eb41976ffeb3": {
+          "type": "fplistCollection",
+          "settings": {
+            "collection": "best-seller",
+            "title": "Best-Seller"
+          }
+        },
+        "b4e4af0c-9105-4c6e-b900-0f678e8ee004": {
+          "type": "fplistCollection",
+          "settings": {
+            "collection": "on-sale",
+            "title": ""
+          }
+        },
+        "61095ba1-e7e2-4287-819d-e29faa15625e": {
+          "type": "fplistCollection",
+          "settings": {
+            "collection": "top-rated",
+            "title": ""
+          }
+        }
+      },
+      "block_order": [
+        "0e794b70-266d-4875-8498-eb41976ffeb3",
+        "b4e4af0c-9105-4c6e-b900-0f678e8ee004",
+        "61095ba1-e7e2-4287-819d-e29faa15625e"
       ],
       "settings": {
         "custom_id": "",
@@ -360,11 +597,9 @@
         "layout": "boxed",
         "nomargin": false,
         "scopedCSS": "",
-        "height": 290,
+        "height": 530,
         "padding": 20,
-        "lineMargin": 12,
-        "backgroundColor": "#cfb4d9",
-        "backgroundImageUrl": "",
+        "backgroundColor": "rgba(0,0,0,0)",
         "backgroundPosition": "middle",
         "backgroundFilter": "none",
         "backdropIntensity": 50,
@@ -372,6 +607,277 @@
         "backgroundPattern": false,
         "overlayOpacity": 0,
         "overlayColor": "#000000",
+        "contentColor": "rgba(0,0,0,0)",
+        "horizontalAlignment": "center",
+        "verticalAlignment": "middle",
+        "heading": "",
+        "headingColor": "rgba(0,0,0,0)",
+        "subheading": "",
+        "subheadingColor": "rgba(0,0,0,0)",
+        "subheadingPosition": "above",
+        "headingAlignment": "start",
+        "colGap": 20,
+        "colCount": "col-md-4",
+        "prdtCount": 4,
+        "showMore": false
+      }
+    },
+    "87256f7a-4d20-4d9d-bf17-3b6044d25a62": {
+      "type": "section__image-text",
+      "blocks": {
+        "8540f3b2-54e2-4d50-94d5-ed245f82b4c6": {
+          "type": "customRichText",
+          "settings": {
+            "fullWidth": true,
+            "maxBWidth": 100,
+            "content": "<p>Introducing the Brilliance Collection</p>",
+            "textColor": "#fa9090",
+            "fontSize": "custom",
+            "customFontSize": 15,
+            "customFont": false,
+            "customFontFamily": "work_sans_n6"
+          }
+        },
+        "template--21557189345560__87256f7a-4d20-4d9d-bf17-3b6044d25a62-title-1": {
+          "type": "title",
+          "settings": {
+            "fullWidth": true,
+            "content": "Bond Bar",
+            "textColor": "rgba(0,0,0,0)",
+            "fontFamily": "title",
+            "fontSize": "medium"
+          }
+        },
+        "template--21557189345560__87256f7a-4d20-4d9d-bf17-3b6044d25a62-richText-1": {
+          "type": "richText",
+          "settings": {
+            "fullWidth": true,
+            "maxBWidth": 100,
+            "content": "<p>Explore cutting-edge formulas designed to cater to the <br/>unique needs of all hair types and textures <br/>n our innovative Brilliance Collection.</p>",
+            "detectLists": true,
+            "textColor": "rgba(0,0,0,0)",
+            "fontFamily": "base",
+            "fontSize": "base"
+          }
+        }
+      },
+      "block_order": [
+        "8540f3b2-54e2-4d50-94d5-ed245f82b4c6",
+        "template--21557189345560__87256f7a-4d20-4d9d-bf17-3b6044d25a62-title-1",
+        "template--21557189345560__87256f7a-4d20-4d9d-bf17-3b6044d25a62-richText-1"
+      ],
+      "settings": {
+        "custom_id": "",
+        "displayFor": "display--both",
+        "layout": "stretchBg",
+        "nomargin": false,
+        "scopedCSS": "",
+        "height": 500,
+        "padding": 0,
+        "lineMargin": 8,
+        "backgroundColor": "#f8f7f7",
+        "backgroundPosition": "middle",
+        "backgroundFilter": "none",
+        "backdropIntensity": 50,
+        "parallax": false,
+        "backgroundPattern": false,
+        "overlayOpacity": 0,
+        "overlayColor": "#000000",
+        "contentColor": "rgba(0,0,0,0)",
+        "horizontalAlignment": "center",
+        "verticalAlignment": "middle",
+        "imagePosition": "left",
+        "imageWidth": "6",
+        "image": "shopify://shop_images/image_11.png",
+        "image_url": "",
+        "imageOverlayOpacity": 0,
+        "imageOverlayColor": "#000000"
+      }
+    },
+    "198d4182-b9b7-4b73-971c-a036d129bd48": {
+      "type": "section__featured-collection",
+      "settings": {
+        "custom_id": "",
+        "displayFor": "display--both",
+        "layout": "default",
+        "nomargin": false,
+        "scopedCSS": "",
+        "height": 390,
+        "padding": 15,
+        "backgroundColor": "rgba(0,0,0,0)",
+        "heading": "",
+        "headingColor": "rgba(0,0,0,0)",
+        "subheading": "",
+        "subheadingColor": "rgba(0,0,0,0)",
+        "subheadingPosition": "above",
+        "headingAlignment": "center",
+        "collection": "bondbar",
+        "productCount": 4,
+        "showMore": true,
+        "showMoreText": "",
+        "showMoreAlignment": "center"
+      }
+    },
+    "d48bd8bf-94df-4f81-ac1c-1ab974df333f": {
+      "type": "section__logolist",
+      "blocks": {
+        "b8ae242d-8046-40e7-9aa2-53996f1b0d53": {
+          "type": "logoListLogo",
+          "settings": {
+            "logo": "shopify://shop_images/Sauce_Beauty.png",
+            "logoLink": "shopify://collections/sauce-beauty"
+          }
+        },
+        "512dd973-fdd9-450c-a604-6e29cd76d05d": {
+          "type": "logoListLogo",
+          "settings": {
+            "logo": "shopify://shop_images/Silk_Elements.png",
+            "logoLink": "shopify://collections/silk-elements"
+          }
+        },
+        "560d5b15-9c81-424a-aef9-6913525a4e65": {
+          "type": "logoListLogo",
+          "settings": {
+            "logo": "shopify://shop_images/Bond_Bar.png",
+            "logoLink": "shopify://collections/bondbar-1"
+          }
+        },
+        "5990f055-bf38-4333-a0bc-46fd65921ca8": {
+          "type": "logoListLogo",
+          "settings": {
+            "logo": "shopify://shop_images/Ion.png",
+            "logoLink": "shopify://collections/ion"
+          }
+        }
+      },
+      "block_order": [
+        "b8ae242d-8046-40e7-9aa2-53996f1b0d53",
+        "512dd973-fdd9-450c-a604-6e29cd76d05d",
+        "560d5b15-9c81-424a-aef9-6913525a4e65",
+        "5990f055-bf38-4333-a0bc-46fd65921ca8"
+      ],
+      "settings": {
+        "custom_id": "",
+        "displayFor": "display--both",
+        "layout": "default",
+        "nomargin": false,
+        "scopedCSS": "",
+        "height": 0,
+        "padding": 0,
+        "lineMargin": 12,
+        "backgroundColor": "rgba(0,0,0,0)",
+        "backgroundPosition": "middle",
+        "backgroundFilter": "none",
+        "backdropIntensity": 50,
+        "parallax": false,
+        "backgroundPattern": false,
+        "overlayOpacity": 0,
+        "overlayColor": "#000000",
+        "horizontalAlignment": "center",
+        "verticalAlignment": "middle",
+        "heading": "Check out these Premium Brands.",
+        "headingColor": "rgba(0,0,0,0)",
+        "subheading": "",
+        "subheadingColor": "rgba(0,0,0,0)",
+        "subheadingPosition": "above",
+        "headingAlignment": "center",
+        "hover": "opacitybw"
+      }
+    },
+    "40c6a023-bf80-4ce4-a2f2-2b5c24c40078": {
+      "type": "section__blog",
+      "settings": {
+        "custom_id": "",
+        "displayFor": "display--both",
+        "layout": "default",
+        "nomargin": false,
+        "scopedCSS": "",
+        "height": 580,
+        "padding": 0,
+        "backgroundColor": "#f8f7f7",
+        "backgroundPosition": "middle",
+        "backgroundFilter": "none",
+        "backdropIntensity": 50,
+        "parallax": false,
+        "backgroundPattern": false,
+        "overlayOpacity": 0,
+        "overlayColor": "#000000",
+        "contentColor": "rgba(0,0,0,0)",
+        "horizontalAlignment": "center",
+        "verticalAlignment": "middle",
+        "heading": "Hair Care, Style, and Trends",
+        "headingColor": "#191d21",
+        "subheading": "Strand Symphony",
+        "subheadingColor": "#fa9090",
+        "subheadingPosition": "above",
+        "headingAlignment": "center",
+        "blog": "news",
+        "maxCards": 3
+      }
+    },
+    "29c9f856-0cc1-4eae-98a0-044234e7b707": {
+      "type": "section__cta",
+      "blocks": {
+        "06d0bfa9-a7a3-4a06-8d91-5ecc5e8ffb8b": {
+          "type": "title",
+          "settings": {
+            "fullWidth": true,
+            "content": "Unlock Your Best Hair Days!",
+            "textColor": "rgba(0,0,0,0)",
+            "fontFamily": "title",
+            "fontSize": "medium"
+          }
+        },
+        "cba18a61-d2f2-4b2e-b1c0-2ebb669456ac": {
+          "type": "richText",
+          "settings": {
+            "fullWidth": true,
+            "maxBWidth": 100,
+            "content": "<p>Sign Up Now for 10% Off & Dive into the Fun of 15% Off Your First Online Order!</p>",
+            "detectLists": true,
+            "textColor": "rgba(0,0,0,0)",
+            "fontFamily": "base",
+            "fontSize": "base"
+          }
+        },
+        "05bc3d1b-d044-482f-852d-a38e796d2c94": {
+          "type": "blockNewsletter",
+          "settings": {
+            "fullWidth": true,
+            "newsletter": "shopify",
+            "inputMaxWidth": 500,
+            "inputText": "rgba(0,0,0,0)",
+            "inputBackground": "rgba(0,0,0,0)",
+            "email": "Your e-mail goes here",
+            "buttonType": "primary",
+            "submit": "Subscribe"
+          }
+        }
+      },
+      "block_order": [
+        "06d0bfa9-a7a3-4a06-8d91-5ecc5e8ffb8b",
+        "cba18a61-d2f2-4b2e-b1c0-2ebb669456ac",
+        "05bc3d1b-d044-482f-852d-a38e796d2c94"
+      ],
+      "settings": {
+        "custom_id": "",
+        "displayFor": "display--both",
+        "layout": "boxed",
+        "nomargin": false,
+        "scopedCSS": "",
+        "height": 300,
+        "padding": 10,
+        "lineMargin": 12,
+        "backgroundColor": "rgba(0,0,0,0)",
+        "backgroundImage": "shopify://shop_images/image_10.png",
+        "backgroundImageUrl": "",
+        "backgroundPosition": "middle",
+        "backgroundFilter": "none",
+        "backdropIntensity": 50,
+        "parallax": false,
+        "backgroundPattern": false,
+        "overlayOpacity": 20,
+        "overlayColor": "#ffffff",
         "contentColor": "rgba(0,0,0,0)",
         "horizontalAlignment": "center",
         "verticalAlignment": "middle",
@@ -383,134 +889,22 @@
         "subheadingPosition": "above",
         "headingAlignment": "center"
       }
-    },
-    "bfae8abf-46a0-4206-af36-49414f5c118a": {
-      "type": "section__featured-collection",
-      "settings": {
-        "custom_id": "{{ section.settings.collection.title }}",
-        "displayFor": "display--both",
-        "layout": "default",
-        "nomargin": true,
-        "scopedCSS": "",
-        "height": 390,
-        "padding": 20,
-        "backgroundColor": "rgba(0,0,0,0)",
-        "heading": "Crazy Nails",
-        "headingColor": "#0d0d0d",
-        "subheading": "",
-        "subheadingColor": "rgba(0,0,0,0)",
-        "subheadingPosition": "above",
-        "headingAlignment": "center",
-        "collection": "nails",
-        "productCount": 12,
-        "showMore": true,
-        "showMoreText": "MORE",
-        "showMoreAlignment": "center"
-      }
-    },
-    "section_slider_adaptive_WbkwWh": {
-      "type": "section__slider--adaptive",
-      "blocks": {
-        "image_slide_adaptive_3cTUXP": {
-          "type": "imageSlideAdaptive",
-          "settings": {
-            "horizontalAlignment": "center",
-            "verticalAlignment": "middle",
-            "padding": 16,
-            "contentSpacing": 12,
-            "backgroundColor": "rgba(0,0,0,0)",
-            "backgroundPosition": "middle",
-            "overlayOpacity": 40,
-            "overlayColor": "#000000",
-            "slideURL": "",
-            "heading": "This is your slide's heading",
-            "headingColor": "rgba(0,0,0,0)",
-            "content": "<p>Enjoy the flexibility</p>",
-            "contentColor": "rgba(0,0,0,0)",
-            "button1Text": "Primary button",
-            "button1Link": "",
-            "button1Style": "primary",
-            "button1Type": "default",
-            "button2Text": "Secondary button",
-            "button2Link": "",
-            "button2Style": "secondary",
-            "button2Type": "default"
-          }
-        }
-      },
-      "block_order": [
-        "image_slide_adaptive_3cTUXP"
-      ],
-      "settings": {
-        "custom_id": "",
-        "displayFor": "display--both",
-        "layout": "default",
-        "nomargin": true,
-        "height": 0,
-        "contentColor": "rgba(0,0,0,0)",
-        "autoplay": true,
-        "slideSpeed": 3,
-        "animation": "none",
-        "delayAnimation": false
-      }
-    },
-    "section_slider_adaptive_pqeGqf": {
-      "type": "section__slider--adaptive",
-      "blocks": {
-        "image_slide_adaptive_VRxEKz": {
-          "type": "imageSlideAdaptive",
-          "settings": {
-            "horizontalAlignment": "center",
-            "verticalAlignment": "middle",
-            "padding": 16,
-            "contentSpacing": 12,
-            "backgroundColor": "rgba(0,0,0,0)",
-            "backgroundPosition": "middle",
-            "overlayOpacity": 40,
-            "overlayColor": "#000000",
-            "slideURL": "",
-            "heading": "This is your slide's heading",
-            "headingColor": "rgba(0,0,0,0)",
-            "content": "<p>Enjoy the flexibility</p>",
-            "contentColor": "rgba(0,0,0,0)",
-            "button1Text": "Primary button",
-            "button1Link": "",
-            "button1Style": "primary",
-            "button1Type": "default",
-            "button2Text": "Secondary button",
-            "button2Link": "",
-            "button2Style": "secondary",
-            "button2Type": "default"
-          }
-        }
-      },
-      "block_order": [
-        "image_slide_adaptive_VRxEKz"
-      ],
-      "settings": {
-        "custom_id": "",
-        "displayFor": "display--both",
-        "layout": "default",
-        "nomargin": false,
-        "height": 0,
-        "contentColor": "rgba(0,0,0,0)",
-        "autoplay": true,
-        "slideSpeed": 3,
-        "animation": "none",
-        "delayAnimation": false
-      }
     }
   },
   "order": [
-    "c_image_banner_NEaFmL",
-    "0b1d2300-2d81-4c7c-9c36-26e3f28f493e",
-    "bc7ede14-658b-47dc-9a41-d159b412e2ce",
-    "39ffde19-ca3f-4bed-ac9e-5562062dcbed",
-    "16265528618af17c6c",
-    "16265529277430f275",
-    "5825d15c-1ad3-48a6-86d6-f863f3c776eb",
-    "bfae8abf-46a0-4206-af36-49414f5c118a",
-    "section_slider_adaptive_WbkwWh",
-    "section_slider_adaptive_pqeGqf"
+    "b90e60d1-4548-45a9-9af3-5b8a98cfde79",
+    "916bbae0-03c1-441e-a6cf-3b8e292b139b",
+    "a8fb6dcb-e63c-45bd-9535-c8fbf8894200",
+    "e0fb4ebe-9942-4341-9059-d54d6f9933af",
+    "297dee03-8cb8-4d3e-b6a5-4c4aa649905f",
+    "59365ce0-5026-42e5-9fe2-7843e5a9b40a",
+    "3f6cbb01-c834-4e89-a8d8-def88d150134",
+    "d53ac72d-c90c-425a-a5dd-5f75abd78235",
+    "1626553335f2494384",
+    "87256f7a-4d20-4d9d-bf17-3b6044d25a62",
+    "198d4182-b9b7-4b73-971c-a036d129bd48",
+    "d48bd8bf-94df-4f81-ac1c-1ab974df333f",
+    "40c6a023-bf80-4ce4-a2f2-2b5c24c40078",
+    "29c9f856-0cc1-4eae-98a0-044234e7b707"
   ]
 }

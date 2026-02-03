@@ -10,7 +10,7 @@
 
 <div class="block--image" id="blockImage--{{-block.id}}">
 {% if block.settings.image != nil %}
-{% render 'ratio-image', image: block.settings.image, maxWidth: 960, ratioType: 'vw', mratio: 100, dratio: block.settings.maxBWidth, class: 'image--fullWidth' %}
+{% render 'ratio-image', image: block.settings.image, alt: block.settings.image.alt, maxWidth: 960, ratioType: 'vw', mratio: 100, dratio: block.settings.maxBWidth, class: 'image--fullWidth' %}
 {% else %}
 {{ 'product-1' | placeholder_svg_tag: 'svg__fake' }}
 {% endif %}

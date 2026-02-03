@@ -16,10 +16,10 @@
         {% unless block.settings.newsletter_img == nil %}
           {% if block.settings.newsletter_img_link %}
             <a href="{{ block.settings.newsletter_img_link }}">
-              {% render 'ratio-image', image: block.settings.newsletter_img, mratio: '12', dratio: iWidth, ratioType: 'col' %}
+              {% render 'ratio-image', image: block.settings.newsletter_img, alt: block.settings.newsletter_img.alt, mratio: '12', dratio: iWidth, ratioType: 'col' %}
             </a>
           {% else %}
-            {% render 'ratio-image', image: block.settings.newsletter_img, mratio: '12', dratio: iWidth, ratioType: 'col' %}
+            {% render 'ratio-image', image: block.settings.newsletter_img, alt: block.settings.newsletter_img.alt, mratio: '12', dratio: iWidth, ratioType: 'col' %}
           {% endif %}
         {% endunless %}
 

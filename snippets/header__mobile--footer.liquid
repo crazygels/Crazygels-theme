@@ -49,7 +49,12 @@
     <a class="user__link" href="{{ routes.account_url }}">Account</a>
     <a class="user__link" href="{{ routes.account_logout_url }}">{{'navigation.buttons.log_out'|t}}</a>
 {% else %}
-    <a class="user__link" href="{{ routes.account_login_url }}">{{'navigation.buttons.sign_in'|t}}</a>
-    <a class="user__link" href="{{ routes.account_register_url }}">{{'navigation.buttons.sign_up'|t}}</a>
+    {% unless loginPopup  %}
+        <a class="user__link" href="{{ routes.account_login_url }}">{{'navigation.buttons.sign_in'|t}}</a>
+        <a class="user__link" href="{{ routes.account_register_url }}">{{'navigation.buttons.sign_up'|t}}</a>
+    {% else %}
+        <span class="user__link" data-login-popup> {{'navigation.buttons.sign_in'|t}} </span >
+        <span class="user__link" data-login-popup-register>{{'navigation.buttons.sign_up'|t}}</span>
+    {% endunless %}
 {% endif %}
 {% endif %}

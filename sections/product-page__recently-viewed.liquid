@@ -2,7 +2,7 @@
 <div class="row {{section.settings.layout-}}" id="bstr-recommendations">
 {% render 'block__general--heading' with section as section %}
 {%- for product in recommendations.products limit: 5 -%}
-<div class="col-12 col-md-1-5 card--holder">
+<div class="col-12 col-md-1-5 card--holder{% if settings.easeIn %} ease-in{% endif %}">
 {% render 'product-card-default', product: product, dsize: '1-5' %}
 </div>
 {%- endfor -%}
@@ -12,9 +12,7 @@
 
 {% schema %}
 {
-  "name": {
-    "en": "Recently viewed"
-  },
+  "name": "Recently viewed",
   "settings": [
     {
       "type": "header",

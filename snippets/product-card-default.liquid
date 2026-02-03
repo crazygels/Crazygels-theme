@@ -1,5 +1,7 @@
-<div class="card--default {% unless product.available %}card--soldout{% endunless %} card--{{settings.cardStyle}}">
-
+<div class="card--default {% unless product.available %}card--soldout{% endunless %} card--{{settings.cardStyle}}" data-product-card-default>
+{% if settings.productCompare %}
+  {% render 'product-compare' product: product %}
+{% endif %}
 <a class="card__img--container" href="{{ product.url | within: collection }}" data-product-card-swatch-id="{{product.id}}">
 <div class="card__img--ratio">
   <div class="card__img" {% if settings.cardShowGallery %}data-booster-slider data-current-slide=0 data-total-slides={{product.images.size}}{% endif %}>
@@ -9,9 +11,6 @@
           <span class="tag tag--soldout">{{'general.buttons.sold_out' | t}}</span>
         {% endif %}
         {% if product.compare_at_price_min > 0 and settings.tagSale %}
-          {% if product.price_varies %}
-            <span class="tag tag--sale">{{'general.tags.sale' | t}}</span>
-          {% else %}
             {% unless product.price >= product.compare_at_price %}
               {% assign s_type = settings.saleType | default: 'percent' %}
 
@@ -26,7 +25,6 @@
                 {%- endcase -%}
             </span>
             {% endunless %}
-            {% endif %}
         {% endif %}
         {% for tag in product.tags %}
           {% if tag contains 'bstr-tag-' %} {% comment %} this needs to be an if not unless  {% endcomment %}
@@ -108,11 +106,7 @@
 {% assign sale = true %}
 {% endif %}
 <span class="card__price {% if sale == true %}card__price--sale{% endif %}">
-{% if product.price_varies %}
-{{'product_page.card.from'|t}} <span class="jsPrice">{{ product.price_min | money | strip_html }}</span>
-{% else %}
 <span class="jsPrice">{{ product.price | money | strip_html }}</span>
-{% endif %}
 {% unless product.price == product.compare_at_price %}
 {% if sale == true %}
 {% unless product.price >= product.compare_at_price %}
@@ -133,13 +127,26 @@
 {% assign var = product.first_available_variant %}
 
 {% if product.available %}
-  {% if product.has_only_default_variant %}
-  {% form 'product', product %}
-    <input name="id" type="hidden" value="{{var.id}}">
-    {% render 'add-to-cart-button', variant: var.id, quantity: 1, price: product.price %}
-  {% endform %}
+  {% if settings.quickShop %}
+    {% assign button_text = 'general.buttons.quick_shop' | t %}
+    {% assign btnType = 'quickShop' %}
+    {% render 'quick-buy-button', href: product.url, price: product.price, product_id: product.id, text: button_text, btnType: btnType %}
+  {% endif %}
+  {% if product.has_only_default_variant or product.variants.size == 1 %}
+    {% form 'product', product %}
+      <input name="id" type="hidden" value="{{var.id}}">
+      {% render 'add-to-cart-button', variant: var.id, quantity: 1, price: product.price, product: product %}
+    {% endform %}
   {% else %}
-    {% render 'quick-buy-button', href: product.url, price: product.price, product_id: product.id %}
+    {% if product.variants.size > 1 %}
+      {% if settings.quickShop %}
+      {% assign button_text = 'general.buttons.see_options' | t %}
+      {% endif %}
+      {% assign btnType = 'quickBuy' %}
+      {% render 'quick-buy-button', href: product.url, price: product.price, product_id: product.id, text: button_text, btnType: btnType %}
+    {% else %}
+      {% render 'quick-buy-button', href: product.url, price: product.price, product_id: product.id %}
+    {% endif %}
   {% endif %}
 {% else %}
   {% render 'sold-out-button', disabled: 'disabled' %}

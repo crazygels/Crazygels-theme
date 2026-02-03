@@ -2,7 +2,7 @@
 
 {% assign altSelector = settings.altSelectorList | downcase | split: ',' %}
 
-{% if altSelector.size or settings.defaultSelector == "swatch" %}
+{% if altSelector.size or section.settings.defaultSelector == "swatch" %}
 
 {% assign colorArray = settings.colorSwatches | downcase | split: ',' %}
 {% assign imageArray = settings.imageSwatches | downcase | split: ',' %}
@@ -43,9 +43,9 @@
         {% assign product_option_lc = product_option.name | downcase %}
         {% assign index = forloop.index0 %}
         {% assign optix = 'option' | append: product_option.position %}
-        {% assign selector_type = settings.defaultSelector %}
+        {% assign selector_type = section.settings.defaultSelector %}
         {% if altSelector contains product_option_lc %}
-            {% if settings.defaultSelector == "dropdown" %}
+            {% if section.settings.defaultSelector == "dropdown" %}
                 {% assign selector_type = "swatch" %}
             {% else %}
                 {% assign selector_type = "dropdown" %}

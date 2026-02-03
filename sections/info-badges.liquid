@@ -26,7 +26,7 @@ class="lazyload row {{ section.settings.verticalAlignment }} s__holder info-badg
   <div 
   class="row {{ section.settings.horizontalAlignment }} middle layout__content s__content">
     {%- for block in section.blocks %}
-        <div class="col-12 col-md info-badge middle start s__block s__block--{{-block.type}} {{section.settings.iconPosition}}">
+        <div class="col-12 col-md info-badge middle start s__block s__block--{{-block.type}} {{section.settings.iconPosition}}{% if settings.easeIn %} ease-in{% endif %}">
             <i class="uil uil-{{-block.settings.icon}} info-badge__icon"></i>
             <div class="info-badge__text">
                 {% unless block.settings.heading == blank %}<h3 class="h-reset info-badge__heading">{{block.settings.heading}}</h3>{% endunless %}
@@ -40,18 +40,8 @@ class="lazyload row {{ section.settings.verticalAlignment }} s__holder info-badg
 
 {% schema %}
 {
-    "name": {
-        "en": "Info badges"
-    },
+    "name": "Info badges",
     "settings": [
-        {
-            "type": "header",
-            "content": "Help"
-        },
-        {
-        "type": "paragraph",
-        "content": "[Click here to follow an interactive Tutorial](https://vimeo.com/458154299)"
-        },
         {
             "type": "header",
             "content": "Enable/Disable"

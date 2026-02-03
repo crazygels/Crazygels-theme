@@ -1,4 +1,4 @@
-<div style="display: inline-block;" class="product__countdown--holder product__countdown--{{-block.settings.style}}" {{block.shopify_attributes}}>
+<div style="display: inline-block;" class="product__countdown--holder product__countdown--{{-block.settings.style}}{% if settings.easeIn %} ease-in{% endif %}" {{block.shopify_attributes}}>
     <div style="position: relative; min-width: 280px;" data-countdown data-ct-key="block-{{block.id}}" data-duration="{{block.settings.countdownTime}}" data-duration-format="{{block.settings.countdownTimeFormat}}" class="countdown product__countdown">
         <span class="countdown__title" style="z-index: 1;">{{-block.settings.title-}}</span>
         <span class="countdown__holder"><span class="days">00</span><br>DAYS</span>

@@ -80,42 +80,7 @@
 #colorcode {};
 </style>
 
-<div class="sticky--mobile hide-desktop sticky--closed hide">
-<div class="sticky--container">
-<div style="text-align: right">
-  <span class="sticky__close" onclick="BoosterTheme.ELEMENTS.closeSticky(this)"><i class="uil uil-times"></i></span>
-</div>
-<h4 class="h-reset" style="text-align: center; margin-bottom: 1rem">{{product.title}}</h4>
-  {% render 'block__product-page--price' with product as product %}
-  {% render 'block__product-page--swatch' with product as product %}
-</div>
-<button
-data-original-text="{%- if product.price == 0 and settings.freeShipping  %}{{settings.freeShippingText}}{% else %}{{ 'general.buttons.add_to_cart' | t  }}{% endif -%}"
-data-buy-button="{{product.id}}"
-onclick="BoosterTheme.ELEMENTS.stickyBuy(this, event)"
-class="button button--primary button--{{-settings['primaryButtonStyle']}}  button--primary__{{-settings['primaryButtonStyle']}} sticky--atc__button"
->
-<span data-button-text>
-{%- if product.price == 0 and settings.freeShipping  %}
-  {{settings.freeShippingText}}
-{% else %}
-    {{ 'general.buttons.add_to_cart' | t  }}
-{% endif -%}
-</span> 
-</button>
-<button
-data-product-id="{{product.id}}"
-onclick="BoosterTheme.ELEMENTS.stickyBuy(this, event)"
-class="button button--primary button--{{-settings['primaryButtonStyle']}} hide button--primary__{{-settings['primaryButtonStyle']}} sticky--open__button"
->
-{%- if product.price == 0 and settings.freeShipping  %}
-  {{settings.freeShippingText}}
-{% else %}
-    {{ 'general.buttons.add_to_cart' | t  }}
-{% endif -%}
-</button>
-</div>
-
+{% render 'product-page__sticky-atc', product: product, section: section %}
 
 {% if section.settings.view == "marketplace" %}
 {% assign size = 'col-md' %}
@@ -129,7 +94,7 @@ Product row container
 {%- comment -%}
 Default gallery with thumbnails (always rendered - used for mobile, featured products, modals in case another gallery type is selected) 
 {%- endcomment -%}
-<div class="col-12 {{size}} gallery gallery__default {% if section.settings.galleryStyle != 'default'%}hide-desktop{%endif%}">
+<div class="col-12 {{size}} gallery gallery__default {% if section.settings.galleryStyle != 'default'%}hide-desktop{%endif%}{% if settings.easeIn %} ease-in{% endif %}">
   {% render 'gallery--default', product: product, section: section, isAutoZoom: isAutoZoom, video_loop: video_loop, video_autoplay: video_autoplay %}
 </div>
 {%- comment -%}
@@ -250,13 +215,19 @@ Rendering according to the view (default, marketplace)
       {% render 'block__product-page--price', product: product %}
       {% render 'block__product-page--swatch' with product as product %}
       {% render 'block__product-page--atc', product: product, form: form %}
+      {% if settings.quickShop %}
+        <div class="product__description">
+          <span class="product__description--title">Product description</span>
+          <div>{{product.description}}</div>
+        </div>
+      {% endif %}
     {% endfor %}
   {% endform %}
   {% comment %} END PRODUCT FORM {% endcomment %}
   </div>
 {% else %}
   <div class="col-12 {{size}} unflex product__page--info">
-    <h1 class="h-reset product__title margin__bottom--reduced">{{ product.title }}</h1>
+    <h1 class="h-reset product__title margin__bottom--reduced{% if settings.easeIn %} ease-in{% endif %}">{{ product.title }}</h1>
     {% render 'block__product-page--price' with product as product %}
     {% if product.description != blank %}
     <div class="product__description">
@@ -387,9 +358,7 @@ gallery failover for quickbuy modal/modals
 
 {% schema %}
 {
-  "name": {
-    "en": "Product page content"
-  },
+  "name": "Product page content",
   "settings": [
     {
         "type" : "header",
@@ -399,14 +368,6 @@ gallery failover for quickbuy modal/modals
         "type": "paragraph",
         "content": "Blocks marked with * MUST be included in order for the page to work."
     },
-     {
-            "type": "header",
-            "content": "Help"
-        },
-        {
-        "type": "paragraph",
-        "content": "[Click here to follow an interactive Tutorial](https://vimeo.com/458187257)"
-        },
     {
       "type": "header",
       "content": "Layout"
@@ -738,11 +699,6 @@ gallery failover for quickbuy modal/modals
             "type": "image_picker",
             "label": "Badge image",
             "id": "badge"
-          },
-          {
-              "type": "text",
-              "id": "imageAlt",
-              "label": "Image alt"
           }
         ]
       },
@@ -1178,6 +1134,28 @@ gallery failover for quickbuy modal/modals
                 "label": "Remove bottom space"
               },
               {
+                "type": "radio",
+                "id": "displayAtcFor",
+                "label": "Show sticky ATC on",
+                "options": [
+                  {"value": "display--both", "label": "All devices"},
+                  {"value": "hide-desktop", "label": "Mobile only"},
+                  {"value": "hide-mobile", "label": "Desktop only"}
+                ],
+                "default": "display--both"
+              },
+              {
+                "type": "select",
+                "id": "atcLayout",
+                "label": "Sticky ATC section layout",
+                "options": [
+                  {"value": "default", "label": "Global default"},
+                  {"value": "boxed", "label": "Boxed"},
+                  {"value": "stretchContent", "label": "Full width"}
+                ],
+                "default": "default"
+              },
+              {
                 "type": "select",
                 "id": "stickyATC",
                 "options": [
@@ -1186,7 +1164,7 @@ gallery failover for quickbuy modal/modals
                   {"value": "always", "label": "Always show sticky ATC"}
                 ],
                 "default": "scroll",
-                "label": "Sticky ATC (mobile)"
+                "label": "Sticky ATC"
               }
           ]
       },
@@ -1293,6 +1271,29 @@ gallery failover for quickbuy modal/modals
               "default": "small"
             }
           ]
+      },
+      {
+        "type": "productPopUp",
+        "name": "Pop-up image",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "noMargin",
+            "label": "Remove bottom space"
+          },
+          {
+            "type": "text",
+            "id": "label",
+            "label": "Label",
+            "default": "Pop-up link text"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+        ]
       }
     ]
 }

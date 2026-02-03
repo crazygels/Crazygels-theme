@@ -1,10 +1,7 @@
-{% assign mobile = settings.cardMobile %}
-{% assign desktop = settings.cardDesktop %}
-
 {% paginate collection.products by settings.cardsPerPage %}
   {% for product in collection.products %}
     {% unless product.tags contains 'featured' %}
-      <div class="center col-{{mobile}} col-md-{{desktop}} card--holder">
+      <div class="center col-{{settings.cardMobile}} col-md-{{settings.cardDesktop}} card--holder{% if settings.easeIn %} ease-in{% endif %}">
         {% render 'product-card-default' with product as product %}
       </div>
     {%endunless%}
@@ -46,15 +43,6 @@
   {
     "name": "Product list",
     "class": "row--product col-12 product__list top",
-    "settings": [
-      {
-            "type": "header",
-            "content": "Help"
-        },
-        {
-        "type": "paragraph",
-        "content": "[Click here to follow an interactive Tutorial](https://vimeo.com/458187473)"
-        }
-    ] 
+    "settings": [] 
   }
 {% endschema%}

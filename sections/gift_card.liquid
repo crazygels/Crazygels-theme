@@ -132,20 +132,20 @@ body {
 {% if section.settings.logoPosition contains 'top' and section.settings.logo %}
 {% unless section.settings.customLogo != blank %}
 {% if settings.defaultLogo != nil %}
-  <img height="{{settings.defaultLogo.height}}" width="{{settings.defaultLogo.width}}" src="{{settings.defaultLogo | img_url: '256x'}}" alt="logo" class="logo logo--default">
+  <img height="{{settings.defaultLogo.height}}" width="{{settings.defaultLogo.width}}" src="{{settings.defaultLogo | img_url: '256x'}}" alt="{{ settings.defaultLogo.alt }}" class="logo logo--default">
 {% elsif settings.mobileLogo != nil %}
-  <img height="{{settings.mobileLogo.height}}" width="{{settings.mobileLogo.width}}" src="{{settings.mobileLogo | img_url: '256x'}}" alt="logo" class="logo logo--mobile">
+  <img height="{{settings.mobileLogo.height}}" width="{{settings.mobileLogo.width}}" src="{{settings.mobileLogo | img_url: '256x'}}" alt="{{ settings.mobileLogo.alt }}" class="logo logo--mobile">
 {% elsif settings.transparentLogo != nil %}
-  <img height="{{settings.transparentLogo.height}}" width="{{settings.transparentLogo.width}}" src="{{settings.transparentLogo | img_url: '256x'}}" alt="logo" class="logo logo--transparent">
+  <img height="{{settings.transparentLogo.height}}" width="{{settings.transparentLogo.width}}" src="{{settings.transparentLogo | img_url: '256x'}}" alt="{{ settings.transparentLogo.alt }}" class="logo logo--transparent">
 {% endif %}
 {% else %}
-<img height="{{section.settings.customLogo.height}}" width="{{section.settings.customLogo.width}}" src="{{section.settings.customLogo | img_url: '256x'}}" alt="logo" class="logo logo--transparent">
+<img height="{{section.settings.customLogo.height}}" width="{{section.settings.customLogo.width}}" src="{{section.settings.customLogo | img_url: '256x'}}" alt="{{ section.settings.customLogo.alt }}" class="logo logo--transparent">
 {% endunless %}
 {% endif %}
 <h1 class="h-reset">{{section.settings.title | replace: '%first_name%', customer.first_name | replace: '%last_name%', customer.last_name | replace: '%full_name%', customer.name | replace: '%email%', customer.email}}</h1>
 {{section.settings.content | replace: '%first_name%', customer.first_name | replace: '%last_name%', customer.last_name | replace: '%full_name%', customer.name | replace: '%email%', customer.email}}
   <div class="gift_card">
-  <img src="{{ 'gift_card.png' | asset_url }}" alt="">
+  <img src="{{ 'gift_card.png' | asset_url }}" alt="gift_card">
     {% if section.settings.code %}
     <div class="gc__code">
     {{gift_card.code}}
@@ -176,14 +176,14 @@ body {
 {% if section.settings.logoPosition contains 'bottom' and section.settings.logo %}
 {% unless section.settings.customLogo != blank %}
 {% if settings.defaultLogo != nil %}
-  <img height="{{settings.defaultLogo.height}}" width="{{settings.defaultLogo.width}}" src="{{settings.defaultLogo | img_url: '256x'}}" alt="logo" class="logo logo--default">
+  <img height="{{settings.defaultLogo.height}}" width="{{settings.defaultLogo.width}}" src="{{settings.defaultLogo | img_url: '256x'}}" alt="{{ settings.defaultLogo.alt }}" class="logo logo--default">
 {% elsif settings.mobileLogo != nil %}
-  <img height="{{settings.mobileLogo.height}}" width="{{settings.mobileLogo.width}}" src="{{settings.mobileLogo | img_url: '256x'}}" alt="logo" class="logo logo--mobile">
+  <img height="{{settings.mobileLogo.height}}" width="{{settings.mobileLogo.width}}" src="{{settings.mobileLogo | img_url: '256x'}}" alt="{{ settings.mobileLogo.alt }}" class="logo logo--mobile">
 {% elsif settings.transparentLogo != nil %}
-  <img height="{{settings.transparentLogo.height}}" width="{{settings.transparentLogo.width}}" src="{{settings.transparentLogo | img_url: '256x'}}" alt="logo" class="logo logo--transparent">
+  <img height="{{settings.transparentLogo.height}}" width="{{settings.transparentLogo.width}}" src="{{settings.transparentLogo | img_url: '256x'}}" alt="{{ settings.transparentLogo.alt }}" class="logo logo--transparent">
 {% endif %}
 {% else %}
-<img height="{{section.settings.customLogo.height}}" width="{{section.settings.customLogo.width}}" src="{{section.settings.customLogo | img_url: '256x'}}" alt="logo" class="logo logo--transparent">
+<img height="{{section.settings.customLogo.height}}" width="{{section.settings.customLogo.width}}" src="{{section.settings.customLogo | img_url: '256x'}}" alt="{{ section.settings.customLogo.alt }}" class="logo logo--transparent">
 {% endunless %}
 {% endif %}
 </div>

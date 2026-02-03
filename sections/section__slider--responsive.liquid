@@ -62,7 +62,7 @@
 {% assign customID = section.settings.custom_id %}
 
 <div data-bstr-section-slider="{{section.id}}" {% if section.settings.autoplay %}data-autoplay=true{% endif %} onmouseover="this.dataset.paused = -1;" onmouseout="this.dataset.paused = new Date().getTime();" 
-id="s--{{section.id}}" class="{% render 'common-class', section: section, class: 'slider slider--responsive', vAlign: false %}">
+id="s--{{section.id}}" class="{% render 'common-class', section: section, class: 'slider slider--responsive', vAlign: false %}{% if settings.easeIn %} ease-in{% endif %}">
 {% if section.blocks.size > 1 %}
 <button data-bstr-slider-button="-" class="slider__button hide-mobile" aria-label="Previous"><i class="uil uil-angle-left-b"></i></button>
 <button data-bstr-slider-button="+" class="slider__button slider__button--next hide-mobile" aria-label="Next"><i class="uil uil-angle-right-b"></i></button>
@@ -81,17 +81,15 @@ data-bstr-slide-speed="{{ section.settings.slideSpeed | times: 1000 }}"
 
 {% schema %}
 {
-    "name": {
-        "en": "Responsive Slideshow"
-    },
+    "name": "Responsive Slideshow",
     "settings": [
-      {
+    {
       "type": "header",
       "content": "Help"
     },
     {
       "type": "paragraph",
-      "content": "[Click here to follow an interactive Tutorial](https://vimeo.com/458157772)"
+      "content": "[Click here to follow an interactive Tutorial](https:\/\/vimeo.com\/1050645670)"
     },
     {
       "type": "header",

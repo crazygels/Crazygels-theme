@@ -16,7 +16,7 @@
 }
 </style>
 
-<div id="richtext--{{-block.id}}" class="{% unless block.settings.fontSize == 'custom'%}font__size--{{-block.settings.fontSize}}{% endunless %}" 
+<div id="richtext--{{-block.id}}" class="{% unless block.settings.fontSize == 'custom'%}font__size--{{-block.settings.fontSize}}{% endunless %}{% if settings.easeIn %} ease-in{% endif %}" 
 {{block.shopify_attributes}}>
 {{block.settings.content}}
 </div>

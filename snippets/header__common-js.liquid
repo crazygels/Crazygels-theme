@@ -14,6 +14,14 @@ const checkHs = ()=>{
         if(window.scrollY > 120){
             {% if section.settings.transparent and template == "index" %}h.classList.remove('page__header--transparent'){% endif %}
             if(h.clientHeight) h.parentElement.style.height = h.clientHeight + 'px'
+
+            {% if settings.productCompare %}
+              let productCompare = document.querySelector('[data-compare-product-modal]')
+              if(productCompare) {
+                productCompare.style.top = h.parentElement.style.height
+              }
+            {% endif %}
+
             return h.classList.add('page__header--sticky')
         }
         h.parentElement.style.height = null

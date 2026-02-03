@@ -17,6 +17,9 @@
   content: '';
 }
 {% endif %}
+#s--{{section.id}}  .slider--product-holder {
+  visibility: visible;
+}
 </style>
 {% assign customID = section.settings.custom_id %}
 {% unless section.settings.product == blank %}
@@ -30,7 +33,7 @@
 <div id="s--{{section.id}}" class="{% render 'common-class', section: section, class: 'row padding__vertical featured-product', vAlign: false %}">
   <div id="{{customID}}" class="row s_content layout__content">
     {% render 'block__general--heading' with section as section %}
-    <div class="col-12 col-md-6 gallery gallery__default">
+    <div class="col-12 col-md-6 gallery gallery__default{% if settings.easeIn %} ease-in{% endif %}">
       {% render 'gallery--default', product: product, section: section, video_loop: video_loop, video_autoplay: video_autoplay %}
     </div>
 
@@ -52,7 +55,7 @@
 <div id="s--{{section.id}}" class="{% render 'common-class', section: section, class: 'row padding__vertical featured-product', vAlign: false %}">
   <div id="{{customID}}" class="row s_content layout__content">
     {% render 'block__general--heading' with section as section %}
-    <div class="col-12 col-md-6 gallery__default">
+    <div class="col-12 col-md-6 gallery__default{% if settings.easeIn %} ease-in{% endif %}">
       <div class="gallery">
         <div class="col-min gallery__thumbnails--holder">
           <div class="gallery__thumbnails fancy-scroll">
@@ -71,18 +74,18 @@
 
     <div class="col-12 col-md-6 product__page--info unflex">
       <h1 
-        class="product__title h-reset">
+        class="product__title h-reset{% if settings.easeIn %} ease-in{% endif %}">
         Demo product
       </h1>
       <div 
-        class="product__price--holder">
+        class="product__price--holder{% if settings.easeIn %} ease-in{% endif %}">
         <span class="product__price jsPrice">$179.00</span>
       </div>
-      <div class="product__description {% if block.settings.noMargin %}margin__bottom--reduced{%endif-%}">
+      <div class="product__description {% if block.settings.noMargin %}margin__bottom--reduced{%endif-%}{% if settings.easeIn %} ease-in{% endif %}">
         <span class="product__description--title">Product Description</span>
         <p>This is an example product. Select a product inside this section's settings in order for it to be usable.</p>
       </div>
-      <div class="product__atc {% if block.settings.noMargin %}margin__bottom--reduced{%endif-%}" {{block.shopify_attributes}}>
+      <div class="product__atc {% if block.settings.noMargin %}margin__bottom--reduced{%endif-%}{% if settings.easeIn %} ease-in{% endif %}" {{block.shopify_attributes}}>
         <input style="display: none;">
         {% if settings.quantity_selector %}
         <div class="quantity--input">
@@ -102,18 +105,8 @@
 
 {% schema %}
 {
-    "name": {
-        "en": "Featured product"
-    },
+    "name": "Featured product",
     "settings": [
-      {
-      "type": "header",
-      "content": "Help"
-    },
-    {
-      "type": "paragraph",
-      "content": "[Click here to follow an interactive Tutorial](https://vimeo.com/458157889)"
-    },
     {
       "type": "header",
       "content": "Section ID"

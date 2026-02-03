@@ -12,6 +12,7 @@
         {% assign text = 'general.buttons.add_to_cart' | t  %}
     {% endif %}
 {% endif %}
+{% assign btnType = btnType %}
 
 <a href="{{href}}" data-product-card-swatch-id="{{product_id}}"
 class="button button--{{-button}} button--{{-color}} {% unless icon == 'none' %}button--icon{% endunless %}
@@ -21,8 +22,8 @@ button--{{-type}} button--{{-color-}}__{{-type}}
 {% assign style = color | append: 'ButtonStyle' %}
 button--{{-settings[style]}} button--{{-color-}}__{{-settings[style]}}
 {%- endunless %} {{class-}}"
-{% if settings.quickBuy %}
-onclick="BoosterTheme.ELEMENTS.quickBuy(event)"
+{% if settings.quickBuy or settings.quickShop %}
+onclick="BoosterTheme.ELEMENTS.quickBuy(event, '{{ btnType }}')"
 {% endif %}
 >
 {% unless icon == 'none' %}

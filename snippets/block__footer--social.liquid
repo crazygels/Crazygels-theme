@@ -1,4 +1,4 @@
-<div>
+<div class="{% if settings.easeIn %}ease-in{% endif %}">
 {%- if block.settings.heading != blank -%}<span class="footer__title">{{block.settings.heading}}</span>{%-endif-%}
 {%- assign socialMedia = 'Facebook,Instagram,Twitter,Whatsapp,We,Youtube,Snapchat,Viber,VK,DA,TikTok,Twitch,Linkedin,Pinterest' | split: ',' -%}
 {%- for social in socialMedia -%}
